@@ -33,8 +33,9 @@ public class InfoHandler {
 	private static final long HOUR = 60L;
 	private static final long DAY = 24L;
 	
-	private static final String INFO_MSG = BotUtil
-		.addColors("%tUptime: %g%s %n| %tTime: %g%s %tUTC %n| %tSource: %ghttps://github.com/likcoras/A-Gario");
+	private static final String INFO_MSG =
+		BotUtil
+			.addColors("%tUptime: %g%s %n| %tTime: %g%s %tUTC %n| %tSource: %ghttps://github.com/likcoras/A-Gario");
 	
 	private static final Logger LOG = Logger.getLogger(InfoHandler.class);
 	

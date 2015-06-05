@@ -81,9 +81,10 @@ public class AGario extends ListenerAdapter<PircBotX> {
 	
 	@Override
 	public void onAction(ActionEvent<PircBotX> event) throws IOException {
-		User user = event.getUser();
+		final User user = event.getUser();
 		if (event.getAction().matches("slaps (.+?) around a bit with .*"))
-			spam.out(event.getChannel(), user, user.getNick() + ", no slapping! >:(");
+			spam.out(event.getChannel(), user, user.getNick()
+				+ ", no slapping! >:(");
 	}
 	
 	@Override
@@ -145,6 +146,8 @@ public class AGario extends ListenerAdapter<PircBotX> {
 	}
 	
 	private Configuration<PircBotX> configureBot(BotConfig config) {
+		final BotConfig.Server server = config.getServer();
+		final BotConfig.Bot bot = config.getBot();
 		final Configuration.Builder<PircBotX> builder =
 			new Configuration.Builder<PircBotX>()
 				.addListener(this)
@@ -152,16 +155,16 @@ public class AGario extends ListenerAdapter<PircBotX> {
 				.setAutoSplitMessage(true)
 				.setMessageDelay(3000L)
 				
-				.setName(config.getBot().getNick())
-				.setLogin(config.getBot().getLogin())
-				.setRealName(config.getBot().getRealname())
-				.setVersion(config.getBot().getVersion())
-				.setNickservPassword(config.getBot().getPassword())
+				.setName(bot.getNick())
+				.setLogin(bot.getLogin())
+				.setRealName(bot.getRealname())
+				.setVersion(bot.getVersion())
+				.setNickservPassword(bot.getPassword())
 				
-				.setServerHostname(config.getServer().getHost())
-				.setServerPort(config.getServer().getPort())
+				.setServerHostname(server.getHost())
+				.setServerPort(server.getPort())
 				.setSocketFactory(
-					config.getServer().isSsl() ? config.getServer().isTrust()
+					server.isSsl() ? server.isTrust()
 						? new UtilSSLSocketFactory().trustAllCertificates()
 						: SSLSocketFactory.getDefault() : SocketFactory
 						.getDefault());
