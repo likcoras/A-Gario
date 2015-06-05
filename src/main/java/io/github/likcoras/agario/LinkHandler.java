@@ -32,10 +32,10 @@ import com.google.common.base.Strings;
 public class LinkHandler {
 	
 	private static final String LINK_MSG = BotUtil
-		.addColors("Added link '%t%s%n' %nto '%g%s%n'");
+		.addColors("Added link '%y%s%n' %nto '%g%s%n'");
 	private static final String LINK_REM = BotUtil
-		.addColors("Link '%t%s%n' removed");
-	private static final String LINK_LIST = BotUtil.addColors("%tLinks:%g");
+		.addColors("Link '%y%s%n' removed");
+	private static final String LINK_LIST = BotUtil.addColors("%yLinks:%g");
 	
 	private static final Logger LOG = Logger.getLogger(LinkHandler.class);
 	

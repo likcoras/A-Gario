@@ -35,7 +35,7 @@ public class InfoHandler {
 	
 	private static final String INFO_MSG =
 		BotUtil
-			.addColors("%tUptime: %g%s %n| %tTime: %g%s %tUTC %n| %tSource: %ghttps://github.com/likcoras/A-Gario");
+			.addColors("%yUptime: %g%s %n| %yTime: %g%s %tUTC %n| %ySource: %ghttps://github.com/likcoras/A-Gario");
 	
 	private static final Logger LOG = Logger.getLogger(InfoHandler.class);
 	
