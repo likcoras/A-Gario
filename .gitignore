@@ -1,0 +1,15 @@
+# Eclipse stuff
+.project
+.classpath
+.settings/
+
+# Maven stuff
+target/
+dependency-reduced-pom.xml
+
+# Files generated while testing
+/config.yml
+/ignore
+/links
+/logs/
+

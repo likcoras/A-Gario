@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration>
+
+  <appender name="Console" class="org.apache.log4j.ConsoleAppender">
+    <param name="Target" value="System.out"/>
+    <layout class="org.apache.log4j.PatternLayout">
+      <param name="ConversionPattern" value="[%d{HH:mm:ss}] [%p] %m%n"/>
+    </layout>
+  </appender>
+  
+  <appender name="IrcLog" class="org.apache.log4j.rolling.RollingFileAppender">
+    <rollingPolicy class="org.apache.log4j.rolling.TimeBasedRollingPolicy">
+      <param name="FileNamePattern" value="logs/irc/irc-%d.log.gz"/>
+    </rollingPolicy>
+    <layout class="org.apache.log4j.PatternLayout">
+      <param name="ConversionPattern" value="[%d{HH:mm:ss}] [%p] %m%n"/>
+    </layout>
+  </appender>
+  
+  <appender name="BotLog" class="org.apache.log4j.rolling.RollingFileAppender">
+    <rollingPolicy class="org.apache.log4j.rolling.TimeBasedRollingPolicy">
+      <param name="FileNamePattern" value="logs/bot/bot-%d.log.gz"/>
+    </rollingPolicy>
+    <layout class="org.apache.log4j.PatternLayout">
+      <param name="ConversionPattern" value="[%d{HH:mm:ss}] [%p] %m%n"/>
+    </layout>
+  </appender>
+  
+  <appender name="ErrorLog" class="org.apache.log4j.rolling.RollingFileAppender">
+    <rollingPolicy class="org.apache.log4j.rolling.TimeBasedRollingPolicy">
+      <param name="FileNamePattern" value="logs/error/error-%d.log.gz"/>
+    </rollingPolicy>
+    <layout class="org.apache.log4j.PatternLayout">
+      <param name="ConversionPattern" value="[%d{HH:mm:ss}] [%p] %m%n"/>
+    </layout>
+    <filter class="org.apache.log4j.filter.LevelRangeFilter">
+      <param name="AcceptOnMatch" value="true"/>
+      <param name="LevelMin" value="warn"/>
+      <param name="LevelMax" value="fatal"/>
+    </filter>
+  </appender>
+  
+  <logger name="org.pircbotx">
+    <level value="info"/>
+    <appender-ref ref="IrcLog"/>
+  </logger>
+  
+  <logger name="io.github.likcoras.agario">
+    <level value="info"/>
+    <appender-ref ref="BotLog"/>
+    <appender-ref ref="ErrorLog"/>
+    <appender-ref ref="Console"/>
+  </logger>
+  
+</log4j:configuration>
