@@ -140,6 +140,7 @@ public class AGario extends ListenerAdapter<PircBotX> {
 		final Configuration.Builder<PircBotX> builder =
 			new Configuration.Builder<PircBotX>()
 				.addListener(this)
+				.setAutoReconnect(true)
 				.setAutoSplitMessage(true)
 				.setMessageDelay(3000L)
 				
