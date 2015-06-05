@@ -31,6 +31,7 @@ import org.pircbotx.User;
 import org.pircbotx.UtilSSLSocketFactory;
 import org.pircbotx.exception.IrcException;
 import org.pircbotx.hooks.ListenerAdapter;
+import org.pircbotx.hooks.events.ActionEvent;
 import org.pircbotx.hooks.events.ConnectEvent;
 import org.pircbotx.hooks.events.MessageEvent;
 import org.pircbotx.hooks.events.NickAlreadyInUseEvent;
@@ -76,6 +77,13 @@ public class AGario extends ListenerAdapter<PircBotX> {
 	public void onConnect(ConnectEvent<PircBotX> event) {
 		info.setStart();
 		LOG.info("Connected");
+	}
+	
+	@Override
+	public void onAction(ActionEvent<PircBotX> event) throws IOException {
+		User user = event.getUser();
+		if (event.getAction().matches("slaps (.+?) around a bit with .*"))
+			spam.out(event.getChannel(), user, user.getNick() + ", no slapping! >:(");
 	}
 	
 	@Override
