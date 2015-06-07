@@ -8,8 +8,5 @@ target/
 dependency-reduced-pom.xml
 
 # Files generated while testing
-/config.yml
-/ignore
-/links
-/logs/
+/work/
 
