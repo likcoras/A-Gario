@@ -25,8 +25,8 @@ import org.pircbotx.User;
 public class BotUtil {
 	
 	public static String addColors(String message) {
-		return message.replaceAll("%n", Colors.NORMAL)
-			.replaceAll("%c", Colors.DARK_GREEN);
+		return message.replaceAll("%n", Colors.NORMAL).replaceAll("%c",
+			Colors.DARK_GREEN);
 	}
 	
 	public static boolean isLikc(User user) {
