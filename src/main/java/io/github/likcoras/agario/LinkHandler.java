@@ -26,15 +26,14 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Properties;
 import org.apache.log4j.Logger;
+import org.pircbotx.Colors;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 
 public class LinkHandler {
 	
-	private static final String LINK_MSG = BotUtil
-		.addColors("Added link '%y%s%n' %nto '%g%s%n'");
-	private static final String LINK_REM = BotUtil
-		.addColors("Link '%y%s%n' removed");
+	private static final String LINK_MSG = "Added link '%s' to '%s'";
+	private static final String LINK_REM = "Link '%s%n' removed";
 	private static final String LINK_LIST = BotUtil.addColors("%yLinks:%g");
 	
 	private static final Logger LOG = Logger.getLogger(LinkHandler.class);
@@ -68,7 +67,7 @@ public class LinkHandler {
 	
 	private String getLinksOp(List<String> args) throws IOException {
 		if (args.size() > 2 && args.get(0).equalsIgnoreCase("add"))
-			return setLink("~" + args.get(1), args.get(2));
+			return setLink("~" + Colors.removeFormattingAndColors(args.get(1)), args.get(2));
 		else if (args.size() > 1 && args.get(0).equalsIgnoreCase("rem"))
 			return delLink("~" + args.get(1));
 		return getLinks(args);
@@ -80,7 +79,7 @@ public class LinkHandler {
 	
 	private String getLinks(List<String> args) throws IOException {
 		if (args.size() > 2 && args.get(0).equalsIgnoreCase("add"))
-			return addLink("~" + args.get(1), args.get(2));
+			return addLink("~" + Colors.removeFormattingAndColors(args.get(1)), args.get(2));
 		else if (args.size() > 0 && args.get(0).equalsIgnoreCase("list"))
 			return getLinkList();
 		return "";
