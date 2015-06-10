@@ -30,11 +30,11 @@ import com.google.gson.Gson;
 public class ServersHandler {
 	
 	private static final String SERVERS_FORMAT = BotUtil
-		.addColors("%y%s: %g%d %n| ");
+		.addColors("%c%s: %n%d | ");
 	private static final String SERVERS_TEAM = BotUtil
-		.addColors("%y%s: %g%d %yTeams: %g%d %n| ");
+		.addColors("%c%s: %n%d %cTeam: %n%d | ");
 	private static final String SERVERS_TOTAL = BotUtil
-		.addColors("%yTotal: %g%d players");
+		.addColors("%cTotal: %n%d players");
 	
 	private static final Logger LOG = Logger.getLogger(ServersHandler.class);
 	

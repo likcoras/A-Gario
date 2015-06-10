@@ -26,7 +26,7 @@ public class BotUtil {
 	
 	public static String addColors(String message) {
 		return message.replaceAll("%n", Colors.NORMAL)
-			.replaceAll("%y", Colors.YELLOW).replaceAll("%g", Colors.GREEN);
+			.replaceAll("%c", Colors.DARK_GREEN);
 	}
 	
 	public static boolean isLikc(User user) {
