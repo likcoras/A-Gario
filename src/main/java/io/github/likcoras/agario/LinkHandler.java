@@ -33,7 +33,7 @@ import com.google.common.base.Strings;
 public class LinkHandler {
 	
 	private static final String LINK_MSG = "Added link '%s' to '%s'";
-	private static final String LINK_REM = "Link '%s%n' removed";
+	private static final String LINK_REM = "Link '%s' removed";
 	private static final String LINK_LIST = BotUtil.addColors("%cLinks:%n");
 	
 	private static final Logger LOG = Logger.getLogger(LinkHandler.class);
