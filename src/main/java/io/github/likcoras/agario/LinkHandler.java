@@ -67,7 +67,8 @@ public class LinkHandler {
 	
 	private String getLinksOp(List<String> args) throws IOException {
 		if (args.size() > 2 && args.get(0).equalsIgnoreCase("add"))
-			return setLink("~" + Colors.removeFormattingAndColors(args.get(1)), args.get(2));
+			return setLink("~" + Colors.removeFormattingAndColors(args.get(1)),
+				args.get(2));
 		else if (args.size() > 1 && args.get(0).equalsIgnoreCase("rem"))
 			return delLink("~" + args.get(1));
 		return getLinks(args);
@@ -79,7 +80,8 @@ public class LinkHandler {
 	
 	private String getLinks(List<String> args) throws IOException {
 		if (args.size() > 2 && args.get(0).equalsIgnoreCase("add"))
-			return addLink("~" + Colors.removeFormattingAndColors(args.get(1)), args.get(2));
+			return addLink("~" + Colors.removeFormattingAndColors(args.get(1)),
+				args.get(2));
 		else if (args.size() > 0 && args.get(0).equalsIgnoreCase("list"))
 			return getLinkList();
 		return "";
