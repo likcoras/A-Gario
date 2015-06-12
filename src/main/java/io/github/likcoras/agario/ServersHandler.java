@@ -22,6 +22,7 @@ package io.github.likcoras.agario;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import org.apache.log4j.Logger;
@@ -31,8 +32,6 @@ public class ServersHandler {
 	
 	private static final String SERVERS_FORMAT = BotUtil
 		.addColors("%c%s: %n%d | ");
-	private static final String SERVERS_TEAM = BotUtil
-		.addColors("%c%s: %n%d %cTeam: %n%d | ");
 	private static final String SERVERS_TOTAL = BotUtil
 		.addColors("%cTotal: %n%d players");
 	
@@ -62,20 +61,19 @@ public class ServersHandler {
 	
 	private String getServerText(ServerInfo info) {
 		final Map<String, Integer> servers = info.getRegions();
-		final StringBuffer out = new StringBuffer();
+		final Map<String, Integer> numPlayers = new HashMap<String, Integer>();
 		for (final Entry<String, Integer> server : servers.entrySet()) {
-			final String name = server.getKey();
-			if (name.endsWith(":teams"))
-				continue;
-			final String shortName = name.replaceAll(".+-", "");
-			final String teamName = name + ":teams";
-			final int num = server.getValue();
-			if (servers.containsKey(teamName))
-				out.append(String.format(SERVERS_TEAM, shortName, num,
-					servers.get(teamName)));
-			else
-				out.append(String.format(SERVERS_FORMAT, shortName, num));
+			final String name =
+				server.getKey().replaceAll(".+-", "").replaceAll(":.+", "");
+			final int num =
+				(numPlayers.get(name) == null ? 0 : numPlayers.get(name))
+					+ server.getValue();
+			numPlayers.put(name, num);
 		}
+		final StringBuffer out = new StringBuffer();
+		for (final Entry<String, Integer> server : numPlayers.entrySet())
+			out.append(String.format(SERVERS_FORMAT, server.getKey(),
+				server.getValue()));
 		return out.toString();
 	}
 	
