@@ -35,7 +35,7 @@ public class InfoHandler {
 	
 	private static final String INFO_MSG =
 		BotUtil
-			.addColors("%cUptime: %n%s | %cTime: %n%s UTC | %cSource: %nhttps://github.com/likcoras/A-Gario");
+			.addColors("%cUptime: %n%s| %cTime: %n%s UTC | %cSource: %nhttps://github.com/likcoras/A-Gario");
 	
 	private static final Logger LOG = Logger.getLogger(InfoHandler.class);
 	
@@ -68,13 +68,13 @@ public class InfoHandler {
 		final long days = hours / DAY;
 		final StringBuffer out = new StringBuffer();
 		if (days > 0)
-			out.append(days + "d");
+			out.append(days + "d ");
 		if (hours > 0)
-			out.append(hours % DAY + "h");
+			out.append(hours % DAY + "h ");
 		if (minutes > 0)
-			out.append(minutes % HOUR + "m");
+			out.append(minutes % HOUR + "m ");
 		if (seconds > 0)
-			out.append(seconds % MINUTE + "s");
+			out.append(seconds % MINUTE + "s ");
 		return out.toString();
 	}
 	
