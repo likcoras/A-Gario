@@ -26,33 +26,73 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Properties;
 import org.apache.log4j.Logger;
+import org.pircbotx.Channel;
 import org.pircbotx.Colors;
+import org.pircbotx.PircBotX;
+import org.pircbotx.User;
+import org.pircbotx.hooks.Event;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 
-public class LinkHandler {
+public class LinkHandler implements Handler {
+	
+	private static final Logger LOG = Logger.getLogger(LinkHandler.class);
+	
+	private static final File LINKS = new File("links");
 	
 	private static final String LINK_MSG = "Added link '%s' to '%s'";
 	private static final String LINK_REM = "Link '%s' removed";
 	private static final String LINK_LIST = BotUtil.addColors("%cLinks:%n");
 	
-	private static final Logger LOG = Logger.getLogger(LinkHandler.class);
+	private Properties links;
 	
-	private static final File LINKS = new File("links");
-	private final Properties links;
-	
-	public LinkHandler() throws IOException {
-		links = readLinks(LINKS);
+	@Override
+	public void configure(BotConfig config) throws HandlerException {
+		try {
+			links = readLinks(LINKS);
+		} catch (final IOException e) {
+			throw new HandlerException(e);
+		}
 	}
 	
-	public String link(String link) {
+	@Override
+	public boolean handlesEvent(Event<PircBotX> event) {
+		return false;
+	}
+	
+	@Override
+	public void handleEvent(Event<PircBotX> event) {}
+	
+	@Override
+	public boolean isHandlerOf(Channel chan, User user, String message) {
+		return message.toLowerCase().startsWith("@link")
+			|| message.startsWith("~") || message.startsWith("?");
+	}
+	
+	@Override
+	public String getResponse(Channel chan, User user, String message)
+		throws HandlerException {
+		if (message.startsWith("~") || message.startsWith("?"))
+			return link(message);
+		try {
+			if (BotUtil.isLikc(user))
+				return getLinksLikc(message);
+			if (BotUtil.isOp(chan, user))
+				return getLinksOp(message);
+			return getLinks(message);
+		} catch (final IOException e) {
+			throw new HandlerException(e);
+		}
+	}
+	
+	private String link(String link) {
 		final String out = Strings.nullToEmpty(links.getProperty(link));
 		if (!out.isEmpty())
 			LOG.info(link + " requested");
 		return out;
 	}
 	
-	public String getLinksLikc(String message) throws IOException {
+	private String getLinksLikc(String message) throws IOException {
 		final List<String> args = getArgs(message);
 		if (args.size() > 2 && args.get(0).equalsIgnoreCase("put"))
 			return setLink("?" + args.get(1), args.get(2));
@@ -61,7 +101,7 @@ public class LinkHandler {
 		return getLinksOp(args);
 	}
 	
-	public String getLinksOp(String message) throws IOException {
+	private String getLinksOp(String message) throws IOException {
 		return getLinksOp(getArgs(message));
 	}
 	
@@ -74,7 +114,7 @@ public class LinkHandler {
 		return getLinks(args);
 	}
 	
-	public String getLinks(String message) throws IOException {
+	private String getLinks(String message) throws IOException {
 		return getLinks(getArgs(message));
 	}
 	

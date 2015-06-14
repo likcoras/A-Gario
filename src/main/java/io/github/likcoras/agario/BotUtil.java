@@ -19,6 +19,7 @@
 
 package io.github.likcoras.agario;
 
+import org.pircbotx.Channel;
 import org.pircbotx.Colors;
 import org.pircbotx.User;
 
@@ -32,6 +33,10 @@ public class BotUtil {
 	public static boolean isLikc(User user) {
 		return user.getNick().equalsIgnoreCase("likcoras")
 			&& user.getHostmask().equalsIgnoreCase("tis.very.bored");
+	}
+	
+	public static boolean isOp(Channel chan, User user) {
+		return chan.isOp(user) || chan.isSuperOp(user) || chan.isOwner(user);
 	}
 	
 }

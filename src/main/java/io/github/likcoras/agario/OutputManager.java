@@ -34,17 +34,17 @@ import org.apache.log4j.Logger;
 import org.pircbotx.Channel;
 import org.pircbotx.User;
 
-public class SpamHandler {
+public class OutputManager {
 	
 	private static final File IGNORE = new File("ignore");
 	
-	private static final Logger LOG = Logger.getLogger(SpamHandler.class);
+	private static final Logger LOG = Logger.getLogger(OutputManager.class);
 	
 	private final Map<String, Long> lastOut;
 	private final Map<String, Long> lastSpam;
 	private final List<String> ignored;
 	
-	public SpamHandler() throws IOException {
+	public OutputManager() throws IOException {
 		lastOut = new ConcurrentHashMap<String, Long>();
 		lastSpam = new ConcurrentHashMap<String, Long>();
 		ignored = Collections.synchronizedList(readIgnore());

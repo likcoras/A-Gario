@@ -25,36 +25,55 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 import org.apache.log4j.Logger;
+import org.pircbotx.Channel;
+import org.pircbotx.PircBotX;
+import org.pircbotx.User;
+import org.pircbotx.hooks.Event;
+import org.pircbotx.hooks.events.ConnectEvent;
 
-public class InfoHandler {
+public class InfoHandler implements Handler {
+	
+	private static final Logger LOG = Logger.getLogger(InfoHandler.class);
 	
 	private static final long SECOND = 1000L;
 	private static final long MINUTE = 60L;
 	private static final long HOUR = 60L;
 	private static final long DAY = 24L;
+	private static final TimeZone utcTimeZone;
+	private static final DateFormat dateFormat;
 	
 	private static final String INFO_MSG =
 		BotUtil
 			.addColors("%cUptime: %n%s| %cTime: %n%s UTC | %cSource: %nhttps://github.com/likcoras/A-Gario");
 	
-	private static final Logger LOG = Logger.getLogger(InfoHandler.class);
-	
-	private final TimeZone utcTimeZone;
-	private final DateFormat dateFormat;
-	
-	private long start;
-	
-	public InfoHandler() {
+	static {
 		utcTimeZone = TimeZone.getTimeZone("UTC");
 		dateFormat = new SimpleDateFormat("HH:mm:ss", Locale.US);
 		dateFormat.setTimeZone(utcTimeZone);
 	}
 	
-	public void setStart() {
+	private long start;
+	
+	@Override
+	public void configure(BotConfig config) {}
+	
+	@Override
+	public boolean handlesEvent(Event<PircBotX> event) {
+		return event instanceof ConnectEvent;
+	}
+	
+	@Override
+	public void handleEvent(Event<PircBotX> event) {
 		start = System.currentTimeMillis();
 	}
 	
-	public String getInfo() {
+	@Override
+	public boolean isHandlerOf(Channel chan, User user, String message) {
+		return message.equalsIgnoreCase("@info");
+	}
+	
+	@Override
+	public String getResponse(Channel chan, User user, String message) {
 		LOG.info("Info requested");
 		final String uptime = getTime(System.currentTimeMillis() - start);
 		final String time = dateFormat.format(new Date());

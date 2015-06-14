@@ -26,26 +26,49 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import org.apache.log4j.Logger;
+import org.pircbotx.Channel;
+import org.pircbotx.PircBotX;
+import org.pircbotx.User;
+import org.pircbotx.hooks.Event;
 import com.google.gson.Gson;
 
-public class ServersHandler {
+public class ServersHandler implements Handler {
+	
+	private static final Logger LOG = Logger.getLogger(ServersHandler.class);
+	
+	private static final Gson gson = ServerInfo.getBuilder().create();;
 	
 	private static final String SERVERS_FORMAT = BotUtil
 		.addColors("%c%s: %n%d | ");
 	private static final String SERVERS_TOTAL = BotUtil
 		.addColors("%cTotal: %n%d players");
 	
-	private static final Logger LOG = Logger.getLogger(ServersHandler.class);
+	@Override
+	public void configure(BotConfig config) {}
 	
-	private final Gson gson;
-	
-	public ServersHandler() {
-		gson = ServerInfo.getBuilder().create();
+	@Override
+	public boolean handlesEvent(Event<PircBotX> event) {
+		return false;
 	}
 	
-	public String getServers() throws IOException {
+	@Override
+	public void handleEvent(Event<PircBotX> event) {}
+	
+	@Override
+	public boolean isHandlerOf(Channel chan, User user, String message) {
+		return message.equalsIgnoreCase("@servers");
+	}
+	
+	@Override
+	public String getResponse(Channel chan, User user, String message)
+		throws HandlerException {
 		LOG.info("Servers requested");
-		final ServerInfo info = getServersJson();
+		ServerInfo info;
+		try {
+			info = getServersJson();
+		} catch (final IOException e) {
+			throw new HandlerException(e);
+		}
 		final String serverText = getServerText(info);
 		final String totalText = getTotalText(info);
 		return serverText + totalText;
