@@ -133,7 +133,8 @@ public class AGario extends ListenerAdapter<PircBotX> {
 	
 	private List<Handler> getHandlers() {
 		return ImmutableList.<Handler> builder().add(new LinkHandler())
-			.add(new InfoHandler()).add(new ServersHandler()).build();
+			.add(new InfoHandler()).add(new ServersHandler())
+			.add(new TeamHandler()).build();
 	}
 	
 	private void configure(List<Handler> handlers, BotConfig config)
@@ -189,11 +190,11 @@ public class AGario extends ListenerAdapter<PircBotX> {
 		LOG.info("Quitted");
 	}
 	
-	private void doHandle(Channel chan, User user, String message) throws IOException, HandlerException {
+	private void doHandle(Channel chan, User user, String message)
+		throws IOException, HandlerException {
 		for (final Handler handler : handlers)
 			if (handler.isHandlerOf(chan, user, message))
-				out.out(chan, user,
-					handler.getResponse(chan, user, message));
+				out.out(chan, user, handler.getResponse(chan, user, message));
 	}
 	
 }
