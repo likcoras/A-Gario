@@ -9,8 +9,6 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 import org.apache.log4j.Logger;
 import org.pircbotx.Channel;
 import org.pircbotx.PircBotX;
@@ -26,9 +24,6 @@ public class TeamHandler implements Handler {
 	private static final String LEAD_FORMAT = BotUtil.addColors(" %n%s %c|");
 	
 	private URL mAgar;
-	private ServerConnection UsAtlanta;
-	private ServerConnection UsFremont;
-	private ServerConnection EuLondon;
 	
 	@Override
 	public void configure(BotConfig config) throws HandlerException {
@@ -37,25 +32,6 @@ public class TeamHandler implements Handler {
 		} catch (final MalformedURLException e) {
 			throw new HandlerException(e);
 		}
-		new Timer(true).schedule(new TimerTask() {
-			@Override
-			public void run() {
-				try {
-					if (UsAtlanta != null)
-						UsAtlanta.close();
-					UsAtlanta = new ServerConnection(getServer("US-Atlanta"));
-					if (UsFremont != null)
-						UsFremont.close();
-					UsFremont = new ServerConnection(getServer("US-Fremont"));
-					if (EuLondon != null)
-						EuLondon.close();
-					EuLondon = new ServerConnection(getServer("EU-London"));
-				} catch (IOException | URISyntaxException
-					| InterruptedException e) {
-					LOG.error("Error:", e);
-				}
-			}
-		}, 0L, 300000L);
 	}
 	
 	@Override
@@ -75,17 +51,30 @@ public class TeamHandler implements Handler {
 	public String getResponse(Channel chan, User user, String message)
 		throws HandlerException {
 		LOG.info("Team requested");
-		final String region = message.substring(5);
-		if (region.isEmpty() || region.equalsIgnoreCase(" east"))
-			return getInfo(UsAtlanta);
-		else if (region.equalsIgnoreCase(" west"))
-			return getInfo(UsFremont);
-		else if (region.equalsIgnoreCase(" europe"))
-			return getInfo(EuLondon);
-		return "";
+		final String input = message.substring(5).toLowerCase().trim();
+		String region = getRegion(input);
+		if (region.isEmpty())
+			return "";
+		try {
+			return getInfo(getServer(region));
+		} catch (IOException | URISyntaxException | InterruptedException e) {
+			throw new HandlerException(e);
+		}
 	}
 	
-	private String getServer(String region) throws IOException {
+	private String getRegion(String input) {
+		input = input.toLowerCase();
+		if (input.isEmpty() || input.equals("east") || input.equals("us") || input.equals("us east"))
+			return "US-Atlanta";
+		else if (input.equals("west") || input.equals("us west"))
+			return "US-Fremont";
+		else if (input.equals("eu") || input.equalsIgnoreCase("europe"))
+			return "EU-London";
+		else
+			return "";
+	}
+	
+	private ServerConnection getServer(String region) throws IOException, URISyntaxException, InterruptedException {
 		final HttpURLConnection conn =
 			(HttpURLConnection) mAgar.openConnection();
 		conn.setDoOutput(true);
@@ -93,13 +82,13 @@ public class TeamHandler implements Handler {
 		conn.getOutputStream().write(region.getBytes(StandardCharsets.UTF_8));
 		final BufferedReader read =
 			new BufferedReader(new InputStreamReader(conn.getInputStream()));
-		final String server = read.readLine();
+		final String ip = read.readLine();
 		read.close();
 		conn.disconnect();
-		return server;
+		return new ServerConnection(ip);
 	}
 	
-	private String getInfo(ServerConnection server) {
+	private String getInfo(ServerConnection server) throws InterruptedException {
 		final List<String> leaderboard = server.getLeaderboard();
 		final StringBuffer lead = new StringBuffer();
 		for (final String leader : leaderboard)
