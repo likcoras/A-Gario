@@ -64,12 +64,24 @@ public class TeamHandler implements Handler {
 	
 	private String getRegion(String input) {
 		input = input.toLowerCase();
-		if (input.isEmpty() || input.equals("east") || input.equals("us") || input.equals("us east"))
+		if (input.isEmpty() || input.equals("use") || input.equals("us east"))
 			return "US-Atlanta";
-		else if (input.equals("west") || input.equals("us west"))
+		else if (input.equals("usw") || input.equals("us west"))
 			return "US-Fremont";
-		else if (input.equals("eu") || input.equalsIgnoreCase("europe"))
+		else if (input.equals("eu") || input.equals("europe"))
 			return "EU-London";
+		else if (input.equals("jp") || input.equals("east asia"))
+			return "JP-Tokyo";
+		else if (input.equals("sg") || input.equals("oceania"))
+			return "SG-Singapore";
+		else if (input.equals("ru") || input.equals("russia"))
+			return "RU-Russia";
+		else if (input.equals("cn") || input.equals("china"))
+			return "CN-China";
+		else if (input.equals("br") || input.equals("south america"))
+			return "BR-Brazil";
+		else if (input.equals("tk") || input.equals("turkey"))
+			return "TK-Turkey";
 		else
 			return "";
 	}
