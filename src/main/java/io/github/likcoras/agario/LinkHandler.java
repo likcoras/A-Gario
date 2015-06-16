@@ -25,6 +25,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.apache.log4j.Logger;
 import org.pircbotx.Channel;
 import org.pircbotx.Colors;
@@ -43,6 +45,7 @@ public class LinkHandler implements Handler {
 	private static final String LINK_MSG = "Added link '%s' to '%s'";
 	private static final String LINK_REM = "Link '%s' removed";
 	private static final String LINK_LIST = BotUtil.addColors("%cLinks:%n");
+	private static final Pattern LINK_REGEX = Pattern.compile("\\B([~?]\\w+)");
 	
 	private Properties links;
 	
@@ -65,15 +68,15 @@ public class LinkHandler implements Handler {
 	
 	@Override
 	public boolean isHandlerOf(Channel chan, User user, String message) {
-		return message.toLowerCase().startsWith("@link")
-			|| message.startsWith("~") || message.startsWith("?");
+		return message.toLowerCase().startsWith("@link") || LINK_REGEX.matcher(message).find();
 	}
 	
 	@Override
 	public String getResponse(Channel chan, User user, String message)
 		throws HandlerException {
-		if (message.startsWith("~") || message.startsWith("?"))
-			return link(message);
+		Matcher linkMatch = LINK_REGEX.matcher(message);
+		if (linkMatch.find())
+			return link(linkMatch.group(1));
 		try {
 			if (BotUtil.isLikc(user))
 				return getLinksLikc(message);
