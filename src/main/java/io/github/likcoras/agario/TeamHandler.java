@@ -20,7 +20,7 @@ public class TeamHandler implements Handler {
 	private static final Logger LOG = Logger.getLogger(TeamHandler.class);
 	
 	private static final String TEAM_FORMAT = BotUtil
-		.addColors("%cIP:port: %n%s | %cLeaderboard:%s");
+		.addColors("%cIP:port: ws://%n%s | %cLeaderboard:%s");
 	private static final String LEAD_FORMAT = BotUtil.addColors(" %n%s %c|");
 	
 	private URL mAgar;
