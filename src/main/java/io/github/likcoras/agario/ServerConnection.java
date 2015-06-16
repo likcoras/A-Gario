@@ -86,7 +86,7 @@ public class ServerConnection extends WebSocketClient {
 		lock.lock();
 		while (leaderboard.size() < 1)
 			done.await();
- 		return ImmutableList.copyOf(leaderboard);
+		return ImmutableList.copyOf(leaderboard);
 	}
 	
 }

@@ -52,7 +52,7 @@ public class TeamHandler implements Handler {
 		throws HandlerException {
 		LOG.info("Team requested");
 		final String input = message.substring(5).toLowerCase().trim();
-		String region = getRegion(input);
+		final String region = getRegion(input);
 		if (region.isEmpty())
 			return "";
 		try {
@@ -86,7 +86,8 @@ public class TeamHandler implements Handler {
 			return "";
 	}
 	
-	private ServerConnection getServer(String region) throws IOException, URISyntaxException, InterruptedException {
+	private ServerConnection getServer(String region) throws IOException,
+		URISyntaxException, InterruptedException {
 		final HttpURLConnection conn =
 			(HttpURLConnection) mAgar.openConnection();
 		conn.setDoOutput(true);

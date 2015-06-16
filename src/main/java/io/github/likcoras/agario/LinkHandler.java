@@ -68,13 +68,14 @@ public class LinkHandler implements Handler {
 	
 	@Override
 	public boolean isHandlerOf(Channel chan, User user, String message) {
-		return message.toLowerCase().startsWith("@link") || LINK_REGEX.matcher(message).find();
+		return message.toLowerCase().startsWith("@link")
+			|| LINK_REGEX.matcher(message).find();
 	}
 	
 	@Override
 	public String getResponse(Channel chan, User user, String message)
 		throws HandlerException {
-		Matcher linkMatch = LINK_REGEX.matcher(message);
+		final Matcher linkMatch = LINK_REGEX.matcher(message);
 		if (linkMatch.find())
 			return link(linkMatch.group(1));
 		try {
