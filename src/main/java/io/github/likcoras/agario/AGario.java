@@ -151,7 +151,6 @@ public class AGario extends ListenerAdapter<PircBotX> {
 				.addListener(this)
 				.setAutoReconnect(true)
 				.setAutoSplitMessage(true)
-				.setMessageDelay(3000L)
 				
 				.setName(bot.getNick())
 				.setLogin(bot.getLogin())
