@@ -71,7 +71,7 @@ public class IsonHandler implements Handler {
 		LOG.info("Ison requested for " + host + ":" + port);
 		InetSocketAddress addr = new InetSocketAddress(host, port);
 		InetAddress inet = addr.getAddress();
-		if (inet.isAnyLocalAddress() || inet.isLoopbackAddress())
+		if (inet.isAnyLocalAddress() || inet.isLoopbackAddress() || inet.isLinkLocalAddress() || inet.isSiteLocalAddress())
 			return false;
 		final Socket connection = new Socket();
 		try {
