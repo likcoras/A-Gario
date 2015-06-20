@@ -20,6 +20,7 @@
 package io.github.likcoras.agario;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.regex.Matcher;
@@ -68,9 +69,13 @@ public class IsonHandler implements Handler {
 	
 	private boolean isUp(String host, int port) {
 		LOG.info("Ison requested for " + host + ":" + port);
+		InetSocketAddress addr = new InetSocketAddress(host, port);
+		InetAddress inet = addr.getAddress();
+		if (inet.isAnyLocalAddress() || inet.isLoopbackAddress())
+			return false;
 		final Socket connection = new Socket();
 		try {
-			connection.connect(new InetSocketAddress(host, port), 3000);
+			connection.connect(addr, 3000);
 			connection.close();
 		} catch (final IOException e) {
 			return false;
