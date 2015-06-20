@@ -39,7 +39,7 @@ public class IsonHandler implements Handler {
 		.compile("(?i)(([a-z0-9-]+\\.)+[a-z0-9-]+)(:(\\d+))?");
 	
 	@Override
-	public void configure(BotConfig config) throws HandlerException {}
+	public void configure(BotConfig config) {}
 	
 	@Override
 	public boolean handlesEvent(Event<PircBotX> event) {
@@ -47,7 +47,7 @@ public class IsonHandler implements Handler {
 	}
 	
 	@Override
-	public void handleEvent(Event<PircBotX> event) throws HandlerException {}
+	public void handleEvent(Event<PircBotX> event) {}
 	
 	@Override
 	public boolean isHandlerOf(Channel chan, User user, String message) {
@@ -55,8 +55,7 @@ public class IsonHandler implements Handler {
 	}
 	
 	@Override
-	public String getResponse(Channel chan, User user, String message)
-		throws HandlerException {
+	public String getResponse(Channel chan, User user, String message) {
 		final String url = message.split(" ")[1].trim();
 		final Matcher match = HOST_PATTERN.matcher(url);
 		if (!match.find())

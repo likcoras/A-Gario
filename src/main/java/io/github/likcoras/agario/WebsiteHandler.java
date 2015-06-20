@@ -37,7 +37,7 @@ public class WebsiteHandler implements Handler {
 		.compile("(?i)\\b(http(s)?://([a-z0-9-]+\\.)+[a-z0-9]+(/\\S*)?)\\b");
 	
 	@Override
-	public void configure(BotConfig config) throws HandlerException {}
+	public void configure(BotConfig config) {}
 	
 	@Override
 	public boolean handlesEvent(Event<PircBotX> event) {
@@ -45,7 +45,7 @@ public class WebsiteHandler implements Handler {
 	}
 	
 	@Override
-	public void handleEvent(Event<PircBotX> event) throws HandlerException {}
+	public void handleEvent(Event<PircBotX> event) {}
 	
 	@Override
 	public boolean isHandlerOf(Channel chan, User user, String message) {
@@ -53,8 +53,7 @@ public class WebsiteHandler implements Handler {
 	}
 	
 	@Override
-	public String getResponse(Channel chan, User user, String message)
-		throws HandlerException {
+	public String getResponse(Channel chan, User user, String message) {
 		final Matcher match = LINK_PATTERN.matcher(message);
 		match.find();
 		final String url = match.group(1);
