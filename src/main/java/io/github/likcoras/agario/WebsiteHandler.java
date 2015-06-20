@@ -22,6 +22,7 @@ package io.github.likcoras.agario;
 import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.pircbotx.Channel;
 import org.pircbotx.PircBotX;
@@ -29,6 +30,8 @@ import org.pircbotx.User;
 import org.pircbotx.hooks.Event;
 
 public class WebsiteHandler implements Handler {
+	
+	private static final Logger LOG = Logger.getLogger(WebsiteHandler.class);
 	
 	private static final Pattern LINK_PATTERN = Pattern.compile("(?i)\\b(http(s)?://([a-z0-9-]+\\.)+[a-z0-9]+(/\\S*)?)\\b");
 	
@@ -54,6 +57,7 @@ public class WebsiteHandler implements Handler {
 		Matcher match = LINK_PATTERN.matcher(message);
 		match.find();
 		String url = match.group(1);
+		LOG.info("Title for " + url + " requested");
 		try {
 			return user.getNick() + ": " + Jsoup.connect(url).userAgent("").get().title();
 		} catch (IOException e) {
