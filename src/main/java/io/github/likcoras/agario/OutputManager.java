@@ -33,6 +33,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.apache.log4j.Logger;
 import org.pircbotx.Channel;
 import org.pircbotx.User;
+import com.google.common.collect.ImmutableList;
 
 public class OutputManager {
 	
@@ -71,12 +72,16 @@ public class OutputManager {
 	}
 	
 	public void out(Channel chan, User user, String message) throws IOException {
+		out(chan, user, ImmutableList.of(message));
+	}
+	
+	public void out(Channel chan, User user, List<String> message) throws IOException {
 		if (message.isEmpty())
 			return;
 		final String hostmask = user.getHostmask();
 		final long now = System.currentTimeMillis();
 		if (BotUtil.isLikc(user))
-			chan.send().message(message);
+			sendLines(chan, message);
 		else if (lastOut.containsKey(hostmask)
 			&& now - lastOut.get(hostmask) < 5000) {
 			lastSpam.put(hostmask, now);
@@ -92,7 +97,7 @@ public class OutputManager {
 		} else {
 			lastSpam.remove(hostmask);
 			lastOut.put(hostmask, now);
-			chan.send().message(message);
+			sendLines(chan, message);
 		}
 	}
 	
@@ -115,6 +120,11 @@ public class OutputManager {
 		}
 		write.flush();
 		write.close();
+	}
+	
+	private void sendLines(Channel chan, List<String> message) {
+		for (String line : message)
+			chan.send().message(line);
 	}
 	
 }

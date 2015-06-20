@@ -191,9 +191,11 @@ public class AGario extends ListenerAdapter<PircBotX> {
 	
 	private void doHandle(Channel chan, User user, String message)
 		throws IOException, HandlerException {
+		StringBuffer response = new StringBuffer();
 		for (final Handler handler : handlers)
 			if (handler.isHandlerOf(chan, user, message))
-				out.out(chan, user, handler.getResponse(chan, user, message));
+				response.append(handler.getResponse(chan, user, message) + "\n");
+		out.out(chan, user, Splitter.on("\n").omitEmptyStrings().trimResults().splitToList(response));
 	}
 	
 }
