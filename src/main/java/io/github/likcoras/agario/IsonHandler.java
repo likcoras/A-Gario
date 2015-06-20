@@ -62,14 +62,15 @@ public class IsonHandler implements Handler {
 		final Matcher match = HOST_PATTERN.matcher(url);
 		if (!match.find())
 			return "";
-		if (isUp(match.group(1),
-			match.group(6) != null ? Integer.parseInt(match.group(6)) : 80))
-			return Colors.DARK_GREEN + url + " is up for me";
+		String host = match.group(1);
+		int port = match.group(6) != null ? Integer.parseInt(match.group(6)) : 80;
+		if (isUp(host, port))
+			return Colors.DARK_GREEN + url + "(" + host + "port " + port + ") is up for me";
 		return Colors.RED + url + " is down for me";
 	}
 	
 	private boolean isUp(String host, int port) {
-		LOG.info("Ison requested for " + host + ":" + port);
+		LOG.info("Ison requested for " + host + " port " + port);
 		final InetSocketAddress addr = new InetSocketAddress(host, port);
 		final InetAddress inet = addr.getAddress();
 		if (inet.isAnyLocalAddress() || inet.isLoopbackAddress()
