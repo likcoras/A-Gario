@@ -33,7 +33,8 @@ public class WebsiteHandler implements Handler {
 	
 	private static final Logger LOG = Logger.getLogger(WebsiteHandler.class);
 	
-	private static final Pattern LINK_PATTERN = Pattern.compile("(?i)\\b(http(s)?://([a-z0-9-]+\\.)+[a-z0-9]+(/\\S*)?)\\b");
+	private static final Pattern LINK_PATTERN = Pattern
+		.compile("(?i)\\b(http(s)?://([a-z0-9-]+\\.)+[a-z0-9]+(/\\S*)?)\\b");
 	
 	@Override
 	public void configure(BotConfig config) throws HandlerException {}
@@ -54,13 +55,14 @@ public class WebsiteHandler implements Handler {
 	@Override
 	public String getResponse(Channel chan, User user, String message)
 		throws HandlerException {
-		Matcher match = LINK_PATTERN.matcher(message);
+		final Matcher match = LINK_PATTERN.matcher(message);
 		match.find();
-		String url = match.group(1);
+		final String url = match.group(1);
 		LOG.info("Title for " + url + " requested");
 		try {
-			return user.getNick() + ": " + Jsoup.connect(url).userAgent("").get().title();
-		} catch (IOException e) {
+			return user.getNick() + ": "
+				+ Jsoup.connect(url).userAgent("").get().title();
+		} catch (final IOException e) {
 			return "";
 		}
 	}

@@ -35,7 +35,8 @@ public class IsonHandler implements Handler {
 	
 	private static final Logger LOG = Logger.getLogger(IsonHandler.class);
 	
-	private static final Pattern HOST_PATTERN = Pattern.compile("(?i)(([a-z0-9-]+\\.)+[a-z0-9-]+)(:(\\d+))?");
+	private static final Pattern HOST_PATTERN = Pattern
+		.compile("(?i)(([a-z0-9-]+\\.)+[a-z0-9-]+)(:(\\d+))?");
 	
 	@Override
 	public void configure(BotConfig config) throws HandlerException {}
@@ -56,22 +57,23 @@ public class IsonHandler implements Handler {
 	@Override
 	public String getResponse(Channel chan, User user, String message)
 		throws HandlerException {
-		String url = message.split(" ")[1].trim();
-		Matcher match = HOST_PATTERN.matcher(url);
+		final String url = message.split(" ")[1].trim();
+		final Matcher match = HOST_PATTERN.matcher(url);
 		if (!match.find())
 			return "";
-		if (isUp(match.group(1), match.group(4) != null ? Integer.parseInt(match.group(4)) : 80))
+		if (isUp(match.group(1),
+			match.group(4) != null ? Integer.parseInt(match.group(4)) : 80))
 			return Colors.DARK_GREEN + url + " is up for me";
 		return Colors.RED + url + " is down for me";
 	}
 	
 	private boolean isUp(String host, int port) {
 		LOG.info("Ison requested for " + host + ":" + port);
-		Socket connection = new Socket();
+		final Socket connection = new Socket();
 		try {
 			connection.connect(new InetSocketAddress(host, port), 3000);
 			connection.close();
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			return false;
 		}
 		return true;
