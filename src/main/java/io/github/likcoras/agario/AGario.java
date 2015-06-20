@@ -134,7 +134,7 @@ public class AGario extends ListenerAdapter<PircBotX> {
 	private List<Handler> getHandlers() {
 		return ImmutableList.<Handler> builder().add(new LinkHandler())
 			.add(new InfoHandler()).add(new ServersHandler())
-			.add(new TeamHandler()).build();
+			.add(new TeamHandler()).add(new WebsiteHandler()).build();
 	}
 	
 	private void configure(List<Handler> handlers, BotConfig config)
