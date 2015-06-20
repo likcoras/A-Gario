@@ -78,7 +78,7 @@ public class IsonHandler implements Handler {
 			return false;
 		final Socket connection = new Socket();
 		try {
-			connection.connect(addr, 3000);
+			connection.connect(addr, 2000);
 			connection.close();
 		} catch (final IOException e) {
 			return false;
