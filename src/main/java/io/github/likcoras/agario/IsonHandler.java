@@ -40,6 +40,10 @@ public class IsonHandler implements Handler {
 		Pattern
 			.compile("(?i)(([a-z0-9-]+\\.)+[a-z0-9-]+|\\[?(([0-9a-f]{1,4}:{1,2}){1,7}[0-9a-f]{1,4})\\]?)(:(\\d+))?");
 	
+	private static final String UP_MSG = Colors.DARK_GREEN + "%s (%s port %d) is up for me";
+	private static final String DOWN_MSG = Colors.RED + "%s (%s port %d) is down for me";
+	private static final String NO_MSG = Colors.RED + "%s is down for me";
+	
 	@Override
 	public void configure(BotConfig config) {}
 	
@@ -62,12 +66,12 @@ public class IsonHandler implements Handler {
 		final Matcher match = HOST_PATTERN.matcher(url);
 		if (!match.find())
 			return "";
-		String host = match.group(1);
-		int port = match.group(6) != null ? Integer.parseInt(match.group(6)) : 80;
-		final InetSocketAddress addr = new InetSocketAddress(host, port);
+		final InetSocketAddress addr = new InetSocketAddress(match.group(1), match.group(6) != null ? Integer.parseInt(match.group(6)) : 80);
+		if (addr.isUnresolved())
+			return String.format(NO_MSG, url);
 		if (isUp(addr))
-			return Colors.DARK_GREEN + url + "(" + addr.getAddress().getHostAddress() + " port " + addr.getPort() + ") is up for me";
-		return Colors.RED + url + "(" + addr.getAddress().getHostAddress() + " port " + addr.getPort() + ") is down for me";
+			return String.format(UP_MSG, url, addr.getAddress().getHostAddress(), addr.getPort());
+		return String.format(DOWN_MSG, url, addr.getAddress().getHostAddress(), addr.getPort());
 	}
 	
 	private boolean isUp(InetSocketAddress addr) {
