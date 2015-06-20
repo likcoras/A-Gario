@@ -30,7 +30,7 @@ import org.pircbotx.hooks.Event;
 
 public class WebsiteHandler implements Handler {
 	
-	private static final Pattern LINK_PATTERN = Pattern.compile("(?i)\\b(http(s)?://([a-z0-9-]+\\.)+[a-z]+(/\\S*)?)\\b");
+	private static final Pattern LINK_PATTERN = Pattern.compile("(?i)\\b(http(s)?://([a-z0-9-]+\\.)+[a-z0-9]+(/\\S*)?)\\b");
 	
 	@Override
 	public void configure(BotConfig config) throws HandlerException {}
