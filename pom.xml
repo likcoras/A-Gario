@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>io.github.likcoras</groupId>
   <artifactId>A-Gario</artifactId>
-  <version>1.0.6-SNAPSHOT</version>
+  <version>1.0.6</version>
   <name>A-Gario</name>
   <description>The A`Gario bot for #agario at Rizon.</description>
   <url>https://likcoras.github.io/</url>
