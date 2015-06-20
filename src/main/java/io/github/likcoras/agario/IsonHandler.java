@@ -37,7 +37,7 @@ public class IsonHandler implements Handler {
 	private static final Logger LOG = Logger.getLogger(IsonHandler.class);
 	
 	private static final Pattern HOST_PATTERN = Pattern
-		.compile("(?i)(([a-z0-9-]+\\.)+[a-z0-9-]+)(:(\\d+))?");
+		.compile("(?i)(([a-z0-9-]+\\.)+[a-z0-9-]+|\\[?(([0-9a-f]{1,4}:{1,2}){1,7}[0-9a-f]{1,4})\\]?)(:(\\d+))?");
 	
 	@Override
 	public void configure(BotConfig config) {}
@@ -62,7 +62,7 @@ public class IsonHandler implements Handler {
 		if (!match.find())
 			return "";
 		if (isUp(match.group(1),
-			match.group(4) != null ? Integer.parseInt(match.group(4)) : 80))
+			match.group(6) != null ? Integer.parseInt(match.group(6)) : 80))
 			return Colors.DARK_GREEN + url + " is up for me";
 		return Colors.RED + url + " is down for me";
 	}
