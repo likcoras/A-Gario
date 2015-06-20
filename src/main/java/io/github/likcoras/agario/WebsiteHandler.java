@@ -59,11 +59,11 @@ public class WebsiteHandler implements Handler {
 		final String url = match.group(1);
 		LOG.info("Title for " + url + " requested");
 		try {
-			return user.getNick() + ": "
-				+ Jsoup.connect(url).userAgent("").get().title();
-		} catch (final IOException e) {
-			return "";
-		}
+			String title = Jsoup.connect(url).userAgent("").get().title();
+			if (!title.isEmpty())
+				return user.getNick() + ": " + title;
+		} catch (final IOException e) {}
+		return "";
 	}
 	
 }
