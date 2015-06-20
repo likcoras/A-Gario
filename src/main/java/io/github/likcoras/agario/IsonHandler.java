@@ -76,10 +76,8 @@ public class IsonHandler implements Handler {
 		if (inet.isAnyLocalAddress() || inet.isLoopbackAddress()
 			|| inet.isLinkLocalAddress() || inet.isSiteLocalAddress())
 			return false;
-		final Socket connection = new Socket();
-		try {
+		try (Socket connection = new Socket()) {
 			connection.connect(addr, 2000);
-			connection.close();
 		} catch (final IOException e) {
 			return false;
 		}
