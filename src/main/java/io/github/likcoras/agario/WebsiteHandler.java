@@ -34,7 +34,7 @@ public class WebsiteHandler implements Handler {
 	private static final Logger LOG = Logger.getLogger(WebsiteHandler.class);
 	
 	private static final Pattern LINK_PATTERN = Pattern
-		.compile("(?i)\\b(http(s)?://([a-z0-9-]+\\.)+[a-z0-9]+(/\\S*)?)\\b");
+		.compile("(?i)\\b(https?://([a-z0-9-]+\\.)+[a-z0-9]+(/\\S*)?)\\b");
 	
 	@Override
 	public void configure(BotConfig config) {}
