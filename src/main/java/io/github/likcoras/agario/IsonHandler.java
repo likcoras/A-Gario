@@ -36,8 +36,9 @@ public class IsonHandler implements Handler {
 	
 	private static final Logger LOG = Logger.getLogger(IsonHandler.class);
 	
-	private static final Pattern HOST_PATTERN = Pattern
-		.compile("(?i)(([a-z0-9-]+\\.)+[a-z0-9-]+|\\[?(([0-9a-f]{1,4}:{1,2}){1,7}[0-9a-f]{1,4})\\]?)(:(\\d+))?");
+	private static final Pattern HOST_PATTERN =
+		Pattern
+			.compile("(?i)(([a-z0-9-]+\\.)+[a-z0-9-]+|\\[?(([0-9a-f]{1,4}:{1,2}){1,7}[0-9a-f]{1,4})\\]?)(:(\\d+))?");
 	
 	@Override
 	public void configure(BotConfig config) {}
@@ -69,9 +70,10 @@ public class IsonHandler implements Handler {
 	
 	private boolean isUp(String host, int port) {
 		LOG.info("Ison requested for " + host + ":" + port);
-		InetSocketAddress addr = new InetSocketAddress(host, port);
-		InetAddress inet = addr.getAddress();
-		if (inet.isAnyLocalAddress() || inet.isLoopbackAddress() || inet.isLinkLocalAddress() || inet.isSiteLocalAddress())
+		final InetSocketAddress addr = new InetSocketAddress(host, port);
+		final InetAddress inet = addr.getAddress();
+		if (inet.isAnyLocalAddress() || inet.isLoopbackAddress()
+			|| inet.isLinkLocalAddress() || inet.isSiteLocalAddress())
 			return false;
 		final Socket connection = new Socket();
 		try {

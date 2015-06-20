@@ -75,7 +75,8 @@ public class OutputManager {
 		out(chan, user, ImmutableList.of(message));
 	}
 	
-	public void out(Channel chan, User user, List<String> message) throws IOException {
+	public void out(Channel chan, User user, List<String> message)
+		throws IOException {
 		if (message.isEmpty())
 			return;
 		final String hostmask = user.getHostmask();
@@ -123,7 +124,7 @@ public class OutputManager {
 	}
 	
 	private void sendLines(Channel chan, List<String> message) {
-		for (String line : message)
+		for (final String line : message)
 			chan.send().message(line);
 	}
 	
