@@ -68,7 +68,7 @@ public class LinkHandler implements Handler {
 	
 	@Override
 	public boolean isHandlerOf(Channel chan, User user, String message) {
-		return message.toLowerCase().startsWith("@link")
+		return message.toLowerCase().startsWith("@link ")
 			|| LINK_REGEX.matcher(message).find();
 	}
 	
