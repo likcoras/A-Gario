@@ -42,7 +42,7 @@ public class AGario extends ListenerAdapter<PircBotX> {
 	
 	private static final String HELP_MSG =
 		BotUtil
-			.addColors("%cCommands: %n@help, @info, @servers, @team, @isup, @link, ~[link], ?[link]");
+			.addColors("%cCommands: %n@help, @info, @servers, @isup, @link, ~[link], ?[link]");
 	
 	private static final Logger LOG = Logger.getLogger(AGario.class);
 	
