@@ -84,11 +84,11 @@ public class OutputManager {
 		if (BotUtil.isLikc(user))
 			sendLines(chan, message);
 		else if (lastOut.containsKey(hostmask)
-			&& now - lastOut.get(hostmask) < 5000) {
+			&& now - lastOut.get(hostmask) < 3000) {
 			lastSpam.put(hostmask, now);
 			chan.send().message(user, "Please don't spam.");
 		} else if (lastSpam.containsKey(hostmask)
-			&& now - lastSpam.get(hostmask) < 5000) {
+			&& now - lastSpam.get(hostmask) < 3000) {
 			lastSpam.remove(hostmask);
 			ignored.add(hostmask);
 			writeIgnore();
