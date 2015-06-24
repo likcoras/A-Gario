@@ -34,6 +34,7 @@ public class BotConfig {
 	private Bot bot;
 	private Server server;
 	private List<String> channels;
+	private Others others;
 	
 	public static BotConfig getConfig() throws IOException {
 		final Yaml yaml = new Yaml();
@@ -86,6 +87,14 @@ public class BotConfig {
 	
 	public void setChannels(List<String> channels) {
 		this.channels = channels;
+	}
+	
+	public Others getOthers() {
+		return others;
+	}
+	
+	public void setOthers(Others others) {
+		this.others = others;
 	}
 	
 	public static class Bot {
@@ -174,6 +183,20 @@ public class BotConfig {
 		
 		public void setSsl(boolean ssl) {
 			this.ssl = ssl;
+		}
+		
+	}
+	
+	public static class Others {
+		
+		private String apiKey;
+		
+		public String getApiKey() {
+			return apiKey;
+		}
+		
+		public void setApiKey(String apiKey) {
+			this.apiKey = apiKey;
 		}
 		
 	}

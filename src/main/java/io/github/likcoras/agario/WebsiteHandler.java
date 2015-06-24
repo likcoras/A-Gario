@@ -20,24 +20,39 @@
 package io.github.likcoras.agario;
 
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.log4j.Logger;
-import org.jsoup.Jsoup;
 import org.pircbotx.Channel;
+import org.pircbotx.Colors;
 import org.pircbotx.PircBotX;
 import org.pircbotx.User;
 import org.pircbotx.hooks.Event;
+import com.google.gson.Gson;
 
 public class WebsiteHandler implements Handler {
 	
 	private static final Logger LOG = Logger.getLogger(WebsiteHandler.class);
 	
+	private static final String API =
+		"https://www.googleapis.com/youtube/v3/videos/?part=contentDetails,snippet,statistics&id=%s&key=%s";
 	private static final Pattern LINK_PATTERN = Pattern
-		.compile("(?i)\\b(https?://(\\S*)");
+		.compile("(?i)\\byoutu(\\.be|be\\.com)\\/(.*v(/|=)|(.*/)?)([\\w-]+)");
+	private static final Gson GSON = new Gson();;
+	
+	private static final String YOUTUBE_FORMAT = BotUtil.addColors("["
+		+ Colors.RED + "Youtube%n" + "] %s - by %s [%s] [%d views] %c[%d] "
+		+ Colors.RED + "[%d]");
+	
+	private String apiKey;
 	
 	@Override
-	public void configure(BotConfig config) {}
+	public void configure(BotConfig config) {
+		apiKey = config.getOthers().getApiKey();
+	}
 	
 	@Override
 	public boolean handlesEvent(Event<PircBotX> event) {
@@ -53,17 +68,30 @@ public class WebsiteHandler implements Handler {
 	}
 	
 	@Override
-	public String getResponse(Channel chan, User user, String message) {
+	public String getResponse(Channel chan, User user, String message)
+		throws HandlerException {
 		final Matcher match = LINK_PATTERN.matcher(message);
 		match.find();
-		final String url = match.group(1);
-		LOG.info("Title for " + url + " requested");
+		final String id = match.group(5);
+		LOG.info("Youtube data for " + id + " requested");
+		YoutubeInfo info;
 		try {
-			String title = Jsoup.connect(url).userAgent("").get().title();
-			if (!title.isEmpty())
-				return user.getNick() + ": " + title;
-		} catch (final IOException e) {}
-		return "";
+			info = getYoutubeJson(String.format(API, id, apiKey));
+		} catch (final IOException io) {
+			throw new HandlerException(io);
+		}
+		return String.format(YOUTUBE_FORMAT, info.getTitle(),
+			info.getChannel(), info.getDuration(), info.getViews(),
+			info.getLikes(), info.getDislikes());
+	}
+	
+	private YoutubeInfo getYoutubeJson(String url)
+		throws MalformedURLException, IOException {
+		final InputStreamReader read =
+			new InputStreamReader(new URL(String.format(url)).openStream());
+		final YoutubeInfo info = GSON.fromJson(read, YoutubeInfo.class);
+		read.close();
+		return info;
 	}
 	
 }

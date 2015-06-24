@@ -13,3 +13,6 @@ server:
 
 channels:
 - "#agario"
+
+others:
+  apiKey: apikey
