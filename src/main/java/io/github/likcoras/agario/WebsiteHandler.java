@@ -80,6 +80,8 @@ public class WebsiteHandler implements Handler {
 		} catch (final IOException io) {
 			throw new HandlerException(io);
 		}
+		if (!info.hasEntries())
+			return "";
 		return String.format(YOUTUBE_FORMAT, info.getTitle(),
 			info.getChannel(), info.getDuration(), info.getViews(),
 			info.getLikes(), info.getDislikes());

@@ -4,6 +4,10 @@ public class YoutubeInfo {
 	
 	private Items[] items;
 	
+	public boolean hasEntries() {
+		return items.length > 0;
+	}
+	
 	public String getDuration() {
 		return items[0].contentDetails.duration.substring(2).toLowerCase()
 			.replaceAll("[a-z]", "$0 ").trim();
