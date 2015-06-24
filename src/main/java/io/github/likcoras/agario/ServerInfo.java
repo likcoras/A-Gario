@@ -30,6 +30,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 
 public class ServerInfo {
+	
 	private Regions regions;
 	private Totals totals;
 	

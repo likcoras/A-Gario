@@ -36,7 +36,7 @@ public class ServersHandler implements Handler {
 	
 	private static final Logger LOG = Logger.getLogger(ServersHandler.class);
 	
-	private static final Gson gson = ServerInfo.getBuilder().create();;
+	private static final Gson gson = ServerInfo.getBuilder().create();
 	
 	private static final String SERVERS_FORMAT = BotUtil
 		.addColors("%c%s: %n%d | ");
