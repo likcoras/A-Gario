@@ -4,6 +4,8 @@ import java.lang.reflect.Type;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Value;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -50,6 +52,11 @@ public class YoutubeInfo {
 				likes, dislikes);
 		}
 		
+	}
+	
+	public static Gson getGson() {
+		return new GsonBuilder().registerTypeAdapter(YoutubeInfo.class,
+			new YoutubeInfoDeserializer()).create();
 	}
 	
 	public boolean wasFound() {

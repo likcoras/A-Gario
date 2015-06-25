@@ -41,7 +41,7 @@ public class WebsiteHandler implements Handler {
 		"https://www.googleapis.com/youtube/v3/videos/?part=contentDetails,snippet,statistics&maxResults=1&id=%s&key=%s";
 	private static final Pattern LINK_PATTERN = Pattern
 		.compile("(?i)\\byoutu(\\.be|be\\.com)\\/(.*v(/|=)|(.*/)?)([\\w-]+)");
-	private static final Gson GSON = new Gson();;
+	private static final Gson GSON = YoutubeInfo.getGson();
 	
 	private static final String YOUTUBE_FORMAT = BotUtil.addColors("["
 		+ Colors.RED + "Youtube%n" + "] %s - by %s [%s] [%d views] %c[%d] "
@@ -80,7 +80,7 @@ public class WebsiteHandler implements Handler {
 		} catch (final IOException io) {
 			throw new HandlerException(io);
 		}
-		if (info.wasFound())
+		if (!info.wasFound())
 			return "";
 		return String.format(YOUTUBE_FORMAT, info.getTitle(),
 			info.getChannel(), info.getDuration(), info.getViews(),
