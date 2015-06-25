@@ -38,7 +38,7 @@ public class WebsiteHandler implements Handler {
 	private static final Logger LOG = Logger.getLogger(WebsiteHandler.class);
 	
 	private static final String API =
-		"https://www.googleapis.com/youtube/v3/videos/?part=contentDetails,snippet,statistics&id=%s&key=%s";
+		"https://www.googleapis.com/youtube/v3/videos/?part=contentDetails,snippet,statistics&maxResults=1&id=%s&key=%s";
 	private static final Pattern LINK_PATTERN = Pattern
 		.compile("(?i)\\byoutu(\\.be|be\\.com)\\/(.*v(/|=)|(.*/)?)([\\w-]+)");
 	private static final Gson GSON = new Gson();;
@@ -80,7 +80,7 @@ public class WebsiteHandler implements Handler {
 		} catch (final IOException io) {
 			throw new HandlerException(io);
 		}
-		if (!info.hasEntries())
+		if (info.wasFound())
 			return "";
 		return String.format(YOUTUBE_FORMAT, info.getTitle(),
 			info.getChannel(), info.getDuration(), info.getViews(),

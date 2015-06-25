@@ -22,7 +22,6 @@ package io.github.likcoras.agario;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import org.apache.log4j.Logger;
@@ -36,7 +35,7 @@ public class ServersHandler implements Handler {
 	
 	private static final Logger LOG = Logger.getLogger(ServersHandler.class);
 	
-	private static final Gson gson = ServerInfo.getBuilder().create();
+	private static final Gson gson = ServerInfo.getGson();
 	
 	private static final String SERVERS_FORMAT = BotUtil
 		.addColors("%c%s: %n%d | ");
@@ -83,18 +82,9 @@ public class ServersHandler implements Handler {
 	}
 	
 	private String getServerText(ServerInfo info) {
-		final Map<String, Integer> servers = info.getRegions();
-		final Map<String, Integer> numPlayers = new HashMap<String, Integer>();
-		for (final Entry<String, Integer> server : servers.entrySet()) {
-			final String name =
-				server.getKey().replaceAll(".+-", "").replaceAll(":.+", "");
-			final int num =
-				(numPlayers.get(name) == null ? 0 : numPlayers.get(name))
-					+ server.getValue();
-			numPlayers.put(name, num);
-		}
+		final Map<String, Integer> regions = info.getRegions();
 		final StringBuffer out = new StringBuffer();
-		for (final Entry<String, Integer> server : numPlayers.entrySet())
+		for (final Entry<String, Integer> server : regions.entrySet())
 			out.append(String.format(SERVERS_FORMAT, server.getKey(),
 				server.getValue()));
 		return out.toString();

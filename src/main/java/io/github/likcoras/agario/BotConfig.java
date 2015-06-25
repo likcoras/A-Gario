@@ -27,8 +27,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
+import lombok.Data;
 import org.yaml.snakeyaml.Yaml;
 
+@Data
 public class BotConfig {
 	
 	private Bot bot;
@@ -65,140 +67,26 @@ public class BotConfig {
 		write.close();
 	}
 	
-	public Bot getBot() {
-		return bot;
-	}
-	
-	public void setBot(Bot bot) {
-		this.bot = bot;
-	}
-	
-	public Server getServer() {
-		return server;
-	}
-	
-	public void setServer(Server server) {
-		this.server = server;
-	}
-	
-	public List<String> getChannels() {
-		return channels;
-	}
-	
-	public void setChannels(List<String> channels) {
-		this.channels = channels;
-	}
-	
-	public Others getOthers() {
-		return others;
-	}
-	
-	public void setOthers(Others others) {
-		this.others = others;
-	}
-	
+	@Data
 	public static class Bot {
-		
 		private String nick;
 		private String login;
 		private String realname;
 		private String version;
 		private String password;
-		
-		public String getNick() {
-			return nick;
-		}
-		
-		public void setNick(String nick) {
-			this.nick = nick;
-		}
-		
-		public String getLogin() {
-			return login;
-		}
-		
-		public void setLogin(String login) {
-			this.login = login;
-		}
-		
-		public String getRealname() {
-			return realname;
-		}
-		
-		public void setRealname(String realname) {
-			this.realname = realname;
-		}
-		
-		public String getVersion() {
-			return version;
-		}
-		
-		public void setVersion(String version) {
-			this.version = version;
-		}
-		
-		public String getPassword() {
-			return password;
-		}
-		
-		public void setPassword(String password) {
-			this.password = password;
-		}
 	}
 	
+	@Data
 	public static class Server {
-		
 		private String host;
 		private int port;
 		private boolean trust;
 		private boolean ssl;
-		
-		public String getHost() {
-			return host;
-		}
-		
-		public void setHost(String host) {
-			this.host = host;
-		}
-		
-		public int getPort() {
-			return port;
-		}
-		
-		public void setPort(int port) {
-			this.port = port;
-		}
-		
-		public boolean isTrust() {
-			return trust;
-		}
-		
-		public void setTrust(boolean trust) {
-			this.trust = trust;
-		}
-		
-		public boolean isSsl() {
-			return ssl;
-		}
-		
-		public void setSsl(boolean ssl) {
-			this.ssl = ssl;
-		}
-		
 	}
 	
+	@Data
 	public static class Others {
-		
 		private String apiKey;
-		
-		public String getApiKey() {
-			return apiKey;
-		}
-		
-		public void setApiKey(String apiKey) {
-			this.apiKey = apiKey;
-		}
-		
 	}
 	
 }

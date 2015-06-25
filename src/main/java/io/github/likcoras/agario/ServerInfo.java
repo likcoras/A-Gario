@@ -23,53 +23,69 @@ import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import lombok.Value;
+import com.google.common.collect.ImmutableMap;
+import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 
+@Value
 public class ServerInfo {
 	
-	private Regions regions;
-	private Totals totals;
+	private Map<String, Integer> regions;
+	private int totals;
 	
-	public static class RegionDeserializer implements JsonDeserializer<Regions> {
+	public static class ServerInfoDeserializer implements JsonDeserializer<ServerInfo> {
+		
 		@Override
-		public Regions deserialize(JsonElement json, Type typeOfT,
+		public ServerInfo deserialize(JsonElement json, Type typeOfT,
 			JsonDeserializationContext context) throws JsonParseException {
-			final Regions regions = new Regions();
-			regions.regions = new HashMap<String, Integer>();
-			for (final Entry<String, JsonElement> e : json.getAsJsonObject()
-				.entrySet()) {
+			final JsonObject rawInfo = json.getAsJsonObject();
+			final JsonObject regionsInfo =
+				rawInfo.get("regions").getAsJsonObject();
+			final Map<String, Integer> regions = parseRegionsInfo(regionsInfo);
+			final int totals =
+				rawInfo.get("totals").getAsJsonObject().get("numPlayers")
+					.getAsInt();
+			return new ServerInfo(regions, totals);
+		}
+		
+		private static Map<String, Integer> parseRegionsInfo(
+			JsonObject regionsInfo) {
+			final Map<String, Integer> regions = new HashMap<String, Integer>();
+			for (final Entry<String, JsonElement> e : regionsInfo.entrySet()) {
 				final String name = e.getKey();
 				final int numPlayers =
 					e.getValue().getAsJsonObject().get("numPlayers").getAsInt();
-				regions.regions.put(name, numPlayers);
+				regions.put(name, numPlayers);
 			}
-			return regions;
+			return shortenRegions(regions);
 		}
+		
+		private static Map<String, Integer> shortenRegions(
+			Map<String, Integer> regions) {
+			final Map<String, Integer> shortRegions =
+				new HashMap<String, Integer>();
+			for (final Entry<String, Integer> region : regions.entrySet()) {
+				final String name =
+					region.getKey().replaceAll(".+-", "").replaceAll(":.+", "");
+				final int num =
+					(shortRegions.get(name) == null ? 0 : shortRegions
+						.get(name)) + region.getValue();
+				shortRegions.put(name, num);
+			}
+			return ImmutableMap.copyOf(shortRegions);
+		}
+		
 	}
 	
-	public static GsonBuilder getBuilder() {
-		return new GsonBuilder().registerTypeAdapter(Regions.class,
-			new RegionDeserializer());
-	}
-	
-	public Map<String, Integer> getRegions() {
-		return regions.regions;
-	}
-	
-	public int getTotals() {
-		return totals.numPlayers;
-	}
-	
-	private static class Regions {
-		private Map<String, Integer> regions;
-	}
-	
-	private static class Totals {
-		private int numPlayers;
+	public static Gson getGson() {
+		return new GsonBuilder().registerTypeAdapter(ServerInfo.class,
+			new ServerInfoDeserializer()).create();
 	}
 	
 }
