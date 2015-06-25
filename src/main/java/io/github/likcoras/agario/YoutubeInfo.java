@@ -44,7 +44,7 @@ public class YoutubeInfo {
 			final String channel = snippet.get("channelTitle").getAsString();
 			final String duration =
 				contentDetails.get("duration").getAsString().substring(2)
-					.toLowerCase().replaceAll("[a-z]", "$0 ");
+					.toLowerCase().replaceAll("[a-z]", "$0 ").trim();
 			final long views = statistics.get("viewCount").getAsLong();
 			final long likes = statistics.get("likeCount").getAsLong();
 			final long dislikes = statistics.get("dislikeCount").getAsLong();
