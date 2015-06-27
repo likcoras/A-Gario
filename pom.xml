@@ -8,20 +8,9 @@
   <description>The A`Gario bot for #agario at Rizon.</description>
   <url>https://likcoras.github.io/</url>
   
-  <scm>
-    <url>https://github.com/likcoras/A-Gario</url>
-    <connection>scm:git:git://github.com/likcoras/A-Gario.git</connection>
-    <developerConnection>scm:git:git@github.com:likcoras/A-Gario.git</developerConnection>
-  </scm>
-  
   <build>
     
     <plugins>
-      
-      <plugin>
-        <artifactId>maven-release-plugin</artifactId>
-        <version>2.5.2</version>
-	  </plugin>
       
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
