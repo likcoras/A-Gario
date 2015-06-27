@@ -15,13 +15,6 @@
     <tag>A-Gario-2.0.0</tag>
   </scm>
   
-  <distributionManagement>
-    <repository>
-      <id>github</id>
-      <url>https://github.com/likcoras/A-Gario</url>
-    </repository>
-  </distributionManagement>
-  
   <build>
     
     <plugins>
