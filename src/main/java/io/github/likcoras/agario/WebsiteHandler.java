@@ -67,8 +67,8 @@ public class WebsiteHandler implements Handler {
 		YoutubeInfo info;
 		try {
 			info = getYoutubeJson(String.format(API, id, apiKey));
-		} catch (final IOException io) {
-			throw new HandlerException(io);
+		} catch (final IOException e) {
+			throw new HandlerException(e);
 		}
 		if (!info.wasFound())
 			return "";
