@@ -124,9 +124,7 @@ public class LinkHandler implements Handler {
 	private Properties readLinks(File file) throws IOException {
 		final Properties links = new Properties();
 		file.createNewFile();
-		final FileReader read = new FileReader(file);
-		links.load(read);
-		read.close();
+		links.load(new FileReader(file));
 		return links;
 	}
 	

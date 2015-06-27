@@ -65,12 +65,8 @@ public class ServersHandler implements Handler {
 	}
 	
 	private ServerInfo getServersJson() throws IOException {
-		final InputStreamReader read =
-				new InputStreamReader(
-						new URL("http://m.agar.io/info").openStream());
-		final ServerInfo info = gson.fromJson(read, ServerInfo.class);
-		read.close();
-		return info;
+		return gson.fromJson(new InputStreamReader(
+				new URL("http://m.agar.io/info").openStream()), ServerInfo.class);
 	}
 	
 	private String getServerText(ServerInfo info) {

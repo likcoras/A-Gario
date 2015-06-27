@@ -40,9 +40,7 @@ public class BotConfig {
 	
 	public static BotConfig getConfig() throws IOException {
 		final Yaml yaml = new Yaml();
-		final FileReader read = new FileReader(getFile());
-		final BotConfig config = yaml.loadAs(read, BotConfig.class);
-		read.close();
+		final BotConfig config = yaml.loadAs(new FileReader(getFile()), BotConfig.class);
 		return config;
 	}
 	
