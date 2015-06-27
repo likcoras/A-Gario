@@ -58,27 +58,12 @@ public class ServerInfo {
 			JsonObject regionsInfo) {
 			final Map<String, Integer> regions = new HashMap<String, Integer>();
 			for (final Entry<String, JsonElement> e : regionsInfo.entrySet()) {
-				final String name = e.getKey();
+				final String name = e.getKey().replaceAll(".+-", "");
 				final int numPlayers =
 					e.getValue().getAsJsonObject().get("numPlayers").getAsInt();
 				regions.put(name, numPlayers);
 			}
-			return shortenRegions(regions);
-		}
-		
-		private static Map<String, Integer> shortenRegions(
-			Map<String, Integer> regions) {
-			final Map<String, Integer> shortRegions =
-				new HashMap<String, Integer>();
-			for (final Entry<String, Integer> region : regions.entrySet()) {
-				final String name =
-					region.getKey().replaceAll(".+-", "").replaceAll(":.+", "");
-				final int num =
-					(shortRegions.get(name) == null ? 0 : shortRegions
-						.get(name)) + region.getValue();
-				shortRegions.put(name, num);
-			}
-			return ImmutableMap.copyOf(shortRegions);
+			return ImmutableMap.copyOf(regions);
 		}
 		
 	}
