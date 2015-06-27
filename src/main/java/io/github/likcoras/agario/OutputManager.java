@@ -27,8 +27,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import org.apache.log4j.Logger;
 import org.pircbotx.Channel;
@@ -83,23 +85,21 @@ public class OutputManager {
 		final long now = System.currentTimeMillis();
 		if (BotUtil.isLikc(user))
 			sendLines(chan, message);
-		else if (lastOut.containsKey(hostmask)
-			&& now - lastOut.get(hostmask) < 3000) {
+		else if (shouldFlag(lastOut, hostmask, now)) {
 			lastSpam.put(hostmask, now);
-			chan.send().message(user, "Please don't spam.");
-		} else if (lastSpam.containsKey(hostmask)
-			&& now - lastSpam.get(hostmask) < 3000) {
+			user.send().notice("Please don't spam.");
+		} else if (shouldFlag(lastSpam, hostmask, now)) {
 			lastSpam.remove(hostmask);
 			ignored.add(hostmask);
 			writeIgnore();
-			chan.send().message(
-				"User " + user.getNick() + " ignored due to spam.");
+			user.send().notice("You have been ignored due to spam.");
 			LOG.info("User " + user + " ignored due to spam");
 		} else {
 			lastSpam.remove(hostmask);
 			lastOut.put(hostmask, now);
 			sendLines(chan, message);
 		}
+		purgeOut(now);
 	}
 	
 	private List<String> readIgnore() throws IOException {
@@ -123,9 +123,20 @@ public class OutputManager {
 		write.close();
 	}
 	
+	private boolean shouldFlag(Map<String, Long> map, String hostmask, long now) {
+		return map.containsKey(hostmask) && now - map.get(hostmask) < 3000L;
+	}
+	
 	private void sendLines(Channel chan, List<String> message) {
 		for (final String line : message)
 			chan.send().message(line);
+	}
+	
+	private void purgeOut(long now) {
+		Iterator<Entry<String, Long>> it = lastOut.entrySet().iterator();
+		while (it.hasNext())
+			if (now - it.next().getValue() < 3000L)
+				it.remove();
 	}
 	
 }
