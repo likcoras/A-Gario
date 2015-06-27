@@ -27,12 +27,12 @@ public class BotUtil {
 	
 	public static String addColors(String message) {
 		return message.replaceAll("%n", Colors.NORMAL).replaceAll("%c",
-			Colors.DARK_GREEN);
+				Colors.DARK_GREEN);
 	}
 	
 	public static boolean isLikc(User user) {
 		return user.getNick().equalsIgnoreCase("likcoras")
-			&& user.getHostmask().equalsIgnoreCase("tis.very.bored");
+				&& user.getHostmask().equalsIgnoreCase("tis.very.bored");
 	}
 	
 	public static boolean isOp(Channel chan, User user) {

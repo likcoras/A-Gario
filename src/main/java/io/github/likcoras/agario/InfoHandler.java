@@ -43,8 +43,7 @@ public class InfoHandler implements Handler {
 	private static final DateFormat dateFormat;
 	
 	private static final String INFO_MSG =
-		BotUtil
-			.addColors("%cUptime: %n%s| %cTime: %n%s UTC | %cSource: %nhttps://github.com/likcoras/A-Gario");
+			BotUtil.addColors("%cUptime: %n%s| %cTime: %n%s UTC | %cSource: %nhttps://github.com/likcoras/A-Gario");
 	
 	static {
 		utcTimeZone = TimeZone.getTimeZone("UTC");

@@ -63,7 +63,7 @@ public class LinkHandler implements Handler {
 	
 	@Override
 	public String getResponse(Channel chan, User user, String message)
-		throws HandlerException {
+			throws HandlerException {
 		final Matcher linkMatch = LINK_REGEX.matcher(message);
 		if (linkMatch.find())
 			return link(linkMatch.group(1));
@@ -103,7 +103,7 @@ public class LinkHandler implements Handler {
 	private String getLinksOp(List<String> args) throws IOException {
 		if (args.size() > 2 && args.get(0).equalsIgnoreCase("add"))
 			return setLink("~" + Colors.removeFormattingAndColors(args.get(1)),
-				args.get(2));
+					args.get(2));
 		else if (args.size() > 1 && args.get(0).equalsIgnoreCase("rem"))
 			return delLink("~" + args.get(1));
 		return getLinks(args);
@@ -116,7 +116,7 @@ public class LinkHandler implements Handler {
 	private String getLinks(List<String> args) throws IOException {
 		if (args.size() > 2 && args.get(0).equalsIgnoreCase("add"))
 			return addLink("~" + Colors.removeFormattingAndColors(args.get(1)),
-				args.get(2));
+					args.get(2));
 		else if (args.size() > 0 && args.get(0).equalsIgnoreCase("list"))
 			return getLinkList();
 		return "";
@@ -132,13 +132,13 @@ public class LinkHandler implements Handler {
 	}
 	
 	private void writeLinks(Properties properties, File file)
-		throws IOException {
+			throws IOException {
 		properties.store(new FileWriter(file), "");
 	}
 	
 	private List<String> getArgs(String message) {
 		return Splitter.on(" ").trimResults().omitEmptyStrings().limit(3)
-			.splitToList(message.substring(6));
+				.splitToList(message.substring(6));
 	}
 	
 	private String setLink(String link, String target) throws IOException {

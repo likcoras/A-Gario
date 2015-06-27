@@ -43,24 +43,25 @@ public class ServerInfo {
 		
 		@Override
 		public ServerInfo deserialize(JsonElement json, Type typeOfT,
-			JsonDeserializationContext context) throws JsonParseException {
+				JsonDeserializationContext context) throws JsonParseException {
 			final JsonObject rawInfo = json.getAsJsonObject();
 			final JsonObject regionsInfo =
-				rawInfo.get("regions").getAsJsonObject();
+					rawInfo.get("regions").getAsJsonObject();
 			final Map<String, Integer> regions = parseRegionsInfo(regionsInfo);
 			final int totals =
-				rawInfo.get("totals").getAsJsonObject().get("numPlayers")
-					.getAsInt();
+					rawInfo.get("totals").getAsJsonObject().get("numPlayers")
+							.getAsInt();
 			return new ServerInfo(regions, totals);
 		}
 		
 		private static Map<String, Integer> parseRegionsInfo(
-			JsonObject regionsInfo) {
+				JsonObject regionsInfo) {
 			final Map<String, Integer> regions = new HashMap<String, Integer>();
 			for (final Entry<String, JsonElement> e : regionsInfo.entrySet()) {
 				final String name = e.getKey().replaceAll(".+-", "");
 				final int numPlayers =
-					e.getValue().getAsJsonObject().get("numPlayers").getAsInt();
+						e.getValue().getAsJsonObject().get("numPlayers")
+								.getAsInt();
 				regions.put(name, numPlayers);
 			}
 			return ImmutableMap.copyOf(regions);
@@ -70,7 +71,7 @@ public class ServerInfo {
 	
 	public static Gson getGson() {
 		return new GsonBuilder().registerTypeAdapter(ServerInfo.class,
-			new ServerInfoDeserializer()).create();
+				new ServerInfoDeserializer()).create();
 	}
 	
 }

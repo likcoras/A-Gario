@@ -38,14 +38,14 @@ public class WebsiteHandler implements Handler {
 	private static final Logger LOG = Logger.getLogger(WebsiteHandler.class);
 	
 	private static final String API =
-		"https://www.googleapis.com/youtube/v3/videos/?part=contentDetails,snippet,statistics&maxResults=1&id=%s&key=%s";
-	private static final Pattern LINK_PATTERN = Pattern
-		.compile("(?i)\\byoutu(\\.be|be\\.com)\\/(.*v(/|=)|(.*/)?)([\\w-]+)");
+			"https://www.googleapis.com/youtube/v3/videos/?part=contentDetails,snippet,statistics&maxResults=1&id=%s&key=%s";
+	private static final Pattern LINK_PATTERN =
+			Pattern.compile("(?i)\\byoutu(\\.be|be\\.com)\\/(.*v(/|=)|(.*/)?)([\\w-]+)");
 	private static final Gson GSON = YoutubeInfo.getGson();
 	
 	private static final String YOUTUBE_FORMAT = BotUtil.addColors("["
-		+ Colors.RED + "Youtube%n" + "] %s - by %s [%s] [%d views] %c[%d] "
-		+ Colors.RED + "[%d]");
+			+ Colors.RED + "Youtube%n" + "] %s - by %s [%s] [%d views] %c[%d] "
+			+ Colors.RED + "[%d]");
 	
 	private String apiKey;
 	
@@ -59,7 +59,7 @@ public class WebsiteHandler implements Handler {
 	
 	@Override
 	public String getResponse(Channel chan, User user, String message)
-		throws HandlerException {
+			throws HandlerException {
 		final Matcher match = LINK_PATTERN.matcher(message);
 		if (!match.find())
 			return "";
@@ -74,14 +74,14 @@ public class WebsiteHandler implements Handler {
 		if (!info.wasFound())
 			return "";
 		return String.format(YOUTUBE_FORMAT, info.getTitle(),
-			info.getChannel(), info.getDuration(), info.getViews(),
-			info.getLikes(), info.getDislikes());
+				info.getChannel(), info.getDuration(), info.getViews(),
+				info.getLikes(), info.getDislikes());
 	}
 	
 	private YoutubeInfo getYoutubeJson(String url)
-		throws MalformedURLException, IOException {
+			throws MalformedURLException, IOException {
 		final InputStreamReader read =
-			new InputStreamReader(new URL(String.format(url)).openStream());
+				new InputStreamReader(new URL(String.format(url)).openStream());
 		final YoutubeInfo info = GSON.fromJson(read, YoutubeInfo.class);
 		read.close();
 		return info;

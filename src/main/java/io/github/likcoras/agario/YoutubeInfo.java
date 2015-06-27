@@ -29,34 +29,34 @@ public class YoutubeInfo {
 		
 		@Override
 		public YoutubeInfo deserialize(JsonElement json, Type typeOfT,
-			JsonDeserializationContext context) throws JsonParseException {
+				JsonDeserializationContext context) throws JsonParseException {
 			final JsonArray items =
-				json.getAsJsonObject().get("items").getAsJsonArray();
+					json.getAsJsonObject().get("items").getAsJsonArray();
 			if (items.size() < 0)
 				return new YoutubeInfo(false, "", "", "", 0, 0, 0);
 			final JsonObject item = items.get(0).getAsJsonObject();
 			final JsonObject snippet = item.get("snippet").getAsJsonObject();
 			final JsonObject contentDetails =
-				item.get("contentDetails").getAsJsonObject();
+					item.get("contentDetails").getAsJsonObject();
 			final JsonObject statistics =
-				item.get("statistics").getAsJsonObject();
+					item.get("statistics").getAsJsonObject();
 			final String title = snippet.get("title").getAsString();
 			final String channel = snippet.get("channelTitle").getAsString();
 			final String duration =
-				contentDetails.get("duration").getAsString().substring(2)
-					.toLowerCase().replaceAll("[a-z]", "$0 ").trim();
+					contentDetails.get("duration").getAsString().substring(2)
+							.toLowerCase().replaceAll("[a-z]", "$0 ").trim();
 			final long views = statistics.get("viewCount").getAsLong();
 			final long likes = statistics.get("likeCount").getAsLong();
 			final long dislikes = statistics.get("dislikeCount").getAsLong();
 			return new YoutubeInfo(true, title, channel, duration, views,
-				likes, dislikes);
+					likes, dislikes);
 		}
 		
 	}
 	
 	public static Gson getGson() {
 		return new GsonBuilder().registerTypeAdapter(YoutubeInfo.class,
-			new YoutubeInfoDeserializer()).create();
+				new YoutubeInfoDeserializer()).create();
 	}
 	
 	public boolean wasFound() {

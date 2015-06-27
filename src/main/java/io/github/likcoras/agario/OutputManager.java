@@ -78,7 +78,7 @@ public class OutputManager {
 	}
 	
 	public void out(Channel chan, User user, List<String> message)
-		throws IOException {
+			throws IOException {
 		if (message.isEmpty())
 			return;
 		final String hostmask = user.getHostmask();
@@ -123,7 +123,8 @@ public class OutputManager {
 		write.close();
 	}
 	
-	private boolean shouldFlag(Map<String, Long> map, String hostmask, long now) {
+	private boolean
+			shouldFlag(Map<String, Long> map, String hostmask, long now) {
 		return map.containsKey(hostmask) && now - map.get(hostmask) < 3000L;
 	}
 	
@@ -133,7 +134,7 @@ public class OutputManager {
 	}
 	
 	private void purgeOut(long now) {
-		Iterator<Entry<String, Long>> it = lastOut.entrySet().iterator();
+		final Iterator<Entry<String, Long>> it = lastOut.entrySet().iterator();
 		while (it.hasNext())
 			if (now - it.next().getValue() < 3000L)
 				it.remove();

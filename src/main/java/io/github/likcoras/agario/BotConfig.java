@@ -56,8 +56,8 @@ public class BotConfig {
 	private static void createDefaultFile(File file) throws IOException {
 		file.createNewFile();
 		final BufferedReader read =
-			new BufferedReader(new InputStreamReader(BotConfig.class
-				.getClassLoader().getResourceAsStream("config.yml")));
+				new BufferedReader(new InputStreamReader(BotConfig.class
+						.getClassLoader().getResourceAsStream("config.yml")));
 		final BufferedWriter write = new BufferedWriter(new FileWriter(file));
 		String line;
 		while ((line = read.readLine()) != null)

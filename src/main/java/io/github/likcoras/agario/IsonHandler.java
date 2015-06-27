@@ -37,13 +37,12 @@ public class IsonHandler implements Handler {
 	private static final Logger LOG = Logger.getLogger(IsonHandler.class);
 	
 	private static final Pattern HOST_PATTERN =
-		Pattern
-			.compile("(?i)(([a-z0-9-]+\\.)+[a-z0-9-]+|\\[?(([0-9a-f]{1,4}:{1,2}){1,7}[0-9a-f]{1,4})\\]?)(:(\\d+))?");
+			Pattern.compile("(?i)(([a-z0-9-]+\\.)+[a-z0-9-]+|\\[?(([0-9a-f]{1,4}:{1,2}){1,7}[0-9a-f]{1,4})\\]?)(:(\\d+))?");
 	
 	private static final String UP_MSG = Colors.DARK_GREEN
-		+ "%s (%s port %d) is up for me";
+			+ "%s (%s port %d) is up for me";
 	private static final String DOWN_MSG = Colors.RED
-		+ "%s (%s port %d) is down for me";
+			+ "%s (%s port %d) is down for me";
 	private static final String NO_MSG = Colors.RED + "%s is down for me";
 	
 	@Override
@@ -61,23 +60,23 @@ public class IsonHandler implements Handler {
 		if (!match.find())
 			return "";
 		final InetSocketAddress addr =
-			new InetSocketAddress(match.group(1), match.group(6) != null
-				? Integer.parseInt(match.group(6)) : 80);
+				new InetSocketAddress(match.group(1), match.group(6) != null
+						? Integer.parseInt(match.group(6)) : 80);
 		if (addr.isUnresolved())
 			return String.format(NO_MSG, url);
 		if (isUp(addr))
 			return String.format(UP_MSG, url, addr.getAddress()
-				.getHostAddress(), addr.getPort());
+					.getHostAddress(), addr.getPort());
 		return String.format(DOWN_MSG, url, addr.getAddress().getHostAddress(),
-			addr.getPort());
+				addr.getPort());
 	}
 	
 	private boolean isUp(InetSocketAddress addr) {
 		final InetAddress inet = addr.getAddress();
 		LOG.info("Ison requested for " + inet.getHostAddress() + " port "
-			+ addr.getPort());
+				+ addr.getPort());
 		if (inet.isAnyLocalAddress() || inet.isLoopbackAddress()
-			|| inet.isLinkLocalAddress() || inet.isSiteLocalAddress())
+				|| inet.isLinkLocalAddress() || inet.isSiteLocalAddress())
 			return false;
 		try (Socket connection = new Socket()) {
 			connection.connect(addr, 2000);

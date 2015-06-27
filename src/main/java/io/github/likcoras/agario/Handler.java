@@ -31,6 +31,6 @@ public interface Handler {
 	public void handleEvent(Event<PircBotX> event) throws HandlerException;
 	
 	public String getResponse(Channel chan, User user, String message)
-		throws HandlerException;
+			throws HandlerException;
 	
 }

@@ -38,9 +38,9 @@ public class ServersHandler implements Handler {
 	private static final Gson gson = ServerInfo.getGson();
 	
 	private static final String SERVERS_FORMAT = BotUtil
-		.addColors("%c%s: %n%d | ");
+			.addColors("%c%s: %n%d | ");
 	private static final String SERVERS_TOTAL = BotUtil
-		.addColors("%cTotal: %n%d players");
+			.addColors("%cTotal: %n%d players");
 	
 	@Override
 	public void configure(BotConfig config) {}
@@ -50,7 +50,7 @@ public class ServersHandler implements Handler {
 	
 	@Override
 	public String getResponse(Channel chan, User user, String message)
-		throws HandlerException {
+			throws HandlerException {
 		if (!message.equalsIgnoreCase("@servers"))
 			return "";
 		LOG.info("Servers requested");
@@ -67,7 +67,8 @@ public class ServersHandler implements Handler {
 	
 	private ServerInfo getServersJson() throws IOException {
 		final InputStreamReader read =
-			new InputStreamReader(new URL("http://m.agar.io/info").openStream());
+				new InputStreamReader(
+						new URL("http://m.agar.io/info").openStream());
 		final ServerInfo info = gson.fromJson(read, ServerInfo.class);
 		read.close();
 		return info;
@@ -78,7 +79,7 @@ public class ServersHandler implements Handler {
 		final StringBuffer out = new StringBuffer();
 		for (final Entry<String, Integer> server : regions.entrySet())
 			out.append(String.format(SERVERS_FORMAT, server.getKey(),
-				server.getValue()));
+					server.getValue()));
 		return out.toString();
 	}
 	

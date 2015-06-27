@@ -41,8 +41,7 @@ import com.google.common.collect.ImmutableList;
 public class AGario extends ListenerAdapter<PircBotX> {
 	
 	private static final String HELP_MSG =
-		BotUtil
-			.addColors("%cCommands: %n@help, @info, @servers, @isup, @link, ~[link], ?[link]");
+			BotUtil.addColors("%cCommands: %n@help, @info, @servers, @isup, @link, ~[link], ?[link]");
 	
 	private static final Logger LOG = Logger.getLogger(AGario.class);
 	
@@ -85,7 +84,7 @@ public class AGario extends ListenerAdapter<PircBotX> {
 	
 	@Override
 	public synchronized void onPrivateMessage(
-		PrivateMessageEvent<PircBotX> event) {
+			PrivateMessageEvent<PircBotX> event) {
 		if (!BotUtil.isLikc(event.getUser()))
 			return;
 		final String message = event.getMessage();
@@ -104,7 +103,7 @@ public class AGario extends ListenerAdapter<PircBotX> {
 		} catch (final IOException e) {
 			event.respond("Error!");
 			LOG.error("Privmsg Error: User: " + event.getUser().getNick()
-				+ " Message: " + message, e);
+					+ " Message: " + message, e);
 		}
 	}
 	
@@ -126,18 +125,18 @@ public class AGario extends ListenerAdapter<PircBotX> {
 			} catch (final HandlerException | IOException e) {
 				event.respond("Error! Ping likcoras!");
 				LOG.error("Message Error: Chan: " + chan.getName() + " User: "
-					+ user.getNick() + " Message: " + message, e);
+						+ user.getNick() + " Message: " + message, e);
 			}
 	}
 	
 	private List<Handler> getHandlers() {
 		return ImmutableList.<Handler> builder().add(new LinkHandler())
-			.add(new InfoHandler()).add(new ServersHandler())
-			.add(new WebsiteHandler()).add(new IsonHandler()).build();
+				.add(new InfoHandler()).add(new ServersHandler())
+				.add(new WebsiteHandler()).add(new IsonHandler()).build();
 	}
 	
 	private void configure(List<Handler> handlers, BotConfig config)
-		throws HandlerException {
+			throws HandlerException {
 		for (final Handler handler : handlers)
 			handler.configure(config);
 	}
@@ -146,28 +145,29 @@ public class AGario extends ListenerAdapter<PircBotX> {
 		final BotConfig.Server server = config.getServer();
 		final BotConfig.Bot bot = config.getBot();
 		final Configuration.Builder<PircBotX> builder =
-			new Configuration.Builder<PircBotX>()
-				.addListener(this)
-				.setAutoReconnect(true)
-				
-				.setName(bot.getNick())
-				.setLogin(bot.getLogin())
-				.setRealName(bot.getRealname())
-				.setVersion(bot.getVersion())
-				.setNickservPassword(bot.getPassword())
-				
-				.setServerHostname(server.getHost())
-				.setServerPort(server.getPort())
-				.setSocketFactory(
-					server.isSsl() ? server.isTrust()
-						? new UtilSSLSocketFactory().trustAllCertificates()
-						: SSLSocketFactory.getDefault() : SocketFactory
-						.getDefault());
+				new Configuration.Builder<PircBotX>()
+						.addListener(this)
+						.setAutoReconnect(true)
+						
+						.setName(bot.getNick())
+						.setLogin(bot.getLogin())
+						.setRealName(bot.getRealname())
+						.setVersion(bot.getVersion())
+						.setNickservPassword(bot.getPassword())
+						
+						.setServerHostname(server.getHost())
+						.setServerPort(server.getPort())
+						.setSocketFactory(
+								server.isSsl() ? server.isTrust()
+										? new UtilSSLSocketFactory()
+												.trustAllCertificates()
+										: SSLSocketFactory.getDefault()
+										: SocketFactory.getDefault());
 		
 		for (final String chan : config.getChannels()) {
 			final List<String> chanKey =
-				Splitter.on(":").trimResults().omitEmptyStrings().limit(2)
-					.splitToList(chan);
+					Splitter.on(":").trimResults().omitEmptyStrings().limit(2)
+							.splitToList(chan);
 			if (chanKey.size() < 2)
 				builder.addAutoJoinChannel(chan);
 			else
@@ -188,15 +188,15 @@ public class AGario extends ListenerAdapter<PircBotX> {
 	}
 	
 	private void doHandle(Channel chan, User user, String message)
-		throws IOException, HandlerException {
+			throws IOException, HandlerException {
 		final StringBuffer responses = new StringBuffer();
 		for (final Handler handler : handlers) {
-			String response = handler.getResponse(chan, user, message);
+			final String response = handler.getResponse(chan, user, message);
 			if (!response.isEmpty())
 				responses.append(response + "\n");
 		}
 		out.out(chan, user, Splitter.on("\n").omitEmptyStrings().trimResults()
-			.splitToList(responses));
+				.splitToList(responses));
 	}
 	
 }
