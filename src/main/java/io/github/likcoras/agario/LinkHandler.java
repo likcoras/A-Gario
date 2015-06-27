@@ -59,18 +59,7 @@ public class LinkHandler implements Handler {
 	}
 	
 	@Override
-	public boolean handlesEvent(Event<PircBotX> event) {
-		return false;
-	}
-	
-	@Override
 	public void handleEvent(Event<PircBotX> event) {}
-	
-	@Override
-	public boolean isHandlerOf(Channel chan, User user, String message) {
-		return message.toLowerCase().startsWith("@link ")
-			|| LINK_REGEX.matcher(message).find();
-	}
 	
 	@Override
 	public String getResponse(Channel chan, User user, String message)
@@ -78,6 +67,8 @@ public class LinkHandler implements Handler {
 		final Matcher linkMatch = LINK_REGEX.matcher(message);
 		if (linkMatch.find())
 			return link(linkMatch.group(1));
+		if (!message.toLowerCase().startsWith("@link "))
+			return "";
 		try {
 			if (BotUtil.isLikc(user))
 				return getLinksLikc(message);

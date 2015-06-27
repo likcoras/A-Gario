@@ -50,20 +50,12 @@ public class IsonHandler implements Handler {
 	public void configure(BotConfig config) {}
 	
 	@Override
-	public boolean handlesEvent(Event<PircBotX> event) {
-		return false;
-	}
-	
-	@Override
 	public void handleEvent(Event<PircBotX> event) {}
 	
 	@Override
-	public boolean isHandlerOf(Channel chan, User user, String message) {
-		return message.toLowerCase().startsWith("@isup ");
-	}
-	
-	@Override
 	public String getResponse(Channel chan, User user, String message) {
+		if (!message.toLowerCase().startsWith("@isup "))
+			return "";
 		final String url = message.split(" ")[1].trim();
 		final Matcher match = HOST_PATTERN.matcher(url);
 		if (!match.find())

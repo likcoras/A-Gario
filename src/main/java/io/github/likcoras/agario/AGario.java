@@ -76,8 +76,7 @@ public class AGario extends ListenerAdapter<PircBotX> {
 		super.onEvent(event);
 		try {
 			for (final Handler handler : handlers)
-				if (handler.handlesEvent(event))
-					handler.handleEvent(event);
+				handler.handleEvent(event);
 		} catch (final HandlerException e) {
 			event.respond("Error!");
 			LOG.error("Error:", e);
@@ -190,13 +189,14 @@ public class AGario extends ListenerAdapter<PircBotX> {
 	
 	private void doHandle(Channel chan, User user, String message)
 		throws IOException, HandlerException {
-		final StringBuffer response = new StringBuffer();
-		for (final Handler handler : handlers)
-			if (handler.isHandlerOf(chan, user, message))
-				response
-					.append(handler.getResponse(chan, user, message) + "\n");
+		final StringBuffer responses = new StringBuffer();
+		for (final Handler handler : handlers) {
+			String response = handler.getResponse(chan, user, message);
+			if (!response.isEmpty())
+				responses.append(response + "\n");
+		}
 		out.out(chan, user, Splitter.on("\n").omitEmptyStrings().trimResults()
-			.splitToList(response));
+			.splitToList(responses));
 	}
 	
 }

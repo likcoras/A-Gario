@@ -58,22 +58,15 @@ public class InfoHandler implements Handler {
 	public void configure(BotConfig config) {}
 	
 	@Override
-	public boolean handlesEvent(Event<PircBotX> event) {
-		return event instanceof ConnectEvent;
-	}
-	
-	@Override
 	public void handleEvent(Event<PircBotX> event) {
-		start = System.currentTimeMillis();
-	}
-	
-	@Override
-	public boolean isHandlerOf(Channel chan, User user, String message) {
-		return message.equalsIgnoreCase("@info");
+		if (event instanceof ConnectEvent)
+			start = System.currentTimeMillis();
 	}
 	
 	@Override
 	public String getResponse(Channel chan, User user, String message) {
+		if (!message.equalsIgnoreCase("@info"))
+			return "";
 		LOG.info("Info requested");
 		final String uptime = getTime(System.currentTimeMillis() - start);
 		final String time = dateFormat.format(new Date());

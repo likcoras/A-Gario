@@ -28,11 +28,7 @@ public interface Handler {
 	
 	public void configure(BotConfig config) throws HandlerException;
 	
-	public boolean handlesEvent(Event<PircBotX> event);
-	
 	public void handleEvent(Event<PircBotX> event) throws HandlerException;
-	
-	public boolean isHandlerOf(Channel chan, User user, String message);
 	
 	public String getResponse(Channel chan, User user, String message)
 		throws HandlerException;

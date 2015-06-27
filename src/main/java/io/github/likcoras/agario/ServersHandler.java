@@ -46,21 +46,13 @@ public class ServersHandler implements Handler {
 	public void configure(BotConfig config) {}
 	
 	@Override
-	public boolean handlesEvent(Event<PircBotX> event) {
-		return false;
-	}
-	
-	@Override
 	public void handleEvent(Event<PircBotX> event) {}
-	
-	@Override
-	public boolean isHandlerOf(Channel chan, User user, String message) {
-		return message.equalsIgnoreCase("@servers");
-	}
 	
 	@Override
 	public String getResponse(Channel chan, User user, String message)
 		throws HandlerException {
+		if (!message.equalsIgnoreCase("@servers"))
+			return "";
 		LOG.info("Servers requested");
 		ServerInfo info;
 		try {

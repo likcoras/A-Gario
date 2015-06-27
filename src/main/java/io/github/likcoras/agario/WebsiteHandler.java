@@ -55,23 +55,14 @@ public class WebsiteHandler implements Handler {
 	}
 	
 	@Override
-	public boolean handlesEvent(Event<PircBotX> event) {
-		return false;
-	}
-	
-	@Override
 	public void handleEvent(Event<PircBotX> event) {}
-	
-	@Override
-	public boolean isHandlerOf(Channel chan, User user, String message) {
-		return LINK_PATTERN.matcher(message).find();
-	}
 	
 	@Override
 	public String getResponse(Channel chan, User user, String message)
 		throws HandlerException {
 		final Matcher match = LINK_PATTERN.matcher(message);
-		match.find();
+		if (!match.find())
+			return "";
 		final String id = match.group(5);
 		LOG.info("Youtube data for " + id + " requested");
 		YoutubeInfo info;
