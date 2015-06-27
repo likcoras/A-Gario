@@ -32,16 +32,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
-import org.apache.log4j.Logger;
+import lombok.extern.log4j.Log4j;
 import org.pircbotx.Channel;
 import org.pircbotx.User;
 import com.google.common.collect.ImmutableList;
 
+@Log4j
 public class OutputManager {
 	
 	private static final File IGNORE = new File("ignore");
-	
-	private static final Logger LOG = Logger.getLogger(OutputManager.class);
 	
 	private final Map<String, Long> lastOut;
 	private final Map<String, Long> lastSpam;
@@ -56,13 +55,13 @@ public class OutputManager {
 	public void add(String user) throws IOException {
 		ignored.add(user);
 		writeIgnore();
-		LOG.info("User " + user + " ignored");
+		log.info("User " + user + " ignored");
 	}
 	
 	public void rem(String user) throws IOException {
 		ignored.remove(user);
 		writeIgnore();
-		LOG.info("User " + user + " unignored");
+		log.info("User " + user + " unignored");
 	}
 	
 	public String getList() {
@@ -93,7 +92,7 @@ public class OutputManager {
 			ignored.add(hostmask);
 			writeIgnore();
 			user.send().notice("You have been ignored due to spam.");
-			LOG.info("User " + user + " ignored due to spam");
+			log.info("User " + user + " ignored due to spam");
 		} else {
 			lastSpam.remove(hostmask);
 			lastOut.put(hostmask, now);

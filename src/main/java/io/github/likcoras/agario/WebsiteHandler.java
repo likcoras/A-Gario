@@ -25,7 +25,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.apache.log4j.Logger;
+import lombok.extern.log4j.Log4j;
 import org.pircbotx.Channel;
 import org.pircbotx.Colors;
 import org.pircbotx.PircBotX;
@@ -33,9 +33,8 @@ import org.pircbotx.User;
 import org.pircbotx.hooks.Event;
 import com.google.gson.Gson;
 
+@Log4j
 public class WebsiteHandler implements Handler {
-	
-	private static final Logger LOG = Logger.getLogger(WebsiteHandler.class);
 	
 	private static final String API =
 			"https://www.googleapis.com/youtube/v3/videos/?part=contentDetails,snippet,statistics&maxResults=1&id=%s&key=%s";
@@ -64,7 +63,7 @@ public class WebsiteHandler implements Handler {
 		if (!match.find())
 			return "";
 		final String id = match.group(5);
-		LOG.info("Youtube data for " + id + " requested");
+		log.info("Youtube data for " + id + " requested");
 		YoutubeInfo info;
 		try {
 			info = getYoutubeJson(String.format(API, id, apiKey));

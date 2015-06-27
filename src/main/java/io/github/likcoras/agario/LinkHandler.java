@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.apache.log4j.Logger;
+import lombok.extern.log4j.Log4j;
 import org.pircbotx.Channel;
 import org.pircbotx.Colors;
 import org.pircbotx.PircBotX;
@@ -36,9 +36,8 @@ import org.pircbotx.hooks.Event;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 
+@Log4j
 public class LinkHandler implements Handler {
-	
-	private static final Logger LOG = Logger.getLogger(LinkHandler.class);
 	
 	private static final File LINKS = new File("links");
 	
@@ -83,7 +82,7 @@ public class LinkHandler implements Handler {
 	private String link(String link) {
 		final String out = Strings.nullToEmpty(links.getProperty(link));
 		if (!out.isEmpty())
-			LOG.info(link + " requested");
+			log.info(link + " requested");
 		return out;
 	}
 	
@@ -144,7 +143,7 @@ public class LinkHandler implements Handler {
 	private String setLink(String link, String target) throws IOException {
 		links.setProperty(link, target);
 		writeLinks(links, LINKS);
-		LOG.info("Link " + link + " added");
+		log.info("Link " + link + " added");
 		return String.format(LINK_MSG, link, target);
 	}
 	
@@ -153,7 +152,7 @@ public class LinkHandler implements Handler {
 			return "";
 		links.remove(link);
 		writeLinks(links, LINKS);
-		LOG.info("Link " + link + " removed");
+		log.info("Link " + link + " removed");
 		return String.format(LINK_REM, link);
 	}
 	

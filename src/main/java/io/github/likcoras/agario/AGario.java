@@ -23,7 +23,7 @@ import java.io.IOException;
 import java.util.List;
 import javax.net.SocketFactory;
 import javax.net.ssl.SSLSocketFactory;
-import org.apache.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.pircbotx.Channel;
 import org.pircbotx.Configuration;
 import org.pircbotx.PircBotX;
@@ -38,12 +38,11 @@ import org.pircbotx.hooks.events.PrivateMessageEvent;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
 
+@Slf4j
 public class AGario extends ListenerAdapter<PircBotX> {
 	
 	private static final String HELP_MSG =
 			BotUtil.addColors("%cCommands: %n@help, @info, @servers, @isup, @link, ~[link], ?[link]");
-	
-	private static final Logger LOG = Logger.getLogger(AGario.class);
 	
 	private final OutputManager out;
 	private final List<Handler> handlers;
@@ -52,7 +51,7 @@ public class AGario extends ListenerAdapter<PircBotX> {
 		try {
 			new AGario();
 		} catch (IOException | IrcException | HandlerException e) {
-			LOG.error("Startup Error: ", e);
+			log.error("Startup Error: ", e);
 		}
 	}
 	
@@ -66,7 +65,7 @@ public class AGario extends ListenerAdapter<PircBotX> {
 	
 	@Override
 	public void onNickAlreadyInUse(NickAlreadyInUseEvent<PircBotX> event) {
-		LOG.warn("Nickname is already in use!");
+		log.warn("Nickname is already in use!");
 		quit(event.getBot());
 	}
 	
@@ -78,7 +77,7 @@ public class AGario extends ListenerAdapter<PircBotX> {
 				handler.handleEvent(event);
 		} catch (final HandlerException e) {
 			event.respond("Error!");
-			LOG.error("Error:", e);
+			log.error("Error:", e);
 		}
 	}
 	
@@ -102,7 +101,7 @@ public class AGario extends ListenerAdapter<PircBotX> {
 				quit(event.getBot());
 		} catch (final IOException e) {
 			event.respond("Error!");
-			LOG.error("Privmsg Error: User: " + event.getUser().getNick()
+			log.error("Privmsg Error: User: " + event.getUser().getNick()
 					+ " Message: " + message, e);
 		}
 	}
@@ -124,7 +123,7 @@ public class AGario extends ListenerAdapter<PircBotX> {
 					doHandle(chan, user, message);
 			} catch (final HandlerException | IOException e) {
 				event.respond("Error! Ping likcoras!");
-				LOG.error("Message Error: Chan: " + chan.getName() + " User: "
+				log.error("Message Error: Chan: " + chan.getName() + " User: "
 						+ user.getNick() + " Message: " + message, e);
 			}
 	}
@@ -177,14 +176,14 @@ public class AGario extends ListenerAdapter<PircBotX> {
 	}
 	
 	private void rawLine(PircBotX bot, String target) {
-		LOG.info("Raw " + target);
+		log.info("Raw " + target);
 		bot.sendRaw().rawLineNow(target, true);
 	}
 	
 	private void quit(PircBotX bot) {
 		bot.stopBotReconnect();
 		bot.sendIRC().quitServer();
-		LOG.info("Quitted");
+		log.info("Quitted");
 	}
 	
 	private void doHandle(Channel chan, User user, String message)

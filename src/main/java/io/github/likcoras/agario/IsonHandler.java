@@ -25,16 +25,15 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.apache.log4j.Logger;
+import lombok.extern.log4j.Log4j;
 import org.pircbotx.Channel;
 import org.pircbotx.Colors;
 import org.pircbotx.PircBotX;
 import org.pircbotx.User;
 import org.pircbotx.hooks.Event;
 
+@Log4j
 public class IsonHandler implements Handler {
-	
-	private static final Logger LOG = Logger.getLogger(IsonHandler.class);
 	
 	private static final Pattern HOST_PATTERN =
 			Pattern.compile("(?i)(([a-z0-9-]+\\.)+[a-z0-9-]+|\\[?(([0-9a-f]{1,4}:{1,2}){1,7}[0-9a-f]{1,4})\\]?)(:(\\d+))?");
@@ -73,7 +72,7 @@ public class IsonHandler implements Handler {
 	
 	private boolean isUp(InetSocketAddress addr) {
 		final InetAddress inet = addr.getAddress();
-		LOG.info("Ison requested for " + inet.getHostAddress() + " port "
+		log.info("Ison requested for " + inet.getHostAddress() + " port "
 				+ addr.getPort());
 		if (inet.isAnyLocalAddress() || inet.isLoopbackAddress()
 				|| inet.isLinkLocalAddress() || inet.isSiteLocalAddress())

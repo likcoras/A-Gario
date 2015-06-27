@@ -24,16 +24,15 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.Map;
 import java.util.Map.Entry;
-import org.apache.log4j.Logger;
+import lombok.extern.log4j.Log4j;
 import org.pircbotx.Channel;
 import org.pircbotx.PircBotX;
 import org.pircbotx.User;
 import org.pircbotx.hooks.Event;
 import com.google.gson.Gson;
 
+@Log4j
 public class ServersHandler implements Handler {
-	
-	private static final Logger LOG = Logger.getLogger(ServersHandler.class);
 	
 	private static final Gson gson = ServerInfo.getGson();
 	
@@ -53,7 +52,7 @@ public class ServersHandler implements Handler {
 			throws HandlerException {
 		if (!message.equalsIgnoreCase("@servers"))
 			return "";
-		LOG.info("Servers requested");
+		log.info("Servers requested");
 		ServerInfo info;
 		try {
 			info = getServersJson();

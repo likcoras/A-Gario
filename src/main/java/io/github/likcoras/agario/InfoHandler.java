@@ -24,16 +24,15 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
-import org.apache.log4j.Logger;
+import lombok.extern.log4j.Log4j;
 import org.pircbotx.Channel;
 import org.pircbotx.PircBotX;
 import org.pircbotx.User;
 import org.pircbotx.hooks.Event;
 import org.pircbotx.hooks.events.ConnectEvent;
 
+@Log4j
 public class InfoHandler implements Handler {
-	
-	private static final Logger LOG = Logger.getLogger(InfoHandler.class);
 	
 	private static final long SECOND = 1000L;
 	private static final long MINUTE = 60L;
@@ -66,7 +65,7 @@ public class InfoHandler implements Handler {
 	public String getResponse(Channel chan, User user, String message) {
 		if (!message.equalsIgnoreCase("@info"))
 			return "";
-		LOG.info("Info requested");
+		log.info("Info requested");
 		final String uptime = getTime(System.currentTimeMillis() - start);
 		final String time = dateFormat.format(new Date());
 		return String.format(INFO_MSG, uptime, time);
