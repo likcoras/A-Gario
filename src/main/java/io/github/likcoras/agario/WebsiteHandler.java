@@ -79,7 +79,10 @@ public class WebsiteHandler implements Handler {
 	
 	private YoutubeInfo getYoutubeJson(String url)
 			throws MalformedURLException, IOException {
-		return GSON.fromJson(new InputStreamReader(new URL(String.format(url)).openStream()), YoutubeInfo.class);
+		return GSON
+				.fromJson(
+						new InputStreamReader(new URL(String.format(url))
+								.openStream()), YoutubeInfo.class);
 	}
 	
 }

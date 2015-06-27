@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
+import lombok.Cleanup;
 import lombok.extern.log4j.Log4j;
 import org.pircbotx.Channel;
 import org.pircbotx.User;
@@ -104,22 +105,22 @@ public class OutputManager {
 	private List<String> readIgnore() throws IOException {
 		final List<String> ignored = new ArrayList<String>();
 		IGNORE.createNewFile();
+		@Cleanup
 		final BufferedReader read = new BufferedReader(new FileReader(IGNORE));
 		String line;
 		while ((line = read.readLine()) != null)
 			ignored.add(line);
-		read.close();
 		return ignored;
 	}
 	
 	private void writeIgnore() throws IOException {
+		@Cleanup
 		final BufferedWriter write = new BufferedWriter(new FileWriter(IGNORE));
 		synchronized (ignored) {
 			for (final String ignore : ignored)
 				write.write(ignore + "\n");
 		}
 		write.flush();
-		write.close();
 	}
 	
 	private boolean

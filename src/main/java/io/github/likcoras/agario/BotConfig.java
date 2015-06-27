@@ -27,6 +27,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
+import lombok.Cleanup;
 import lombok.Data;
 import org.yaml.snakeyaml.Yaml;
 
@@ -40,7 +41,8 @@ public class BotConfig {
 	
 	public static BotConfig getConfig() throws IOException {
 		final Yaml yaml = new Yaml();
-		final BotConfig config = yaml.loadAs(new FileReader(getFile()), BotConfig.class);
+		final BotConfig config =
+				yaml.loadAs(new FileReader(getFile()), BotConfig.class);
 		return config;
 	}
 	
@@ -53,16 +55,16 @@ public class BotConfig {
 	
 	private static void createDefaultFile(File file) throws IOException {
 		file.createNewFile();
+		@Cleanup
 		final BufferedReader read =
 				new BufferedReader(new InputStreamReader(BotConfig.class
 						.getClassLoader().getResourceAsStream("config.yml")));
+		@Cleanup
 		final BufferedWriter write = new BufferedWriter(new FileWriter(file));
 		String line;
 		while ((line = read.readLine()) != null)
 			write.write(line + "\n");
-		read.close();
 		write.flush();
-		write.close();
 	}
 	
 	@Data
