@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 import java.util.regex.Matcher;
@@ -35,6 +36,7 @@ import org.pircbotx.User;
 import org.pircbotx.hooks.Event;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
+import com.google.common.collect.ImmutableList;
 
 @Log4j
 public class LinkHandler implements Handler {
@@ -134,8 +136,15 @@ public class LinkHandler implements Handler {
 	}
 	
 	private List<String> getArgs(String message) {
-		return Splitter.on(" ").trimResults().omitEmptyStrings().limit(3)
-				.splitToList(message.substring(6));
+		Iterator<String> it = Splitter.on(" ").trimResults().omitEmptyStrings().limit(3)
+				.split(message.substring(6)).iterator();
+		ImmutableList.Builder<String> builder = ImmutableList.builder();
+		for (int i = 0; it.hasNext(); i++)
+			if (i == 1)
+				builder.add(it.next().toLowerCase());
+			else
+				builder.add(it.next());
+		return builder.build();
 	}
 	
 	private String setLink(String link, String target) throws IOException {
