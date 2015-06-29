@@ -136,9 +136,10 @@ public class LinkHandler implements Handler {
 	}
 	
 	private List<String> getArgs(String message) {
-		Iterator<String> it = Splitter.on(" ").trimResults().omitEmptyStrings().limit(3)
-				.split(message.substring(6)).iterator();
-		ImmutableList.Builder<String> builder = ImmutableList.builder();
+		final Iterator<String> it =
+				Splitter.on(" ").trimResults().omitEmptyStrings().limit(3)
+						.split(message.substring(6)).iterator();
+		final ImmutableList.Builder<String> builder = ImmutableList.builder();
 		for (int i = 0; it.hasNext(); i++)
 			if (i == 1)
 				builder.add(it.next().toLowerCase());
