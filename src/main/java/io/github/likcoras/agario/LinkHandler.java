@@ -82,6 +82,7 @@ public class LinkHandler implements Handler {
 	}
 	
 	private String link(String link) {
+		link = link.toLowerCase();
 		final String out = Strings.nullToEmpty(links.getProperty(link));
 		if (!out.isEmpty())
 			log.info(link + " requested");
