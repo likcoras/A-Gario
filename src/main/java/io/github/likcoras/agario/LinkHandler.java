@@ -46,7 +46,7 @@ public class LinkHandler implements Handler {
 	private static final String LINK_MSG = "Added link '%s' to '%s'";
 	private static final String LINK_REM = "Link '%s' removed";
 	private static final String LINK_LIST = BotUtil.addColors("%cLinks:%n");
-	private static final Pattern LINK_REGEX = Pattern.compile("\\B([~?]\\S+)");
+	private static final Pattern LINK_REGEX = Pattern.compile("\\B(~\\S+)");
 	
 	private Properties links;
 	
@@ -71,8 +71,6 @@ public class LinkHandler implements Handler {
 		if (!message.toLowerCase().startsWith("@link "))
 			return "";
 		try {
-			if (BotUtil.isLikc(user))
-				return getLinksLikc(message);
 			if (BotUtil.isOp(chan, user))
 				return getLinksOp(message);
 			return getLinks(message);
@@ -89,20 +87,8 @@ public class LinkHandler implements Handler {
 		return out;
 	}
 	
-	private String getLinksLikc(String message) throws IOException {
-		final List<String> args = getArgs(message);
-		if (args.size() > 2 && args.get(0).equalsIgnoreCase("put"))
-			return setLink("?" + args.get(1), args.get(2));
-		else if (args.size() > 1 && args.get(0).equalsIgnoreCase("del"))
-			return delLink("?" + args.get(1));
-		return getLinksOp(args);
-	}
-	
 	private String getLinksOp(String message) throws IOException {
-		return getLinksOp(getArgs(message));
-	}
-	
-	private String getLinksOp(List<String> args) throws IOException {
+		final List<String> args =  getArgs(message);
 		if (args.size() > 2 && args.get(0).equalsIgnoreCase("add"))
 			return setLink("~" + Colors.removeFormattingAndColors(args.get(1)),
 					args.get(2));
