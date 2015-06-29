@@ -19,10 +19,11 @@
 
 package io.github.likcoras.agario;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
@@ -41,7 +42,7 @@ import com.google.common.collect.ImmutableList;
 @Log4j
 public class LinkHandler implements Handler {
 	
-	private static final File LINKS = new File("links");
+	private static final Path LINKS = Paths.get("links");
 	
 	private static final String LINK_MSG = "Added link '%s' to '%s'";
 	private static final String LINK_REM = "Link '%s' removed";
@@ -53,7 +54,7 @@ public class LinkHandler implements Handler {
 	@Override
 	public void configure(BotConfig config) throws HandlerException {
 		try {
-			links = readLinks(LINKS);
+			links = readLinks();
 		} catch (final IOException e) {
 			throw new HandlerException(e);
 		}
@@ -110,16 +111,16 @@ public class LinkHandler implements Handler {
 		return "";
 	}
 	
-	private Properties readLinks(File file) throws IOException {
+	private Properties readLinks() throws IOException {
 		final Properties links = new Properties();
-		file.createNewFile();
-		links.load(new FileReader(file));
+		Files.createFile(LINKS);
+		links.load(Files.newBufferedReader(LINKS, StandardCharsets.UTF_8));
 		return links;
 	}
 	
-	private void writeLinks(Properties properties, File file)
+	private void writeLinks(Properties properties)
 			throws IOException {
-		properties.store(new FileWriter(file), "");
+		properties.store(Files.newBufferedWriter(LINKS, StandardCharsets.UTF_8), "");
 	}
 	
 	private List<String> getArgs(String message) {
@@ -137,7 +138,7 @@ public class LinkHandler implements Handler {
 	
 	private String setLink(String link, String target) throws IOException {
 		links.setProperty(link, target);
-		writeLinks(links, LINKS);
+		writeLinks(links);
 		log.info("Link " + link + " added");
 		return String.format(LINK_MSG, link, target);
 	}
@@ -146,7 +147,7 @@ public class LinkHandler implements Handler {
 		if (!links.containsKey(link))
 			return "";
 		links.remove(link);
-		writeLinks(links, LINKS);
+		writeLinks(links);
 		log.info("Link " + link + " removed");
 		return String.format(LINK_REM, link);
 	}

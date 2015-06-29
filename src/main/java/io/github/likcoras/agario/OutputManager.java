@@ -21,10 +21,11 @@ package io.github.likcoras.agario;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -41,7 +42,7 @@ import com.google.common.collect.ImmutableList;
 @Log4j
 public class OutputManager {
 	
-	private static final File IGNORE = new File("ignore");
+	private static final Path IGNORE = Paths.get("ignore");
 	
 	private final String ownerNick;
 	private final String ownerHost;
@@ -109,9 +110,9 @@ public class OutputManager {
 	
 	private List<String> readIgnore() throws IOException {
 		final List<String> ignored = new ArrayList<String>();
-		IGNORE.createNewFile();
+		Files.createFile(IGNORE);
 		@Cleanup
-		final BufferedReader read = new BufferedReader(new FileReader(IGNORE));
+		final BufferedReader read = Files.newBufferedReader(IGNORE, StandardCharsets.UTF_8);
 		String line;
 		while ((line = read.readLine()) != null)
 			ignored.add(line);
@@ -120,7 +121,7 @@ public class OutputManager {
 	
 	private void writeIgnore() throws IOException {
 		@Cleanup
-		final BufferedWriter write = new BufferedWriter(new FileWriter(IGNORE));
+		final BufferedWriter write = Files.newBufferedWriter(IGNORE, StandardCharsets.UTF_8);
 		synchronized (ignored) {
 			for (final String ignore : ignored)
 				write.write(ignore + "\n");

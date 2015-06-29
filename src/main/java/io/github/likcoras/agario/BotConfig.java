@@ -21,11 +21,12 @@ package io.github.likcoras.agario;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import lombok.Cleanup;
 import lombok.Data;
@@ -42,25 +43,25 @@ public class BotConfig {
 	public static BotConfig getConfig() throws IOException {
 		final Yaml yaml = new Yaml();
 		final BotConfig config =
-				yaml.loadAs(new FileReader(getFile()), BotConfig.class);
+				yaml.loadAs(Files.newBufferedReader(getFile(), StandardCharsets.UTF_8), BotConfig.class);
 		return config;
 	}
 	
-	private static File getFile() throws IOException {
-		final File file = new File("config.yml");
-		if (!file.exists())
-			createDefaultFile(file);
-		return file;
+	private static Path getFile() throws IOException {
+		final Path path = Paths.get("config.yml");
+		if (Files.exists(path))
+			createDefaultFile(path);
+		return path;
 	}
 	
-	private static void createDefaultFile(File file) throws IOException {
-		file.createNewFile();
+	private static void createDefaultFile(Path path) throws IOException {
+		Files.createDirectory(path);
 		@Cleanup
 		final BufferedReader read =
 				new BufferedReader(new InputStreamReader(BotConfig.class
 						.getClassLoader().getResourceAsStream("config.yml")));
 		@Cleanup
-		final BufferedWriter write = new BufferedWriter(new FileWriter(file));
+		final BufferedWriter write = Files.newBufferedWriter(path, StandardCharsets.UTF_8);
 		String line;
 		while ((line = read.readLine()) != null)
 			write.write(line + "\n");
