@@ -30,11 +30,6 @@ public class BotUtil {
 				Colors.DARK_GREEN);
 	}
 	
-	public static boolean isLikc(User user) {
-		return user.getNick().equalsIgnoreCase("likcoras")
-				&& user.getHostmask().equalsIgnoreCase("tis.very.bored");
-	}
-	
 	public static boolean isOp(Channel chan, User user) {
 		return chan.isOp(user) || chan.isSuperOp(user) || chan.isOwner(user);
 	}

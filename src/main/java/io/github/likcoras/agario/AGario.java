@@ -44,6 +44,9 @@ public class AGario extends ListenerAdapter<PircBotX> {
 	private static final String HELP_MSG =
 			BotUtil.addColors("%cCommands: %n@help, @info, @servers, @isup, @link, ~[link], ?[link]");
 	
+	private final String ownerNick;
+	private final String ownerHost;
+	
 	private final OutputManager out;
 	private final List<Handler> handlers;
 	
@@ -56,9 +59,11 @@ public class AGario extends ListenerAdapter<PircBotX> {
 	}
 	
 	private AGario() throws IOException, IrcException, HandlerException {
-		out = new OutputManager();
-		handlers = getHandlers();
 		final BotConfig config = BotConfig.getConfig();
+		ownerNick = config.getOthers().getOwnerNick();
+		ownerHost = config.getOthers().getOwnerHost();
+		out = new OutputManager(config);
+		handlers = getHandlers();
 		configure(handlers, config);
 		new PircBotX(configureBot(config)).startBot();
 	}
@@ -84,7 +89,7 @@ public class AGario extends ListenerAdapter<PircBotX> {
 	@Override
 	public synchronized void onPrivateMessage(
 			PrivateMessageEvent<PircBotX> event) {
-		if (!BotUtil.isLikc(event.getUser()))
+		if (!isOwner(event.getUser()))
 			return;
 		final String message = event.getMessage();
 		final String target = message.length() > 3 ? message.substring(4) : "";
@@ -113,7 +118,7 @@ public class AGario extends ListenerAdapter<PircBotX> {
 		final String message = event.getMessage();
 		if (out.isIgnored(user))
 			return;
-		else if (message.equalsIgnoreCase("@quit") && BotUtil.isLikc(user))
+		else if (message.equalsIgnoreCase("@quit") && isOwner(user))
 			quit(event.getBot());
 		else
 			try {
@@ -196,6 +201,10 @@ public class AGario extends ListenerAdapter<PircBotX> {
 		}
 		out.out(chan, user, Splitter.on("\n").omitEmptyStrings().trimResults()
 				.splitToList(responses));
+	}
+	
+	private boolean isOwner(User user) {
+		return ownerNick.equalsIgnoreCase(user.getNick()) && ownerHost.equalsIgnoreCase(user.getHostmask());
 	}
 	
 }

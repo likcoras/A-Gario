@@ -87,6 +87,8 @@ public class BotConfig {
 	@Data
 	public static class Others {
 		private String apiKey;
+		private String ownerNick;
+		private String ownerHost;
 	}
 	
 }

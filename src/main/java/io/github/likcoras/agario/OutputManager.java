@@ -43,11 +43,16 @@ public class OutputManager {
 	
 	private static final File IGNORE = new File("ignore");
 	
+	private final String ownerNick;
+	private final String ownerHost;
+	
 	private final Map<String, Long> lastOut;
 	private final Map<String, Long> lastSpam;
 	private final List<String> ignored;
 	
-	public OutputManager() throws IOException {
+	public OutputManager(BotConfig config) throws IOException {
+		ownerNick = config.getOthers().getOwnerNick();
+		ownerHost = config.getOthers().getOwnerHost();
 		lastOut = new ConcurrentHashMap<String, Long>();
 		lastSpam = new ConcurrentHashMap<String, Long>();
 		ignored = Collections.synchronizedList(readIgnore());
@@ -83,7 +88,7 @@ public class OutputManager {
 			return;
 		final String hostmask = user.getHostmask();
 		final long now = System.currentTimeMillis();
-		if (BotUtil.isLikc(user))
+		if (ownerNick.equalsIgnoreCase(user.getNick()) && ownerHost.equalsIgnoreCase(hostmask))
 			sendLines(chan, message);
 		else if (shouldFlag(lastOut, hostmask, now)) {
 			lastSpam.put(hostmask, now);
