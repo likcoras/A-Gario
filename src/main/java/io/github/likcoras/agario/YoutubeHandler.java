@@ -34,7 +34,7 @@ import org.pircbotx.hooks.Event;
 import com.google.gson.Gson;
 
 @Log4j
-public class WebsiteHandler implements Handler {
+public class YoutubeHandler implements Handler {
 	
 	private static final String API =
 			"https://www.googleapis.com/youtube/v3/videos/?part=contentDetails,snippet,statistics&maxResults=1&id=%s&key=%s";
