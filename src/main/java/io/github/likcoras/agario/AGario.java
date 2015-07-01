@@ -42,7 +42,7 @@ import com.google.common.collect.ImmutableList;
 public class AGario extends ListenerAdapter<PircBotX> {
 	
 	private static final String HELP_MSG =
-			BotUtil.addColors("%cCommands: %n@help, @info, @servers, @isup, @link, ~[link], ?[link]");
+			BotUtil.addColors("%cCommands: %n@help, @info, @servers, @isup, @con, @link, ~[link], ?[link]");
 	
 	private final String ownerNick;
 	private final String ownerHost;
