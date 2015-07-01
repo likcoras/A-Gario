@@ -115,7 +115,8 @@ public class LinkHandler implements Handler {
 	
 	private Properties readLinks() throws IOException {
 		final Properties links = new Properties();
-		Files.createFile(LINKS);
+		if (!Files.exists(LINKS))
+			Files.createFile(LINKS);
 		links.load(Files.newBufferedReader(LINKS, StandardCharsets.UTF_8));
 		return links;
 	}

@@ -110,7 +110,8 @@ public class OutputManager {
 	
 	private List<String> readIgnore() throws IOException {
 		final List<String> ignored = new ArrayList<String>();
-		Files.createFile(IGNORE);
+		if (!Files.exists(IGNORE))
+			Files.createFile(IGNORE);
 		@Cleanup
 		final BufferedReader read = Files.newBufferedReader(IGNORE, StandardCharsets.UTF_8);
 		String line;

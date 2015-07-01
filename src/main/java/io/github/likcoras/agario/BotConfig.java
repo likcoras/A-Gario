@@ -49,13 +49,13 @@ public class BotConfig {
 	
 	private static Path getFile() throws IOException {
 		final Path path = Paths.get("config.yml");
-		if (Files.exists(path))
+		if (!Files.exists(path))
 			createDefaultFile(path);
 		return path;
 	}
 	
 	private static void createDefaultFile(Path path) throws IOException {
-		Files.createDirectory(path);
+		Files.createFile(path);
 		@Cleanup
 		final BufferedReader read =
 				new BufferedReader(new InputStreamReader(BotConfig.class
