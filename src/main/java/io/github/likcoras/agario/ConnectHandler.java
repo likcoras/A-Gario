@@ -18,11 +18,13 @@ import com.google.gson.Gson;
 public class ConnectHandler implements Handler {
 	
 	private static final Gson GSON = new Gson();
-	private static final String QUERY = "http://connect.agariomods.com/json/api.php?action=GSFUC&username=";
+	private static final String QUERY =
+			"http://connect.agariomods.com/json/api.php?action=GSFUC&username=";
 	
 	private static final String NO_USER = "There is no user by the name %s";
 	private static final String NO_IMG = "User %s has not uploaded a skin yet";
-	private static final String USER_IMG = BotUtil.addColors("%cUser: %n%s | %cSkin: %nhttp://connect.agariomods.com/img_%s.png");
+	private static final String USER_IMG =
+			BotUtil.addColors("%cUser: %n%s | %cSkin: %nhttp://connect.agariomods.com/img_%s.png");
 	
 	@Override
 	public void configure(BotConfig config) throws HandlerException {}
@@ -35,7 +37,7 @@ public class ConnectHandler implements Handler {
 			throws HandlerException {
 		if (!message.toLowerCase().startsWith("@con ") || message.length() == 5)
 			return "";
-		String username = message.substring(5).toLowerCase();
+		final String username = message.substring(5).toLowerCase();
 		log.info("Connect skin for " + username + " requested");
 		ConnectInfo info;
 		try {
@@ -48,9 +50,12 @@ public class ConnectHandler implements Handler {
 	
 	@SneakyThrows(UnsupportedEncodingException.class)
 	private ConnectInfo getConnectJson(String username) throws IOException {
-		URLConnection con = new URL(QUERY + URLEncoder.encode(username, "UTF-8")).openConnection();
+		final URLConnection con =
+				new URL(QUERY + URLEncoder.encode(username, "UTF-8"))
+						.openConnection();
 		con.setRequestProperty("User-Agent", "");
-		return GSON.fromJson(new InputStreamReader(con.getInputStream()), ConnectInfo.class);
+		return GSON.fromJson(new InputStreamReader(con.getInputStream()),
+				ConnectInfo.class);
 	}
 	
 	@SneakyThrows(UnsupportedEncodingException.class)
@@ -60,7 +65,8 @@ public class ConnectHandler implements Handler {
 		else if (!info.hasImg())
 			return String.format(NO_IMG, username);
 		else
-			return String.format(USER_IMG, username, URLEncoder.encode(username, "UTF-8"));
+			return String.format(USER_IMG, username,
+					URLEncoder.encode(username, "UTF-8"));
 	}
 	
 }
