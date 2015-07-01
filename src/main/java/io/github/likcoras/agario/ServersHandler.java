@@ -34,7 +34,7 @@ import com.google.gson.Gson;
 @Log4j
 public class ServersHandler implements Handler {
 	
-	private static final Gson gson = ServerInfo.getGson();
+	private static final Gson GSON = ServerInfo.getGson();
 	
 	private static final String SERVERS_FORMAT = BotUtil
 			.addColors("%c%s: %n%d | ");
@@ -65,7 +65,7 @@ public class ServersHandler implements Handler {
 	}
 	
 	private ServerInfo getServersJson() throws IOException {
-		return gson.fromJson(new InputStreamReader(new URL(
+		return GSON.fromJson(new InputStreamReader(new URL(
 				"http://m.agar.io/info").openStream()), ServerInfo.class);
 	}
 	
