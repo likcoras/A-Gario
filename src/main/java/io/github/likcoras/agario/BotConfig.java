@@ -43,7 +43,8 @@ public class BotConfig {
 	public static BotConfig getConfig() throws IOException {
 		final Yaml yaml = new Yaml();
 		final BotConfig config =
-				yaml.loadAs(Files.newBufferedReader(getFile(), StandardCharsets.UTF_8), BotConfig.class);
+				yaml.loadAs(Files.newBufferedReader(getFile(),
+						StandardCharsets.UTF_8), BotConfig.class);
 		return config;
 	}
 	
@@ -61,7 +62,8 @@ public class BotConfig {
 				new BufferedReader(new InputStreamReader(BotConfig.class
 						.getClassLoader().getResourceAsStream("config.yml")));
 		@Cleanup
-		final BufferedWriter write = Files.newBufferedWriter(path, StandardCharsets.UTF_8);
+		final BufferedWriter write =
+				Files.newBufferedWriter(path, StandardCharsets.UTF_8);
 		String line;
 		while ((line = read.readLine()) != null)
 			write.write(line + "\n");

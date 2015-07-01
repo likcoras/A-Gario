@@ -89,7 +89,8 @@ public class OutputManager {
 			return;
 		final String hostmask = user.getHostmask();
 		final long now = System.currentTimeMillis();
-		if (ownerNick.equalsIgnoreCase(user.getNick()) && ownerHost.equalsIgnoreCase(hostmask))
+		if (ownerNick.equalsIgnoreCase(user.getNick())
+				&& ownerHost.equalsIgnoreCase(hostmask))
 			sendLines(chan, message);
 		else if (shouldFlag(lastOut, hostmask, now)) {
 			lastSpam.put(hostmask, now);
@@ -113,7 +114,8 @@ public class OutputManager {
 		if (!Files.exists(IGNORE))
 			Files.createFile(IGNORE);
 		@Cleanup
-		final BufferedReader read = Files.newBufferedReader(IGNORE, StandardCharsets.UTF_8);
+		final BufferedReader read =
+				Files.newBufferedReader(IGNORE, StandardCharsets.UTF_8);
 		String line;
 		while ((line = read.readLine()) != null)
 			ignored.add(line);
@@ -122,7 +124,8 @@ public class OutputManager {
 	
 	private void writeIgnore() throws IOException {
 		@Cleanup
-		final BufferedWriter write = Files.newBufferedWriter(IGNORE, StandardCharsets.UTF_8);
+		final BufferedWriter write =
+				Files.newBufferedWriter(IGNORE, StandardCharsets.UTF_8);
 		synchronized (ignored) {
 			for (final String ignore : ignored)
 				write.write(ignore + "\n");

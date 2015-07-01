@@ -204,7 +204,8 @@ public class AGario extends ListenerAdapter<PircBotX> {
 	}
 	
 	private boolean isOwner(User user) {
-		return ownerNick.equalsIgnoreCase(user.getNick()) && ownerHost.equalsIgnoreCase(user.getHostmask());
+		return ownerNick.equalsIgnoreCase(user.getNick())
+				&& ownerHost.equalsIgnoreCase(user.getHostmask());
 	}
 	
 }

@@ -91,7 +91,7 @@ public class LinkHandler implements Handler {
 	}
 	
 	private String getLinksOp(String message) throws IOException {
-		final List<String> args =  getArgs(message);
+		final List<String> args = getArgs(message);
 		if (args.size() > 2 && args.get(0).equalsIgnoreCase("add"))
 			return setLink("~" + Colors.removeFormattingAndColors(args.get(1)),
 					args.get(2));
@@ -121,9 +121,9 @@ public class LinkHandler implements Handler {
 		return links;
 	}
 	
-	private void writeLinks(Properties properties)
-			throws IOException {
-		properties.store(Files.newBufferedWriter(LINKS, StandardCharsets.UTF_8), "");
+	private void writeLinks(Properties properties) throws IOException {
+		properties.store(
+				Files.newBufferedWriter(LINKS, StandardCharsets.UTF_8), "");
 	}
 	
 	private List<String> getArgs(String message) {
