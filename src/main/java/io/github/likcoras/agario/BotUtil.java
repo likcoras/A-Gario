@@ -31,7 +31,7 @@ public class BotUtil {
 	}
 	
 	public static boolean isOp(Channel chan, User user) {
-		return chan.isOp(user) || chan.isSuperOp(user) || chan.isOwner(user);
+		return chan.isHalfOp(user) || chan.isOp(user) || chan.isSuperOp(user) || chan.isOwner(user);
 	}
 	
 }
