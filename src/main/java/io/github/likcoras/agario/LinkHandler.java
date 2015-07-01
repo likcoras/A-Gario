@@ -73,11 +73,13 @@ public class LinkHandler implements Handler {
 			return "";
 		try {
 			if (BotUtil.isOp(chan, user))
-				return getLinksOp(message);
-			return getLinks(message);
+				user.send().notice(getLinksOp(message));
+			else
+				user.send().notice(getLinks(message));
 		} catch (final IOException e) {
 			throw new HandlerException(e);
 		}
+		return "";
 	}
 	
 	private String link(String link) {
