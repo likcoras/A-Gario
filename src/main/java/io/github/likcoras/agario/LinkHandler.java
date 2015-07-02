@@ -27,6 +27,7 @@ import java.nio.file.Paths;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
+import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import lombok.extern.log4j.Log4j;
@@ -163,7 +164,7 @@ public class LinkHandler implements Handler {
 	
 	private String getLinkList() {
 		final StringBuffer out = new StringBuffer(LINK_LIST);
-		for (final String link : links.stringPropertyNames())
+		for (final String link : new TreeSet<String>(links.stringPropertyNames()))
 			out.append(" " + link);
 		return out.toString();
 	}
