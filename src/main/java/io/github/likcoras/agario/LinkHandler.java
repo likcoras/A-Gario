@@ -67,11 +67,12 @@ public class LinkHandler implements Handler {
 	@Override
 	public String getResponse(Channel chan, User user, String message)
 			throws HandlerException {
-		final Matcher linkMatch = LINK_REGEX.matcher(message);
-		if (linkMatch.find())
-			return link(linkMatch.group(1));
-		if (!message.toLowerCase().startsWith("@link "))
+		if (!message.toLowerCase().startsWith("@link ")) {
+			final Matcher linkMatch = LINK_REGEX.matcher(message);
+			if (linkMatch.find())
+				return link(linkMatch.group(1));
 			return "";
+		}
 		try {
 			if (BotUtil.isOp(chan, user))
 				user.send().notice(getLinksOp(message));
