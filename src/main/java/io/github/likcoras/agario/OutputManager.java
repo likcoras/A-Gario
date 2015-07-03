@@ -27,17 +27,16 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.concurrent.ConcurrentHashMap;
 import lombok.Cleanup;
+import lombok.Synchronized;
 import lombok.extern.log4j.Log4j;
 import org.pircbotx.Channel;
 import org.pircbotx.User;
-import com.google.common.collect.ImmutableList;
 
 @Log4j
 public class OutputManager {
@@ -54,17 +53,19 @@ public class OutputManager {
 	public OutputManager(BotConfig config) throws IOException {
 		ownerNick = config.getOthers().getOwnerNick();
 		ownerHost = config.getOthers().getOwnerHost();
-		lastOut = new ConcurrentHashMap<String, Long>();
-		lastSpam = new ConcurrentHashMap<String, Long>();
-		ignored = Collections.synchronizedList(readIgnore());
+		lastOut = new HashMap<String, Long>();
+		lastSpam = new HashMap<String, Long>();
+		ignored = readIgnore();
 	}
 	
+	@Synchronized
 	public void add(String user) throws IOException {
 		ignored.add(user);
 		writeIgnore();
 		log.info("User " + user + " ignored");
 	}
 	
+	@Synchronized
 	public void rem(String user) throws IOException {
 		ignored.remove(user);
 		writeIgnore();
@@ -75,14 +76,12 @@ public class OutputManager {
 		return ignored.toString();
 	}
 	
+	@Synchronized
 	public boolean isIgnored(User user) {
 		return ignored.contains(user.getHostmask());
 	}
 	
-	public void out(Channel chan, User user, String message) throws IOException {
-		out(chan, user, ImmutableList.of(message));
-	}
-	
+	@Synchronized
 	public void out(Channel chan, User user, List<String> message)
 			throws IOException {
 		if (message.isEmpty())
@@ -102,7 +101,6 @@ public class OutputManager {
 			user.send().notice("You have been ignored due to spam.");
 			log.info("User " + user + " ignored due to spam");
 		} else {
-			lastSpam.remove(hostmask);
 			lastOut.put(hostmask, now);
 			sendLines(chan, message);
 		}
@@ -126,28 +124,30 @@ public class OutputManager {
 		@Cleanup
 		final BufferedWriter write =
 				Files.newBufferedWriter(IGNORE, StandardCharsets.UTF_8);
-		synchronized (ignored) {
-			for (final String ignore : ignored)
-				write.write(ignore + "\n");
-		}
+		for (final String ignore : ignored)
+			write.write(ignore + "\n");
 		write.flush();
 	}
 	
-	private boolean
-			shouldFlag(Map<String, Long> map, String hostmask, long now) {
+	private boolean shouldFlag(Map<String, Long> map, String hostmask, long now) {
 		return map.containsKey(hostmask) && now - map.get(hostmask) < 3000L;
 	}
 	
 	private void sendLines(Channel chan, List<String> message) {
 		for (final String line : message)
-			chan.send().message(line);
+			if (!line.isEmpty())
+				chan.send().message(line);
 	}
 	
 	private void purgeOut(long now) {
-		final Iterator<Entry<String, Long>> it = lastOut.entrySet().iterator();
-		while (it.hasNext())
-			if (now - it.next().getValue() < 3000L)
-				it.remove();
+		final Iterator<Entry<String, Long>> outIt = lastOut.entrySet().iterator();
+		while (outIt.hasNext())
+			if (now - outIt.next().getValue() < 3000L)
+				outIt.remove();
+		final Iterator<Entry<String, Long>> spamIt = lastSpam.entrySet().iterator();
+		while (spamIt.hasNext())
+			if (now - spamIt.next().getValue() < 3000L)
+				spamIt.remove();
 	}
 	
 }

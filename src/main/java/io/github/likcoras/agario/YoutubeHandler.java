@@ -57,8 +57,7 @@ public class YoutubeHandler implements Handler {
 	public void handleEvent(Event<PircBotX> event) {}
 	
 	@Override
-	public String getResponse(Channel chan, User user, String message)
-			throws HandlerException {
+	public String getResponse(Channel chan, User user, String message) throws HandlerException {
 		final Matcher match = LINK_PATTERN.matcher(message);
 		if (!match.find())
 			return "";

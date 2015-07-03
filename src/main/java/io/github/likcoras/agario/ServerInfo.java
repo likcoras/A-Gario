@@ -42,8 +42,7 @@ public class ServerInfo {
 	public static class ServerInfoDeserializer implements JsonDeserializer<ServerInfo> {
 		
 		@Override
-		public ServerInfo deserialize(JsonElement json, Type typeOfT,
-				JsonDeserializationContext context) throws JsonParseException {
+		public ServerInfo deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
 			final JsonObject rawInfo = json.getAsJsonObject();
 			final JsonObject regionsInfo =
 					rawInfo.get("regions").getAsJsonObject();
@@ -54,13 +53,12 @@ public class ServerInfo {
 			return new ServerInfo(regions, totals);
 		}
 		
-		private static Map<String, Integer> parseRegionsInfo(
-				JsonObject regionsInfo) {
+		private static Map<String, Integer> parseRegionsInfo(JsonObject regionsInfo) {
 			final Map<String, Integer> regions = new HashMap<String, Integer>();
-			for (final Entry<String, JsonElement> e : regionsInfo.entrySet()) {
-				final String name = e.getKey().replaceAll(".+-", "");
+			for (final Entry<String, JsonElement> region : regionsInfo.entrySet()) {
+				final String name = region.getKey().replaceAll(".+-", "");
 				final int numPlayers =
-						e.getValue().getAsJsonObject().get("numPlayers")
+						region.getValue().getAsJsonObject().get("numPlayers")
 								.getAsInt();
 				regions.put(name, numPlayers);
 			}

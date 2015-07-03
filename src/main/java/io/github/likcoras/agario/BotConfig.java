@@ -19,16 +19,12 @@
 
 package io.github.likcoras.agario;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-import lombok.Cleanup;
 import lombok.Data;
 import org.yaml.snakeyaml.Yaml;
 
@@ -51,23 +47,8 @@ public class BotConfig {
 	private static Path getFile() throws IOException {
 		final Path path = Paths.get("config.yml");
 		if (!Files.exists(path))
-			createDefaultFile(path);
+			Files.copy(BotConfig.class.getClassLoader().getResourceAsStream("config.yml"), path);
 		return path;
-	}
-	
-	private static void createDefaultFile(Path path) throws IOException {
-		Files.createFile(path);
-		@Cleanup
-		final BufferedReader read =
-				new BufferedReader(new InputStreamReader(BotConfig.class
-						.getClassLoader().getResourceAsStream("config.yml")));
-		@Cleanup
-		final BufferedWriter write =
-				Files.newBufferedWriter(path, StandardCharsets.UTF_8);
-		String line;
-		while ((line = read.readLine()) != null)
-			write.write(line + "\n");
-		write.flush();
 	}
 	
 	@Data

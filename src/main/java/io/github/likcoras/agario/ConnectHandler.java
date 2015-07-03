@@ -24,28 +24,25 @@ public class ConnectHandler implements Handler {
 	private static final String NO_USER = "There is no user by the name %s";
 	private static final String NO_IMG = "User %s has not uploaded a skin yet";
 	private static final String USER_IMG =
-			BotUtil.addColors("%cUser: %n%s | %cSkin: %nhttp://connect.agariomods.com/img_%s.png");
+			BotUtil.addColors("User found | %cSkin: %nhttp://connect.agariomods.com/img_%s.png");
 	
 	@Override
-	public void configure(BotConfig config) throws HandlerException {}
+	public void configure(BotConfig config) {}
 	
 	@Override
-	public void handleEvent(Event<PircBotX> event) throws HandlerException {}
+	public void handleEvent(Event<PircBotX> event) {}
 	
 	@Override
-	public String getResponse(Channel chan, User user, String message)
-			throws HandlerException {
+	public String getResponse(Channel chan, User user, String message) throws HandlerException {
 		if (!message.toLowerCase().startsWith("@con ") || message.length() == 5)
 			return "";
 		final String username = message.substring(5).toLowerCase();
-		log.info("Connect skin for " + username + " requested");
-		ConnectInfo info;
+		log.info("Connect info for " + username + " requested");
 		try {
-			info = getConnectJson(username);
-		} catch (final IOException e) {
+			return getConText(username, getConnectJson(username));
+		} catch (IOException e) {
 			throw new HandlerException(e);
 		}
-		return getConText(username, info);
 	}
 	
 	@SneakyThrows(UnsupportedEncodingException.class)
@@ -65,8 +62,7 @@ public class ConnectHandler implements Handler {
 		else if (!info.hasImg())
 			return String.format(NO_IMG, username);
 		else
-			return String.format(USER_IMG, username,
-					URLEncoder.encode(username, "UTF-8"));
+			return String.format(USER_IMG, URLEncoder.encode(username, "UTF-8"));
 	}
 	
 }

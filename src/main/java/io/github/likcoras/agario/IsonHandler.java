@@ -31,6 +31,7 @@ import org.pircbotx.Colors;
 import org.pircbotx.PircBotX;
 import org.pircbotx.User;
 import org.pircbotx.hooks.Event;
+import com.google.common.base.Optional;
 
 @Log4j
 public class IsonHandler implements Handler {
@@ -39,10 +40,9 @@ public class IsonHandler implements Handler {
 			Pattern.compile("(?i)(([a-z0-9-]+\\.)+[a-z0-9-]+|\\[?(([0-9a-f]{1,4}:{1,2}){1,7}[0-9a-f]{1,4})\\]?)(:(\\d+))?");
 	
 	private static final String UP_MSG = Colors.DARK_GREEN
-			+ "%s (%s port %d) is up for me";
+			+ "%s is up for me";
 	private static final String DOWN_MSG = Colors.RED
-			+ "%s (%s port %d) is down for me";
-	private static final String NO_MSG = Colors.RED + "%s is down for me";
+			+ "%s is down for me";
 	
 	@Override
 	public void configure(BotConfig config) {}
@@ -52,37 +52,38 @@ public class IsonHandler implements Handler {
 	
 	@Override
 	public String getResponse(Channel chan, User user, String message) {
-		if (!message.toLowerCase().startsWith("@isup "))
+		if (!message.toLowerCase().startsWith("@isup ") || message.length() == 6)
 			return "";
-		final String url = message.split(" ")[1].trim();
-		final Matcher match = HOST_PATTERN.matcher(url);
-		if (!match.find())
-			return "";
-		final InetSocketAddress addr =
-				new InetSocketAddress(match.group(1), match.group(6) != null
-						? Integer.parseInt(match.group(6)) : 80);
-		if (addr.isUnresolved())
-			return String.format(NO_MSG, url);
-		if (isUp(addr))
-			return String.format(UP_MSG, url, addr.getAddress()
-					.getHostAddress(), addr.getPort());
-		return String.format(DOWN_MSG, url, addr.getAddress().getHostAddress(),
-				addr.getPort());
+		String target = message.substring(6).toLowerCase();
+		log.info("Ison requested for " + target);
+		Optional<InetSocketAddress> addr = getAddr(target);
+		if (addr.isPresent() && checkUpDown(addr.get()))
+			return String.format(UP_MSG, target);
+		return String.format(DOWN_MSG, target);
 	}
 	
-	private boolean isUp(InetSocketAddress addr) {
-		final InetAddress inet = addr.getAddress();
-		log.info("Ison requested for " + inet.getHostAddress() + " port "
-				+ addr.getPort());
-		if (inet.isAnyLocalAddress() || inet.isLoopbackAddress()
-				|| inet.isLinkLocalAddress() || inet.isSiteLocalAddress())
+	private Optional<InetSocketAddress> getAddr(String target) {
+		final Matcher match = HOST_PATTERN.matcher(target);
+		if (!match.find())
+			return Optional.absent();
+		return Optional.of(new InetSocketAddress(match.group(1), match.group(6) != null
+						? Integer.parseInt(match.group(6)) : 80));
+	}
+	
+	private boolean checkUpDown(InetSocketAddress addr) {
+		if (addr.isUnresolved() || isInvalid(addr.getAddress()))
 			return false;
-		try (Socket connection = new Socket()) {
-			connection.connect(addr, 2000);
-		} catch (final IOException e) {
+		try (Socket con = new Socket()) {
+			con.connect(addr);
+		} catch (IOException e) {
 			return false;
 		}
 		return true;
+	}
+	
+	private boolean isInvalid(InetAddress inet) {
+		return inet.isAnyLocalAddress() || inet.isLoopbackAddress()
+				|| inet.isLinkLocalAddress() || inet.isSiteLocalAddress();
 	}
 	
 }

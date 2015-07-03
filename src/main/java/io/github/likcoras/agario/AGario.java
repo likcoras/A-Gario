@@ -20,6 +20,7 @@
 package io.github.likcoras.agario;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import javax.net.SocketFactory;
 import javax.net.ssl.SSLSocketFactory;
@@ -77,23 +78,17 @@ public class AGario extends ListenerAdapter<PircBotX> {
 	@Override
 	public void onEvent(Event<PircBotX> event) throws Exception {
 		super.onEvent(event);
-		try {
-			for (final Handler handler : handlers)
-				handler.handleEvent(event);
-		} catch (final HandlerException e) {
-			event.respond("Error!");
-			log.error("Error:", e);
-		}
+		for (final Handler handler : handlers)
+			handler.handleEvent(event);
 	}
 	
 	@Override
 	public synchronized void onPrivateMessage(
-			PrivateMessageEvent<PircBotX> event) {
+			PrivateMessageEvent<PircBotX> event) throws IOException, Exception {
 		if (!isOwner(event.getUser()))
 			return;
 		final String message = event.getMessage();
 		final String target = message.length() > 3 ? message.substring(4) : "";
-		try {
 			if (message.startsWith("add "))
 				out.add(target);
 			else if (message.startsWith("rem "))
@@ -104,15 +99,10 @@ public class AGario extends ListenerAdapter<PircBotX> {
 				rawLine(event.getBot(), target);
 			else if (message.equals("quit"))
 				quit(event.getBot());
-		} catch (final IOException e) {
-			event.respond("Error!");
-			log.error("Privmsg Error: User: " + event.getUser().getNick()
-					+ " Message: " + message, e);
-		}
 	}
 	
 	@Override
-	public void onMessage(MessageEvent<PircBotX> event) {
+	public void onMessage(MessageEvent<PircBotX> event) throws IOException, HandlerException {
 		final Channel chan = event.getChannel();
 		final User user = event.getUser();
 		final String message = event.getMessage();
@@ -121,16 +111,10 @@ public class AGario extends ListenerAdapter<PircBotX> {
 		else if (message.equalsIgnoreCase("@quit") && isOwner(user))
 			quit(event.getBot());
 		else
-			try {
 				if (message.equalsIgnoreCase("@help"))
-					out.out(chan, user, HELP_MSG);
+					out.out(chan, user, ImmutableList.of(HELP_MSG));
 				else
 					doHandle(chan, user, message);
-			} catch (final HandlerException | IOException e) {
-				event.respond("Error! Ping likcoras!");
-				log.error("Message Error: Chan: " + chan.getName() + " User: "
-						+ user.getNick() + " Message: " + message, e);
-			}
 	}
 	
 	private List<Handler> getHandlers() {
@@ -194,14 +178,10 @@ public class AGario extends ListenerAdapter<PircBotX> {
 	
 	private void doHandle(Channel chan, User user, String message)
 			throws IOException, HandlerException {
-		final StringBuffer responses = new StringBuffer();
-		for (final Handler handler : handlers) {
-			final String response = handler.getResponse(chan, user, message);
-			if (!response.isEmpty())
-				responses.append(response + "\n");
-		}
-		out.out(chan, user, Splitter.on("\n").omitEmptyStrings().trimResults()
-				.splitToList(responses));
+		final List<String> responses = new ArrayList<String>();
+		for (final Handler handler : handlers)
+				responses.add(handler.getResponse(chan, user, message));
+		out.out(chan, user, responses);
 	}
 	
 	private boolean isOwner(User user) {

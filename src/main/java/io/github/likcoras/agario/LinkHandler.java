@@ -20,11 +20,9 @@
 package io.github.likcoras.agario;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 import java.util.TreeSet;
@@ -48,7 +46,7 @@ public class LinkHandler implements Handler {
 	private static final String LINK_MSG = "Added link '%s' to '%s'";
 	private static final String LINK_REM = "Link '%s' removed";
 	private static final String LINK_LIST = BotUtil.addColors("%cLinks:%n");
-	private static final Pattern LINK_REGEX = Pattern.compile("\\B(~\\S+)");
+	private static final Pattern LINK_REGEX = Pattern.compile("\\B~(\\S+)");
 	
 	private Properties links;
 	
@@ -95,10 +93,10 @@ public class LinkHandler implements Handler {
 	private String getLinksOp(String message) throws IOException {
 		final List<String> args = getArgs(message);
 		if (args.size() > 2 && args.get(0).equalsIgnoreCase("add"))
-			return setLink("~" + Colors.removeFormattingAndColors(args.get(1)),
+			return addLink(Colors.removeFormattingAndColors(args.get(1)),
 					args.get(2));
 		else if (args.size() > 1 && args.get(0).equalsIgnoreCase("rem"))
-			return delLink("~" + args.get(1));
+			return delLink(args.get(1));
 		return getLinks(args);
 	}
 	
@@ -107,10 +105,7 @@ public class LinkHandler implements Handler {
 	}
 	
 	private String getLinks(List<String> args) throws IOException {
-		if (args.size() > 2 && args.get(0).equalsIgnoreCase("add"))
-			return addLink("~" + Colors.removeFormattingAndColors(args.get(1)),
-					args.get(2));
-		else if (args.size() > 0 && args.get(0).equalsIgnoreCase("list"))
+		if (args.size() == 0 || args.get(0).equalsIgnoreCase("list"))
 			return getLinkList();
 		return "";
 	}
@@ -119,32 +114,35 @@ public class LinkHandler implements Handler {
 		final Properties links = new Properties();
 		if (!Files.exists(LINKS))
 			Files.createFile(LINKS);
-		links.load(Files.newBufferedReader(LINKS, StandardCharsets.UTF_8));
+		links.load(Files.newInputStream(LINKS));
 		return links;
 	}
 	
 	private void writeLinks(Properties properties) throws IOException {
-		properties.store(
-				Files.newBufferedWriter(LINKS, StandardCharsets.UTF_8), "");
+		properties.store(Files.newOutputStream(LINKS), "");
 	}
 	
 	private List<String> getArgs(String message) {
-		final Iterator<String> it =
+		final List<String> split =
 				Splitter.on(" ").trimResults().omitEmptyStrings().limit(3)
-						.split(message.substring(6)).iterator();
+						.splitToList(message.substring(6));
 		final ImmutableList.Builder<String> builder = ImmutableList.builder();
-		for (int i = 0; it.hasNext(); i++)
-			if (i == 1)
-				builder.add(it.next().toLowerCase());
-			else
-				builder.add(it.next());
+		boolean lower = false;
+		for (String arg : split)
+			if (lower) {
+				builder.add(arg.toLowerCase());
+				lower = false;
+			} else {
+				builder.add(arg);
+				lower = true;
+			}
 		return builder.build();
 	}
 	
-	private String setLink(String link, String target) throws IOException {
+	private String addLink(String link, String target) throws IOException {
 		links.setProperty(link, target);
 		writeLinks(links);
-		log.info("Link " + link + " added");
+		log.info("Link " + link + " added to " + target);
 		return String.format(LINK_MSG, link, target);
 	}
 	
@@ -155,12 +153,6 @@ public class LinkHandler implements Handler {
 		writeLinks(links);
 		log.info("Link " + link + " removed");
 		return String.format(LINK_REM, link);
-	}
-	
-	private String addLink(String link, String target) throws IOException {
-		if (links.containsKey(link))
-			return "";
-		return setLink(link, target);
 	}
 	
 	private String getLinkList() {
