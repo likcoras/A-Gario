@@ -39,10 +39,8 @@ public class IsonHandler implements Handler {
 	private static final Pattern HOST_PATTERN =
 			Pattern.compile("(?i)(([a-z0-9-]+\\.)+[a-z0-9-]+|\\[?(([0-9a-f]{1,4}:{1,2}){1,7}[0-9a-f]{1,4})\\]?)(:(\\d+))?");
 	
-	private static final String UP_MSG = Colors.DARK_GREEN
-			+ "%s is up for me";
-	private static final String DOWN_MSG = Colors.RED
-			+ "%s is down for me";
+	private static final String UP_MSG = Colors.DARK_GREEN + "%s is up for me";
+	private static final String DOWN_MSG = Colors.RED + "%s is down for me";
 	
 	@Override
 	public void configure(BotConfig config) {}
@@ -52,11 +50,12 @@ public class IsonHandler implements Handler {
 	
 	@Override
 	public String getResponse(Channel chan, User user, String message) {
-		if (!message.toLowerCase().startsWith("@isup ") || message.length() == 6)
+		if (!message.toLowerCase().startsWith("@isup ")
+				|| message.length() == 6)
 			return "";
-		String target = message.substring(6).toLowerCase();
+		final String target = message.substring(6).toLowerCase();
 		log.info("Ison requested for " + target);
-		Optional<InetSocketAddress> addr = getAddr(target);
+		final Optional<InetSocketAddress> addr = getAddr(target);
 		if (addr.isPresent() && checkUpDown(addr.get()))
 			return String.format(UP_MSG, target);
 		return String.format(DOWN_MSG, target);
@@ -66,8 +65,10 @@ public class IsonHandler implements Handler {
 		final Matcher match = HOST_PATTERN.matcher(target);
 		if (!match.find())
 			return Optional.absent();
-		return Optional.of(new InetSocketAddress(match.group(1), match.group(6) != null
-						? Integer.parseInt(match.group(6)) : 80));
+		return Optional
+				.of(new InetSocketAddress(match.group(1),
+						match.group(6) != null ? Integer.parseInt(match
+								.group(6)) : 80));
 	}
 	
 	private boolean checkUpDown(InetSocketAddress addr) {
@@ -75,7 +76,7 @@ public class IsonHandler implements Handler {
 			return false;
 		try (Socket con = new Socket()) {
 			con.connect(addr);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			return false;
 		}
 		return true;

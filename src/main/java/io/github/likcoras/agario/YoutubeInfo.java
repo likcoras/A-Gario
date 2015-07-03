@@ -28,8 +28,7 @@ public class YoutubeInfo {
 	public static class YoutubeInfoDeserializer implements JsonDeserializer<YoutubeInfo> {
 		
 		@Override
-		public YoutubeInfo deserialize(JsonElement json, Type typeOfT,
-				JsonDeserializationContext context) throws JsonParseException {
+		public YoutubeInfo deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
 			final JsonArray items =
 					json.getAsJsonObject().get("items").getAsJsonArray();
 			if (items.size() < 0)

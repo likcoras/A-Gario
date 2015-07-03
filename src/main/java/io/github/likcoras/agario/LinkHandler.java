@@ -63,8 +63,7 @@ public class LinkHandler implements Handler {
 	public void handleEvent(Event<PircBotX> event) {}
 	
 	@Override
-	public String getResponse(Channel chan, User user, String message)
-			throws HandlerException {
+	public String getResponse(Channel chan, User user, String message) throws HandlerException {
 		if (!message.toLowerCase().startsWith("@link ")) {
 			final Matcher linkMatch = LINK_REGEX.matcher(message);
 			if (linkMatch.find())
@@ -128,7 +127,7 @@ public class LinkHandler implements Handler {
 						.splitToList(message.substring(6));
 		final ImmutableList.Builder<String> builder = ImmutableList.builder();
 		boolean lower = false;
-		for (String arg : split)
+		for (final String arg : split)
 			if (lower) {
 				builder.add(arg.toLowerCase());
 				lower = false;
@@ -157,7 +156,8 @@ public class LinkHandler implements Handler {
 	
 	private String getLinkList() {
 		final StringBuffer out = new StringBuffer(LINK_LIST);
-		for (final String link : new TreeSet<String>(links.stringPropertyNames()))
+		for (final String link : new TreeSet<String>(
+				links.stringPropertyNames()))
 			out.append(" " + link);
 		return out.toString();
 	}

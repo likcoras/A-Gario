@@ -47,7 +47,9 @@ public class BotConfig {
 	private static Path getFile() throws IOException {
 		final Path path = Paths.get("config.yml");
 		if (!Files.exists(path))
-			Files.copy(BotConfig.class.getClassLoader().getResourceAsStream("config.yml"), path);
+			Files.copy(
+					BotConfig.class.getClassLoader().getResourceAsStream(
+							"config.yml"), path);
 		return path;
 	}
 	

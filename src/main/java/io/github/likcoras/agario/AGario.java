@@ -83,22 +83,21 @@ public class AGario extends ListenerAdapter<PircBotX> {
 	}
 	
 	@Override
-	public synchronized void onPrivateMessage(
-			PrivateMessageEvent<PircBotX> event) throws IOException, Exception {
+	public synchronized void onPrivateMessage(PrivateMessageEvent<PircBotX> event) throws IOException, Exception {
 		if (!isOwner(event.getUser()))
 			return;
 		final String message = event.getMessage();
 		final String target = message.length() > 3 ? message.substring(4) : "";
-			if (message.startsWith("add "))
-				out.add(target);
-			else if (message.startsWith("rem "))
-				out.rem(target);
-			else if (message.equals("lst"))
-				event.respond(out.getList());
-			else if (message.startsWith("raw "))
-				rawLine(event.getBot(), target);
-			else if (message.equals("quit"))
-				quit(event.getBot());
+		if (message.startsWith("add "))
+			out.add(target);
+		else if (message.startsWith("rem "))
+			out.rem(target);
+		else if (message.equals("lst"))
+			event.respond(out.getList());
+		else if (message.startsWith("raw "))
+			rawLine(event.getBot(), target);
+		else if (message.equals("quit"))
+			quit(event.getBot());
 	}
 	
 	@Override
@@ -110,11 +109,10 @@ public class AGario extends ListenerAdapter<PircBotX> {
 			return;
 		else if (message.equalsIgnoreCase("@quit") && isOwner(user))
 			quit(event.getBot());
+		else if (message.equalsIgnoreCase("@help"))
+			out.out(chan, user, ImmutableList.of(HELP_MSG));
 		else
-				if (message.equalsIgnoreCase("@help"))
-					out.out(chan, user, ImmutableList.of(HELP_MSG));
-				else
-					doHandle(chan, user, message);
+			doHandle(chan, user, message);
 	}
 	
 	private List<Handler> getHandlers() {
@@ -124,8 +122,7 @@ public class AGario extends ListenerAdapter<PircBotX> {
 				.add(new ConnectHandler()).build();
 	}
 	
-	private void configure(List<Handler> handlers, BotConfig config)
-			throws HandlerException {
+	private void configure(List<Handler> handlers, BotConfig config) throws HandlerException {
 		for (final Handler handler : handlers)
 			handler.configure(config);
 	}
@@ -176,11 +173,10 @@ public class AGario extends ListenerAdapter<PircBotX> {
 		log.info("Quitted");
 	}
 	
-	private void doHandle(Channel chan, User user, String message)
-			throws IOException, HandlerException {
+	private void doHandle(Channel chan, User user, String message) throws IOException, HandlerException {
 		final List<String> responses = new ArrayList<String>();
 		for (final Handler handler : handlers)
-				responses.add(handler.getResponse(chan, user, message));
+			responses.add(handler.getResponse(chan, user, message));
 		out.out(chan, user, responses);
 	}
 	

@@ -48,8 +48,7 @@ public class ServersHandler implements Handler {
 	public void handleEvent(Event<PircBotX> event) {}
 	
 	@Override
-	public String getResponse(Channel chan, User user, String message)
-			throws HandlerException {
+	public String getResponse(Channel chan, User user, String message) throws HandlerException {
 		if (!message.equalsIgnoreCase("@servers"))
 			return "";
 		log.info("Servers requested");

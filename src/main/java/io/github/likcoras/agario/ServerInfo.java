@@ -55,7 +55,8 @@ public class ServerInfo {
 		
 		private static Map<String, Integer> parseRegionsInfo(JsonObject regionsInfo) {
 			final Map<String, Integer> regions = new HashMap<String, Integer>();
-			for (final Entry<String, JsonElement> region : regionsInfo.entrySet()) {
+			for (final Entry<String, JsonElement> region : regionsInfo
+					.entrySet()) {
 				final String name = region.getKey().replaceAll(".+-", "");
 				final int numPlayers =
 						region.getValue().getAsJsonObject().get("numPlayers")

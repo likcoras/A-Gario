@@ -40,7 +40,7 @@ public class ConnectHandler implements Handler {
 		log.info("Connect info for " + username + " requested");
 		try {
 			return getConText(username, getConnectJson(username));
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			throw new HandlerException(e);
 		}
 	}
@@ -62,7 +62,8 @@ public class ConnectHandler implements Handler {
 		else if (!info.hasImg())
 			return String.format(NO_IMG, username);
 		else
-			return String.format(USER_IMG, URLEncoder.encode(username, "UTF-8"));
+			return String
+					.format(USER_IMG, URLEncoder.encode(username, "UTF-8"));
 	}
 	
 }

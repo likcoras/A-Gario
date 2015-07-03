@@ -76,8 +76,7 @@ public class YoutubeHandler implements Handler {
 				info.getLikes(), info.getDislikes());
 	}
 	
-	private YoutubeInfo getYoutubeJson(String url)
-			throws MalformedURLException, IOException {
+	private YoutubeInfo getYoutubeJson(String url) throws MalformedURLException, IOException {
 		return GSON
 				.fromJson(
 						new InputStreamReader(new URL(String.format(url))

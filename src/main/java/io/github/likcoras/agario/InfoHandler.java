@@ -35,8 +35,14 @@ import org.pircbotx.hooks.events.ConnectEvent;
 @Log4j
 public class InfoHandler implements Handler {
 	
-	private static final DateTimeFormatter DATE_FORMAT = DateTimeFormat.longTime();
-	private static final PeriodFormatter PERIOD_FORMAT = new PeriodFormatterBuilder().printZeroNever().appendDays().appendSuffix("d").appendSeparator(" ").appendHours().appendSuffix("h").appendSeparator(" ").appendMinutes().appendSuffix("m").appendSeparator(" ").appendSeconds().appendSuffix("s").toFormatter();
+	private static final DateTimeFormatter DATE_FORMAT = DateTimeFormat
+			.longTime();
+	private static final PeriodFormatter PERIOD_FORMAT =
+			new PeriodFormatterBuilder().printZeroNever().appendDays()
+					.appendSuffix("d").appendSeparator(" ").appendHours()
+					.appendSuffix("h").appendSeparator(" ").appendMinutes()
+					.appendSuffix("m").appendSeparator(" ").appendSeconds()
+					.appendSuffix("s").toFormatter();
 	
 	private static final String INFO_MSG =
 			BotUtil.addColors("%cUptime: %n%s | %cTime: %n%s | %cSource: %nhttps://github.com/likcoras/A-Gario");
@@ -57,7 +63,9 @@ public class InfoHandler implements Handler {
 		if (!message.equalsIgnoreCase("@info"))
 			return "";
 		log.info("Info requested");
-		return String.format(INFO_MSG, new Period(start, Instant.now()).toString(PERIOD_FORMAT), Instant.now().toString(DATE_FORMAT));
+		return String.format(INFO_MSG,
+				new Period(start, Instant.now()).toString(PERIOD_FORMAT),
+				Instant.now().toString(DATE_FORMAT));
 	}
 	
 }

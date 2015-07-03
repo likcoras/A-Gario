@@ -82,8 +82,7 @@ public class OutputManager {
 	}
 	
 	@Synchronized
-	public void out(Channel chan, User user, List<String> message)
-			throws IOException {
+	public void out(Channel chan, User user, List<String> message) throws IOException {
 		if (message.isEmpty())
 			return;
 		final String hostmask = user.getHostmask();
@@ -140,11 +139,13 @@ public class OutputManager {
 	}
 	
 	private void purgeOut(long now) {
-		final Iterator<Entry<String, Long>> outIt = lastOut.entrySet().iterator();
+		final Iterator<Entry<String, Long>> outIt =
+				lastOut.entrySet().iterator();
 		while (outIt.hasNext())
 			if (now - outIt.next().getValue() < 3000L)
 				outIt.remove();
-		final Iterator<Entry<String, Long>> spamIt = lastSpam.entrySet().iterator();
+		final Iterator<Entry<String, Long>> spamIt =
+				lastSpam.entrySet().iterator();
 		while (spamIt.hasNext())
 			if (now - spamIt.next().getValue() < 3000L)
 				spamIt.remove();
