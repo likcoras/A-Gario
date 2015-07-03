@@ -83,7 +83,7 @@ public class AGario extends ListenerAdapter<PircBotX> {
 	}
 	
 	@Override
-	public synchronized void onPrivateMessage(PrivateMessageEvent<PircBotX> event) throws IOException, Exception {
+	public synchronized void onPrivateMessage(PrivateMessageEvent<PircBotX> event) throws Exception {
 		if (!isOwner(event.getUser()))
 			return;
 		final String message = event.getMessage();
