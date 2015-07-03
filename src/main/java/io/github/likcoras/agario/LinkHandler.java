@@ -44,8 +44,8 @@ public class LinkHandler implements Handler {
 	
 	private static final Path LINKS = Paths.get("links");
 	
-	private static final String LINK_MSG = "Added link '%s' to '%s'";
-	private static final String LINK_REM = "Link '%s' removed";
+	private static final String LINK_MSG = "Added link '~%s' to '%s'";
+	private static final String LINK_REM = "Link '~%s' removed";
 	private static final String LINK_LIST = BotUtil.addColors("%cLinks:%n");
 	private static final Pattern LINK_REGEX = Pattern.compile("\\B~(\\S+)");
 	
