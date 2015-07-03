@@ -34,6 +34,7 @@ import org.pircbotx.Colors;
 import org.pircbotx.PircBotX;
 import org.pircbotx.User;
 import org.pircbotx.hooks.Event;
+import org.pircbotx.hooks.events.PrivateMessageEvent;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
@@ -60,7 +61,19 @@ public class LinkHandler implements Handler {
 	}
 	
 	@Override
-	public void handleEvent(Event<PircBotX> event) {}
+	public void handleEvent(Event<PircBotX> event) {
+		if (!(event instanceof PrivateMessageEvent))
+			return;
+		final PrivateMessageEvent<PircBotX> privMsg =
+				(PrivateMessageEvent<PircBotX>) event;
+		final String message = privMsg.getMessage();
+		if (!message.toLowerCase().startsWith("@link ")) {
+			final Matcher linkMatch = LINK_REGEX.matcher(message);
+			if (linkMatch.find())
+				privMsg.respond(link(linkMatch.group(1)));
+		} else
+			privMsg.respond(getLinks(message));
+	}
 	
 	@Override
 	public String getResponse(Channel chan, User user, String message) throws HandlerException {
@@ -99,11 +112,11 @@ public class LinkHandler implements Handler {
 		return getLinks(args);
 	}
 	
-	private String getLinks(String message) throws IOException {
+	private String getLinks(String message) {
 		return getLinks(getArgs(message));
 	}
 	
-	private String getLinks(List<String> args) throws IOException {
+	private String getLinks(List<String> args) {
 		if (args.size() == 0 || args.get(0).equalsIgnoreCase("list"))
 			return getLinkList();
 		return "";
@@ -158,7 +171,7 @@ public class LinkHandler implements Handler {
 		final StringBuffer out = new StringBuffer(LINK_LIST);
 		for (final String link : new TreeSet<String>(
 				links.stringPropertyNames()))
-			out.append(" " + link);
+			out.append(" ~" + link);
 		return out.toString();
 	}
 	
