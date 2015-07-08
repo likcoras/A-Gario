@@ -138,13 +138,13 @@ public class OutputManager {
 	}
 	
 	private void sendLines(Channel chan, List<String> message, long now) {
-		for (final String line : message) {
-			if (!line.isEmpty() && !(line.equals(lastMsg) && now - lastMsgTime < 3000L)) {
+		for (final String line : message)
+			if (!line.isEmpty()
+					&& !(line.equals(lastMsg) && now - lastMsgTime < 3000L)) {
 				chan.send().message(line);
 				lastMsg = line;
 				lastMsgTime = now;
 			}
-		}
 	}
 	
 	private void purgeOut(long now) {
