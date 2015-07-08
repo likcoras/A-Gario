@@ -50,12 +50,17 @@ public class OutputManager {
 	private final Map<String, Long> lastSpam;
 	private final List<String> ignored;
 	
+	private String lastMsg;
+	private long lastMsgTime;
+	
 	public OutputManager(BotConfig config) throws IOException {
 		ownerNick = config.getOthers().getOwnerNick();
 		ownerHost = config.getOthers().getOwnerHost();
 		lastOut = new HashMap<String, Long>();
 		lastSpam = new HashMap<String, Long>();
 		ignored = readIgnore();
+		lastMsg = "";
+		lastMsgTime = 0L;
 	}
 	
 	@Synchronized
@@ -89,7 +94,7 @@ public class OutputManager {
 		final long now = System.currentTimeMillis();
 		if (ownerNick.equalsIgnoreCase(user.getNick())
 				&& ownerHost.equalsIgnoreCase(hostmask))
-			sendLines(chan, message);
+			sendLines(chan, message, now);
 		else if (shouldFlag(lastOut, hostmask, now)) {
 			lastSpam.put(hostmask, now);
 			user.send().notice("Please don't spam.");
@@ -101,7 +106,7 @@ public class OutputManager {
 			log.info("User " + user + " ignored due to spam");
 		} else {
 			lastOut.put(hostmask, now);
-			sendLines(chan, message);
+			sendLines(chan, message, now);
 		}
 		purgeOut(now);
 	}
@@ -132,10 +137,14 @@ public class OutputManager {
 		return map.containsKey(hostmask) && now - map.get(hostmask) < 3000L;
 	}
 	
-	private void sendLines(Channel chan, List<String> message) {
-		for (final String line : message)
-			if (!line.isEmpty())
+	private void sendLines(Channel chan, List<String> message, long now) {
+		for (final String line : message) {
+			if (!line.isEmpty() && !(line.equals(lastMsg) && now - lastMsgTime < 3000L)) {
 				chan.send().message(line);
+				lastMsg = line;
+				lastMsgTime = now;
+			}
+		}
 	}
 	
 	private void purgeOut(long now) {
