@@ -9,6 +9,7 @@ import java.net.URLEncoder;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j;
 import org.pircbotx.Channel;
+import org.pircbotx.Colors;
 import org.pircbotx.PircBotX;
 import org.pircbotx.User;
 import org.pircbotx.hooks.Event;
@@ -24,7 +25,7 @@ public class ConnectHandler implements Handler {
 	private static final String NO_USER = "There is no user by the name %s";
 	private static final String NO_IMG = "User %s has not uploaded a skin yet";
 	private static final String USER_IMG =
-			BotUtil.addColors("User found | %cSkin: %nhttp://connect.agariomods.com/img_%s.png");
+			BotUtil.addColors("User found | %cSkin " + Colors.RED + "(NSFW WARNING)" + "%c: %nhttp://connect.agariomods.com/img_%s.png");
 	
 	@Override
 	public void configure(BotConfig config) {}
