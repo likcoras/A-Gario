@@ -20,7 +20,9 @@
 package io.github.likcoras.agario;
 
 import java.lang.reflect.Type;
+import java.text.NumberFormat;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import lombok.Value;
@@ -36,8 +38,8 @@ import com.google.gson.JsonParseException;
 @Value
 public class ServerInfo {
 	
-	private Map<String, Integer> regions;
-	private int totals;
+	private Map<String, String> regions;
+	private String totals;
 	
 	public static class ServerInfoDeserializer implements JsonDeserializer<ServerInfo> {
 		
@@ -46,21 +48,20 @@ public class ServerInfo {
 			final JsonObject rawInfo = json.getAsJsonObject();
 			final JsonObject regionsInfo =
 					rawInfo.get("regions").getAsJsonObject();
-			final Map<String, Integer> regions = parseRegionsInfo(regionsInfo);
-			final int totals =
-					rawInfo.get("totals").getAsJsonObject().get("numPlayers")
-							.getAsInt();
+			final Map<String, String> regions = parseRegionsInfo(regionsInfo);
+			final String totals = NumberFormat.getInstance(Locale.US).format(rawInfo.get("totals").getAsJsonObject().get("numPlayers")
+							.getAsInt());
 			return new ServerInfo(regions, totals);
 		}
 		
-		private static Map<String, Integer> parseRegionsInfo(JsonObject regionsInfo) {
-			final Map<String, Integer> regions = new HashMap<String, Integer>();
+		private static Map<String, String> parseRegionsInfo(JsonObject regionsInfo) {
+			final Map<String, String> regions = new HashMap<String, String>();
+			final NumberFormat format = NumberFormat.getInstance(Locale.US);
 			for (final Entry<String, JsonElement> region : regionsInfo
 					.entrySet()) {
 				final String name = region.getKey().replaceAll(".+-", "");
-				final int numPlayers =
-						region.getValue().getAsJsonObject().get("numPlayers")
-								.getAsInt();
+				final String numPlayers = format.format(region.getValue().getAsJsonObject().get("numPlayers")
+								.getAsInt());
 				regions.put(name, numPlayers);
 			}
 			return ImmutableMap.copyOf(regions);

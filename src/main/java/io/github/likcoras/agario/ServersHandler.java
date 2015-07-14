@@ -37,9 +37,9 @@ public class ServersHandler implements Handler {
 	private static final Gson GSON = ServerInfo.getGson();
 	
 	private static final String SERVERS_FORMAT = BotUtil
-			.addColors("%c%s: %n%d | ");
+			.addColors("%c%s: %n%s | ");
 	private static final String SERVERS_TOTAL = BotUtil
-			.addColors("%cTotal: %n%d players");
+			.addColors("%cTotal: %n%s players");
 	
 	@Override
 	public void configure(BotConfig config) {}
@@ -69,9 +69,9 @@ public class ServersHandler implements Handler {
 	}
 	
 	private String getServerText(ServerInfo info) {
-		final Map<String, Integer> regions = info.getRegions();
+		final Map<String, String> regions = info.getRegions();
 		final StringBuffer out = new StringBuffer();
-		for (final Entry<String, Integer> server : regions.entrySet())
+		for (final Entry<String, String> server : regions.entrySet())
 			out.append(String.format(SERVERS_FORMAT, server.getKey(),
 					server.getValue()));
 		return out.toString();
