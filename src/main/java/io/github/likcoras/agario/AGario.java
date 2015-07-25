@@ -134,6 +134,7 @@ public class AGario extends ListenerAdapter<PircBotX> {
 				new Configuration.Builder<PircBotX>()
 						.addListener(this)
 						.setAutoReconnect(true)
+						.setAutoSplitMessage(true)
 						
 						.setName(bot.getNick())
 						.setLogin(bot.getLogin())
