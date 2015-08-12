@@ -23,6 +23,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.NumberFormat;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import lombok.extern.log4j.Log4j;
@@ -43,8 +45,8 @@ public class YoutubeHandler implements Handler {
 	private static final Gson GSON = YoutubeInfo.getGson();
 	
 	private static final String YOUTUBE_FORMAT = BotUtil.addColors("["
-			+ Colors.RED + "Youtube%n" + "] %s - by %s [%s] [%d views] %c[%d] "
-			+ Colors.RED + "[%d]");
+			+ Colors.RED + "Youtube%n" + "] %s - by %s [%s] [%s views] %c[%s] "
+			+ Colors.RED + "[%s]");
 	
 	private String apiKey;
 	
@@ -59,6 +61,7 @@ public class YoutubeHandler implements Handler {
 	@Override
 	public String getResponse(Channel chan, User user, String message) throws HandlerException {
 		final Matcher match = LINK_PATTERN.matcher(message);
+		System.out.println(match);
 		if (!match.find())
 			return "";
 		final String id = match.group(5);
@@ -71,9 +74,13 @@ public class YoutubeHandler implements Handler {
 		}
 		if (!info.wasFound())
 			return "";
+		NumberFormat format = NumberFormat.getInstance(Locale.US);
+		System.out.println(String.format(YOUTUBE_FORMAT, info.getTitle(),
+				info.getChannel(), info.getDuration(), format.format(info.getViews()),
+				format.format(info.getLikes()), format.format(info.getDislikes())));
 		return String.format(YOUTUBE_FORMAT, info.getTitle(),
-				info.getChannel(), info.getDuration(), info.getViews(),
-				info.getLikes(), info.getDislikes());
+				info.getChannel(), info.getDuration(), format.format(info.getViews()),
+				format.format(info.getLikes()), format.format(info.getDislikes()));
 	}
 	
 	private YoutubeInfo getYoutubeJson(String url) throws MalformedURLException, IOException {
