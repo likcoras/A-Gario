@@ -1,9 +1,10 @@
 package io.github.likcoras.agar.auth;
 
+import io.github.likcoras.agar.Utils;
+
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.ImmutableMap;
-import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import lombok.Cleanup;
 import lombok.extern.log4j.Log4j2;
@@ -29,13 +30,10 @@ public class Auth {
     private final Map<String, AuthLevel> nicks;
     private final Cache<UUID, AuthLevel> auths;
     
-    private final Gson gson;
-    
-    public Auth() throws IOException {
+    public Auth() {
         auths = CacheBuilder.newBuilder()
                 .expireAfterAccess(1L, TimeUnit.MINUTES).build();
         nicks = new ConcurrentHashMap<>();
-        gson = new Gson();
         readNicks();
     }
     
@@ -71,7 +69,7 @@ public class Auth {
         try {
             @Cleanup BufferedReader reader = Files.newBufferedReader(AUTH_FILE);
             Type type = new TypeToken<Map<String, String>>() {}.getType();
-            Map<String, String> rawMap = gson.fromJson(reader, type);
+            Map<String, String> rawMap = Utils.GSON.fromJson(reader, type);
             rawMap.forEach(
                     (key, value) -> nicks.put(key, AuthLevel.valueOf(value)));
         } catch (IOException e) {
@@ -82,7 +80,7 @@ public class Auth {
     private void writeNicks() {
         try {
             @Cleanup BufferedWriter writer = Files.newBufferedWriter(AUTH_FILE);
-            gson.toJson(nicks, writer);
+            Utils.GSON.toJson(nicks, writer);
         } catch (IOException e) {
             log.error("Error while writing nicks", e);
         }
