@@ -6,6 +6,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import lombok.Cleanup;
+import lombok.extern.log4j.Log4j2;
 import org.pircbotx.User;
 
 import java.io.BufferedReader;
@@ -21,6 +22,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
+@Log4j2(topic = "errorlog")
 public class Auth {
     private static final Path AUTH_FILE = Paths.get("auths");
     
@@ -73,7 +75,7 @@ public class Auth {
             rawMap.forEach(
                     (key, value) -> nicks.put(key, AuthLevel.valueOf(value)));
         } catch (IOException e) {
-            // TODO log
+            log.error("Error while reading nicks", e);
         }
     }
     
@@ -82,7 +84,7 @@ public class Auth {
             @Cleanup BufferedWriter writer = Files.newBufferedWriter(AUTH_FILE);
             gson.toJson(nicks, writer);
         } catch (IOException e) {
-            // TODO log
+            log.error("Error while writing nicks", e);
         }
     }
 }

@@ -1,0 +1,52 @@
+<Configuration status="INFO">
+
+  <Appenders>
+    
+    <Console name="Console">
+      <PatternLayout pattern="[%d{HH:mm:ss}] [%level] %m%n"/>
+    </Console>
+    
+    <RollingFile name="IrcLog" fileName="logs/irc/irc.log" filePattern="logs/irc/irc-%d{MM-dd}.log.gz">
+      <PatternLayout pattern="[%d{HH:mm:ss}] [%level] %m%n"/>
+      <Policies>
+        <TimeBasedTriggeringPolicy/>
+      </Policies>
+    </RollingFile>
+    
+    <RollingFile name="BotLog" fileName="logs/bot/bot.log" filePattern="logs/bot/bot-%d{MM-dd}.log.gz">
+      <PatternLayout pattern="[%d{HH:mm:ss}] [%level] %m%n"/>
+      <Policies>
+        <TimeBasedTriggeringPolicy/>
+      </Policies>
+    </RollingFile>
+    
+    <RollingFile name="ErrorLog" fileName="logs/error/error.log" filePattern="logs/error/error-%d{MM-dd}.log.gz">
+      <PatternLayout pattern="[%d{HH:mm:ss}] [%level] %m%n"/>
+      <Policies>
+        <TimeBasedTriggeringPolicy/>
+      </Policies>
+    </RollingFile>
+    
+  </Appenders>
+  
+  <Loggers>
+    
+    <Root level="info">
+      <AppenderRef ref="Console"/>
+    </Root>
+    
+    <Logger name="org.pircbotx" level="info" additivity="false">
+      <AppenderRef ref="IrcLog"/>
+    </Logger>
+    
+    <Logger name="io.github.likcoras" level="info">
+      <AppenderRef ref="BotLog"/>
+    </Logger>
+    
+    <Logger name="errorlog" level="info">
+      <AppenderRef ref="ErrorLog"/>
+    </Logger>
+    
+  </Loggers>
+  
+</Configuration>
