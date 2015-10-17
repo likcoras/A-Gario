@@ -53,6 +53,10 @@ public class Auth {
         return ImmutableMap.copyOf(nicks);
     }
     
+    public boolean checkLevel(User user, AuthLevel level) {
+        return getLevel(user).compareTo(level) >= 0;
+    }
+    
     public AuthLevel getLevel(User user) {
         UUID uid = user.getUserId();
         if (!nicks.containsKey(uid)) {
