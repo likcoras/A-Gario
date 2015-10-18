@@ -27,13 +27,11 @@ import java.util.concurrent.TimeUnit;
 public class Auth {
     private static final Path AUTH_FILE = Paths.get("auths");
     
-    private final Map<String, AuthLevel> nicks;
-    private final Cache<UUID, AuthLevel> auths;
+    private final Map<String, AuthLevel> nicks = new ConcurrentHashMap<>();
+    private final Cache<UUID, AuthLevel> auths = CacheBuilder.newBuilder()
+            .expireAfterAccess(15L, TimeUnit.MINUTES).build();
     
     public Auth() {
-        auths = CacheBuilder.newBuilder()
-                .expireAfterAccess(15L, TimeUnit.MINUTES).build();
-        nicks = new ConcurrentHashMap<>();
         readNicks();
     }
     

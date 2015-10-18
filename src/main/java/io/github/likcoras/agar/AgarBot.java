@@ -11,12 +11,11 @@ import org.pircbotx.UtilSSLSocketFactory;
 @Getter
 public class AgarBot extends PircBotX {
     private final Config config;
-    private final Auth auth;
+    private final Auth auth = new Auth();
     
     public AgarBot( Config config) {
         super(getBotConfig(config));
         this.config = config;
-        auth = new Auth();
     }
     
     private static Configuration<AgarBot> getBotConfig(Config config) {
