@@ -32,7 +32,7 @@ public class Auth {
     
     public Auth() {
         auths = CacheBuilder.newBuilder()
-                .expireAfterAccess(1L, TimeUnit.MINUTES).build();
+                .expireAfterAccess(15L, TimeUnit.MINUTES).build();
         nicks = new ConcurrentHashMap<>();
         readNicks();
     }
