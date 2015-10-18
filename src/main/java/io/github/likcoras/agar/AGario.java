@@ -1,8 +1,11 @@
 package io.github.likcoras.agar;
 
+import com.google.common.io.Resources;
+import lombok.Cleanup;
 import lombok.extern.log4j.Log4j2;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -27,9 +30,15 @@ public class AGario {
     private Config getConfig() throws IOException {
         Path file = Paths.get("config");
         if (Files.notExists(file)) {
-            Files.createFile(file);
+            createConfig(file);
         }
-        return Utils.GSON.fromJson(Files.newBufferedReader(Paths.get("config")),
+        return Utils.GSON.fromJson(Files.newBufferedReader(file),
                 Config.class);
+    }
+    
+    private void createConfig(Path file) throws IOException {
+        @Cleanup
+        InputStream stream = Resources.getResource("config.json").openStream();
+        Files.copy(stream, file);
     }
 }
