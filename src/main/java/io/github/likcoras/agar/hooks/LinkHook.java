@@ -26,11 +26,11 @@ import java.util.stream.Collectors;
 @Log4j2
 public class LinkHook extends ListenerAdapter<AgarBot> {
     private static final Path LINK_FILE = Paths.get("links");
+    private static final String ADDED = Utils.addFormat("&03Link added: ");
+    private static final String REMOVED = Utils.addFormat("&03Link removed: ");
+    private static final Pattern PATTERN = Pattern.compile("~(\\S+)");
     
     private final Properties links = new Properties();
-    private final Pattern pattern = Pattern.compile("~(\\S+)");
-    private final String added = Utils.addFormat("&03Link added: ");
-    private final String removed = Utils.addFormat("&03Link removed: ");
     
     public LinkHook() {
         readLinks();
@@ -78,7 +78,7 @@ public class LinkHook extends ListenerAdapter<AgarBot> {
                 Colors.removeFormattingAndColors(args.get(2)).toLowerCase();
         String target = args.get(3);
         links.setProperty(name, target);
-        event.getUser().send().message(added + name);
+        event.getUser().send().message(ADDED + name);
         writeLinks();
     }
     
@@ -88,15 +88,15 @@ public class LinkHook extends ListenerAdapter<AgarBot> {
             return;
         }
         String name = args.get(2).toLowerCase();
-        String link = (String) links.remove(name);
-        if (link != null) {
-            event.getUser().send().message(removed + link);
+        String removed = (String) links.remove(name);
+        if (removed != null) {
+            event.getUser().send().message(REMOVED + removed);
             writeLinks();
         }
     }
     
     private void handleLink(GenericMessageEvent<AgarBot> event) {
-        Matcher matcher = pattern.matcher(event.getMessage());
+        Matcher matcher = PATTERN.matcher(event.getMessage());
         if (!matcher.find()) {
             return;
         }
