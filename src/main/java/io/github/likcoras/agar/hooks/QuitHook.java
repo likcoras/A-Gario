@@ -11,8 +11,8 @@ public class QuitHook extends ListenerAdapter<AgarBot> {
     @Override
     public void onGenericMessage(GenericMessageEvent<AgarBot> event) {
         AgarBot bot = event.getBot();
-        if (bot.getAuth().checkLevel(event.getUser(), AuthLevel.ADMIN)
-                && Utils.isTrigger(event.getMessage(), "quit")) {
+        if (Utils.isTrigger(event.getMessage(), "quit")
+                && bot.getAuth().checkLevel(event.getUser(), AuthLevel.ADMIN)) {
             bot.stopBotReconnect();
             bot.sendIRC().quitServer();
         }
