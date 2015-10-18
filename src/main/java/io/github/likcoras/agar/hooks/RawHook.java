@@ -16,10 +16,8 @@ public class RawHook extends ListenerAdapter<AgarBot> {
         AgarBot bot = event.getBot();
         String message = event.getMessage();
         User user = event.getUser();
-        if (!bot.getAuth().checkLevel(user, AuthLevel.ADMIN)) {
-            return;
-        }
-        if (Utils.isTrigger(message, "raw ")) {
+        if (Utils.isTrigger(message, "raw ")
+                && bot.getAuth().checkLevel(user, AuthLevel.ADMIN)) {
             String raw = message.substring(5);
             event.getBot().sendRaw().rawLineNow(raw);
             log.warn("Raw: " + user.getNick() + "@" + user.getHostmask() + ": "
