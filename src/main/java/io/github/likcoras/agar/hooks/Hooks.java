@@ -9,8 +9,7 @@ import java.util.List;
 
 public class Hooks {
     public static final List<Listener<AgarBot>> LIST =
-            ImmutableList.builder().add(new CoreHook())
-                    .add(new QuitHook()).add(new RawHook()).add(new AuthHook())
-                    .add(new LinkHook())
+            ImmutableList.<Listener<AgarBot>> builder().add(new CoreHook())
+                    .add(new QuitHook()).add(new RawHook()).add(new LinkHook())
                     .add(new BadwordHook()).build();
 }
