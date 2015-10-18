@@ -25,7 +25,7 @@ import java.util.concurrent.TimeUnit;
 
 @Log4j2(topic = "errorlog")
 public class Auth {
-    private static final Path AUTH_FILE = Paths.get("auths");
+    private static final Path AUTH_FILE = Paths.get("auths.json");
     
     private final Map<String, AuthLevel> nicks = new ConcurrentHashMap<>();
     private final Cache<UUID, AuthLevel> auths = CacheBuilder.newBuilder()
@@ -69,6 +69,9 @@ public class Auth {
     
     private void readNicks() {
         try {
+            if (Files.notExists(AUTH_FILE)) {
+                Files.createFile(AUTH_FILE);
+            }
             @Cleanup BufferedReader reader = Files.newBufferedReader(AUTH_FILE);
             Type type = new TypeToken<Map<String, String>>() {}.getType();
             Map<String, String> rawMap = Utils.GSON.fromJson(reader, type);
