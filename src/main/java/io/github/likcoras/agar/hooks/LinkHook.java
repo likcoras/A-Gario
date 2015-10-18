@@ -26,6 +26,7 @@ import java.util.stream.Collectors;
 @Log4j2
 public class LinkHook extends ListenerAdapter<AgarBot> {
     private static final Path LINK_FILE = Paths.get("links");
+    
     private final Properties links = new Properties();
     private final Pattern pattern = Pattern.compile("~(\\S+)");
     private final String added = Utils.addFormat("&03Link added: ");
