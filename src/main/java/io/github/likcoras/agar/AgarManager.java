@@ -15,11 +15,11 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 public class AgarManager extends ThreadedListenerManager<AgarBot> {
-    private static final int STRIKES = 5;
-    private static final int TIME = 5;
+    private static final int STRIKES = 4;
+    private static final int TIME = 3;
     
     private final LoadingCache<String, Integer> spam =
-            CacheBuilder.newBuilder().expireAfterAccess(TIME, TimeUnit.SECONDS)
+            CacheBuilder.newBuilder().expireAfterWrite(TIME, TimeUnit.SECONDS)
                     .build(new CacheLoader<String, Integer>() {
                         @Override
                         public Integer load(String key) {
