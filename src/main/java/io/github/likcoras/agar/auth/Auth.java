@@ -79,8 +79,8 @@ public class Auth {
             @Cleanup BufferedReader reader = Files.newBufferedReader(AUTH_FILE);
             Type type = new TypeToken<Map<String, String>>() {}.getType();
             Map<String, String> rawMap = Utils.GSON.fromJson(reader, type);
-            rawMap.forEach(
-                    (key, value) -> nicks.put(key.toLowerCase(), AuthLevel.valueOf(value)));
+            rawMap.forEach((key, value) -> nicks.put(key.toLowerCase(),
+                    AuthLevel.valueOf(value)));
         } catch (IOException e) {
             log.error("Error while reading nicks", e);
         }
