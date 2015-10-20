@@ -8,5 +8,8 @@ target/
 dependency-reduced-pom.xml
 
 # Files generated while testing
-/work/
-
+/logs/
+auths.json
+badwords.txt
+config.json
+links.txt
