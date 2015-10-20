@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.net.URL;
+import java.net.URLConnection;
 import java.time.Duration;
 
 public class Utils {
@@ -45,6 +46,8 @@ public class Utils {
     }
     
     public static <T> T fromJson(String url, Class<T> type) throws IOException {
+        URLConnection conn = new URL(url).openConnection();
+        conn.setRequestProperty("User-Agent", null);
         @Cleanup InputStreamReader reader =
                 new InputStreamReader(new URL(url).openStream());
         return GSON.fromJson(reader, type);
