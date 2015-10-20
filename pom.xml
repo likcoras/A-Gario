@@ -93,7 +93,7 @@
         <configuration>
           <archive>
             <manifest>
-              <mainClass>io.github.likcoras.agario.AGario</mainClass>
+              <mainClass>io.github.likcoras.agar.AGario</mainClass>
             </manifest>
           </archive>
         </configuration>
