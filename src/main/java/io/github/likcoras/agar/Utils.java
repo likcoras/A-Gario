@@ -6,6 +6,7 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
+import lombok.Cleanup;
 import org.pircbotx.hooks.events.MessageEvent;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 
@@ -44,7 +45,8 @@ public class Utils {
     }
     
     public static <T> T fromJson(URL url, Class<T> type) throws IOException {
-        return GSON.fromJson(new InputStreamReader(url.openStream()), type);
+        @Cleanup InputStreamReader reader = new InputStreamReader(url.openStream());
+        return GSON.fromJson(reader, type);
     }
     
     private static class DurationDeserlializer implements JsonDeserializer<Duration> {
