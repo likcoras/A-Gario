@@ -81,5 +81,4 @@ public class YoutubeHook extends ListenerAdapter<AgarBot> {
         long likeCount;
         long dislikeCount;
     }
-    
 }
