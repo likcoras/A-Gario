@@ -12,6 +12,7 @@ import org.pircbotx.UtilSSLSocketFactory;
 public class AgarBot extends PircBotX {
     private final Config config;
     private final Auth auth = new Auth();
+    private final Spam spam = new Spam();
     
     public AgarBot( Config config) {
         super(getBotConfig(config));

@@ -5,8 +5,6 @@ import io.github.likcoras.agar.Utils;
 import io.github.likcoras.agar.auth.AuthLevel;
 
 import com.google.common.base.Splitter;
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
 import lombok.Cleanup;
 import lombok.extern.log4j.Log4j2;
 import org.pircbotx.Colors;
@@ -21,8 +19,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Properties;
-import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -34,7 +30,6 @@ public class LinkHook extends ListenerAdapter<AgarBot> {
     private static final String REMOVED = Utils.addFormat("&03Link removed: ");
     private static final Pattern PATTERN = Pattern.compile("~(\\S+)");
     
-    private final Cache<UUID, Boolean> spam = CacheBuilder.newBuilder().expireAfterWrite(10L, TimeUnit.SECONDS).build();
     private final Properties links = new Properties();
     
     public LinkHook() {
@@ -101,26 +96,14 @@ public class LinkHook extends ListenerAdapter<AgarBot> {
     }
     
     private void handleLink(GenericMessageEvent<AgarBot> event) {
-        if (spamFilter(event)) {
-            return;
-        }
         Matcher matcher = PATTERN.matcher(event.getMessage());
         if (!matcher.find()) {
             return;
         }
         String link = matcher.group(1).toLowerCase();
-        if (links.containsKey(link)) {
+        if (links.containsKey(link) && event.getBot().getSpam().check(event.getUser())) {
             Utils.reply(event, links.getProperty(link));
         }
-    }
-    
-    private boolean spamFilter(GenericMessageEvent<AgarBot> event) {
-        UUID uid = event.getUser().getUserId();
-        if (spam.getIfPresent(uid) != null) {
-            return true;
-        }
-        spam.put(uid, true);
-        return false;
     }
     
     private void readLinks() {
