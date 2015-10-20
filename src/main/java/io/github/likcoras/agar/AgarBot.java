@@ -24,7 +24,6 @@ public class AgarBot extends PircBotX {
                 new Configuration.Builder<AgarBot>().setAutoReconnect(true)
                         .setMaxLineLength(400).setMessageDelay(0L)
                         .setVersion("A`Gario by likcoras")
-                        .setListenerManager(new AgarManager())
                         .setName(config.getNick()).setLogin(config.getUser())
                         .setRealName(config.getGecos())
                         .setServer(config.getHost(), config.getPort());
