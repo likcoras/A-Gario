@@ -3,6 +3,7 @@ package io.github.likcoras.agar;
 import com.google.common.io.Resources;
 import lombok.Cleanup;
 import lombok.extern.log4j.Log4j2;
+import org.pircbotx.exception.IrcException;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,11 +21,11 @@ public class AGario {
         Config config;
         try {
             config = getConfig();
-        } catch (IOException e) {
-            log.error("Error while reading config", e);
+            new AgarBot(config).startBot();
+        } catch (IOException | IrcException e) {
+            log.error("Error while starting bot", e);
             return;
         }
-        new AgarBot(config);
     }
     
     private Config getConfig() throws IOException {

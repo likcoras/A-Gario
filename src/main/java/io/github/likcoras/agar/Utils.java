@@ -54,7 +54,7 @@ public class Utils {
     }
     
     public static String formatDuration(Duration duration) {
-        return String.format("%d:%d:%d", duration.toHours(),
+        return String.format("%02d:%02d:%02d", duration.toHours(),
                 duration.getSeconds() % 3600 / 60, duration.getSeconds() % 60);
     }
     

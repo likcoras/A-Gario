@@ -15,11 +15,11 @@ import java.util.regex.Pattern;
 
 public class YoutubeHook extends ListenerAdapter<AgarBot> {
     private static final String API_DATA =
-            "https://www.googleapis.com/youtube/v3/videos/?part=contentDetails,snippet,statistics&maxResults=1&id=%s&key=";
+            "https://www.googleapis.com/youtube/v3/videos/?part=contentDetails,snippet,statistics&maxResults=1&id=%s&key=%s";
     private static final Pattern LINK_PATTERN = Pattern.compile(
             "(?i)\\byoutu(?:\\.be|be\\.com)\\/(?:.*v(?:/|=)|(?:.*/)?)([\\w-]+)");
     private static final String INFO = Utils.addFormat(
-            "[&04Youtube&r] %s by %s [%s] [%s views] &03[%s] &04[%s]");
+            "&r[&04Youtube&r] %s by %s [%s] [%s views] &03[%s] &04[%s]");
             
     @Override
     public void onGenericMessage(GenericMessageEvent<AgarBot> event)
@@ -30,7 +30,7 @@ public class YoutubeHook extends ListenerAdapter<AgarBot> {
             return;
         }
         YoutubeInfo info =
-                getInfo(match.group(), bot.getConfig().getGoogleApi());
+                getInfo(match.group(1), bot.getConfig().getGoogleApi());
         if (info != null && !info.getItems().isEmpty()) {
             event.respond(formatInfo(info));
         }

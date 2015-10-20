@@ -71,6 +71,9 @@ public class Auth {
         try {
             if (Files.notExists(AUTH_FILE)) {
                 Files.createFile(AUTH_FILE);
+                @Cleanup BufferedWriter writer =
+                        Files.newBufferedWriter(AUTH_FILE);
+                writer.write("{}");
             }
             @Cleanup BufferedReader reader = Files.newBufferedReader(AUTH_FILE);
             Type type = new TypeToken<Map<String, String>>() {}.getType();
