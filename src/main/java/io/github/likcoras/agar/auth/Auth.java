@@ -36,12 +36,12 @@ public class Auth {
     }
     
     public void addNick(String nick, AuthLevel level) {
-        nicks.put(nick, level);
+        nicks.put(nick.toLowerCase(), level);
         writeNicks();
     }
     
     public void remNick(String nick) {
-        AuthLevel level = nicks.remove(nick);
+        AuthLevel level = nicks.remove(nick.toLowerCase());
         if (level != null) {
             writeNicks();
         }
@@ -57,11 +57,12 @@ public class Auth {
     
     public AuthLevel getLevel(User user) {
         UUID uid = user.getUserId();
-        if (!nicks.containsKey(user.getNick())) {
+        String nick = user.getNick().toLowerCase();
+        if (!nicks.containsKey(nick)) {
             return AuthLevel.USER;
         }
         try {
-            return auths.get(uid, new AuthChecker(user, nicks.get(uid)));
+            return auths.get(uid, new AuthChecker(user, nicks.get(nick)));
         } catch (ExecutionException e) {
             return AuthLevel.USER;
         }
@@ -79,7 +80,7 @@ public class Auth {
             Type type = new TypeToken<Map<String, String>>() {}.getType();
             Map<String, String> rawMap = Utils.GSON.fromJson(reader, type);
             rawMap.forEach(
-                    (key, value) -> nicks.put(key, AuthLevel.valueOf(value)));
+                    (key, value) -> nicks.put(key.toLowerCase(), AuthLevel.valueOf(value)));
         } catch (IOException e) {
             log.error("Error while reading nicks", e);
         }

@@ -29,14 +29,14 @@ public class AuthChecker implements Callable<AuthLevel> {
     }
     
     private boolean isMessage(NoticeEvent<PircBotX> event) {
-        User user = event.getUser();
+        User nickserv = event.getUser();
         String message = event.getMessage().toLowerCase();
-        return user.getNick().equalsIgnoreCase("nickserv")
+        return nickserv.getNick().equalsIgnoreCase("nickserv")
                 && message.startsWith("status " + user.getNick().toLowerCase());
     }
     
     private AuthLevel getLevel(String message) {
         int status = Integer.parseInt(message.substring(message.length() - 1));
-        return status < 1 ? level : AuthLevel.USER;
+        return status > 1 ? level : AuthLevel.USER;
     }
 }
