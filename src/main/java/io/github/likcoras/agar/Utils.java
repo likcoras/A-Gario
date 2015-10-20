@@ -18,7 +18,7 @@ import java.time.Duration;
 
 public class Utils {
     public static final Gson GSON = new GsonBuilder()
-            .registerTypeAdapter(Duration.class, new DurationDeserlializer())
+            .registerTypeAdapter(Duration.class, new DurationDeserializer())
             .create();
             
     public static String addFormat(String message) {
@@ -44,12 +44,12 @@ public class Utils {
         }
     }
     
-    public static <T> T fromJson(URL url, Class<T> type) throws IOException {
-        @Cleanup InputStreamReader reader = new InputStreamReader(url.openStream());
+    public static <T> T fromJson(String url, Class<T> type) throws IOException {
+        @Cleanup InputStreamReader reader = new InputStreamReader(new URL(url).openStream());
         return GSON.fromJson(reader, type);
     }
     
-    private static class DurationDeserlializer implements JsonDeserializer<Duration> {
+    private static class DurationDeserializer implements JsonDeserializer<Duration> {
         @Override
         public Duration deserialize(JsonElement json, Type typeOfT,
                 JsonDeserializationContext context) throws JsonParseException {
