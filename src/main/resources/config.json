@@ -1,0 +1,18 @@
+{
+  "nick": "A`Gario_",
+  "user": "A`Gario",
+  "gecos": "A`Gario",
+  "password": "",
+
+  "host": "irc.rizon.net",
+  "port": 6697,
+  "ssl": true,
+
+  "channels": [
+    "#likctest"
+  ],
+  
+  "pasteApi": "09d594e3ecdfcc44717f252362ab552e",
+  
+  "googleApi": ""
+}

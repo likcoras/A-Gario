@@ -28,7 +28,7 @@ public class AGario {
     }
     
     private Config getConfig() throws IOException {
-        Path file = Paths.get("config");
+        Path file = Paths.get("config.json");
         if (Files.notExists(file)) {
             createConfig(file);
         }

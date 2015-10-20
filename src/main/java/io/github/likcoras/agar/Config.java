@@ -18,4 +18,5 @@ public class Config {
     List<String> channels;
     
     String pasteApi;
+    String googleApi;
 }
