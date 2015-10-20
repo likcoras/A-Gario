@@ -64,7 +64,7 @@ public class BadwordHook extends ListenerAdapter<AgarBot> {
     }
     
     @Override
-    public void onGenericMessage(GenericMessageEvent<AgarBot> event) {
+    public void onGenericMessage(GenericMessageEvent<AgarBot> event) throws IOException {
         if (Utils.isTrigger(event.getMessage(), "badword ") && event.getBot()
                 .getAuth().checkLevel(event.getUser(), AuthLevel.ADMIN)) {
             handleTrigger(event);
@@ -81,7 +81,7 @@ public class BadwordHook extends ListenerAdapter<AgarBot> {
         handleBadword(event, event);
     }
     
-    private void handleTrigger(GenericMessageEvent<AgarBot> event) {
+    private void handleTrigger(GenericMessageEvent<AgarBot> event) throws IOException {
         List<String> args = Splitter.on(" ").limit(4).trimResults()
                 .splitToList(event.getMessage());
         if (args.size() < 2) {
@@ -95,7 +95,7 @@ public class BadwordHook extends ListenerAdapter<AgarBot> {
         }
     }
     
-    private void listWord(GenericMessageEvent<AgarBot> event) {
+    private void listWord(GenericMessageEvent<AgarBot> event) throws IOException {
         synchronized (pastebin) {
             if (changedd.getAndSet(false)) {
                 pastebin = newPaste(event);
@@ -105,23 +105,18 @@ public class BadwordHook extends ListenerAdapter<AgarBot> {
     }
     
     @SneakyThrows(UnsupportedEncodingException.class)
-    private String newPaste(GenericMessageEvent<AgarBot> event) {
+    private String newPaste(GenericMessageEvent<AgarBot> event) throws IOException {
         StringBuilder builder = new StringBuilder("Words:\n");
         badwords.forEach((pattern, level) -> builder.append(level).append(" ")
                 .append(pattern.pattern()).append("\n"));
         String data = String.format(API_DATA,
                 event.getBot().getConfig().getPasteApi(),
                 URLEncoder.encode(builder.toString(), "UTF-8"));
-        try {
-            String paste = makePaste(data);
-            if (paste == null) {
-                changedd.set(true);
-            }
-            return paste;
-        } catch (IOException e) {
-            log.error("Error while pasting data", e);
-            return "";
+        String paste = makePaste(data);
+        if (paste == null) {
+            changedd.set(true);
         }
+        return paste;
     }
     
     private String makePaste(String data) throws IOException {
