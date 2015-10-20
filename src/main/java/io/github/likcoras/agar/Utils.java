@@ -1,16 +1,25 @@
 package io.github.likcoras.agar;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
 import org.pircbotx.hooks.events.MessageEvent;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.Type;
 import java.net.URL;
+import java.time.Duration;
 
 public class Utils {
-    public static final Gson GSON = new Gson();
-    
+    public static final Gson GSON = new GsonBuilder()
+            .registerTypeAdapter(Duration.class, new DurationDeserlializer())
+            .create();
+            
     public static String addFormat(String message) {
         return message.replaceAll("&b", "\u0002").replaceAll("&\u0002", "&b")
                 .replaceAll("&r", "\u000f").replaceAll("&\u000f", "&r")
@@ -24,7 +33,8 @@ public class Utils {
         return message.toLowerCase().startsWith("@" + trigger);
     }
     
-    public static void reply(GenericMessageEvent<AgarBot> event, String message) {
+    public static void reply(GenericMessageEvent<AgarBot> event,
+            String message) {
         if (event instanceof MessageEvent) {
             ((MessageEvent<AgarBot>) event).getChannel().send()
                     .message(message);
@@ -35,5 +45,13 @@ public class Utils {
     
     public static <T> T fromJson(URL url, Class<T> type) throws IOException {
         return GSON.fromJson(new InputStreamReader(url.openStream()), type);
+    }
+    
+    private static class DurationDeserlializer implements JsonDeserializer<Duration> {
+        @Override
+        public Duration deserialize(JsonElement json, Type typeOfT,
+                JsonDeserializationContext context) throws JsonParseException {
+            return Duration.parse(json.getAsString());
+        }
     }
 }
