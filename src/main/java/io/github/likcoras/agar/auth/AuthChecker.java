@@ -18,7 +18,7 @@ public class AuthChecker implements Callable<AuthLevel> {
         user.getBot().sendIRC().message("NickServ", "STATUS " + user.getNick());
         WaitForQueue queue = new WaitForQueue(user.getBot());
         while (true) {
-            @SuppressWarnings("unchecked") // Shitty api decisions
+            @SuppressWarnings("unchecked")
             NoticeEvent<PircBotX> event = queue.waitFor(NoticeEvent.class);
             if (!isMessage(event)) {
                 continue;

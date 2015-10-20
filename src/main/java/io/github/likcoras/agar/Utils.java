@@ -49,7 +49,7 @@ public class Utils {
         URLConnection conn = new URL(url).openConnection();
         conn.setRequestProperty("User-Agent", null);
         @Cleanup InputStreamReader reader =
-                new InputStreamReader(new URL(url).openStream());
+                new InputStreamReader(conn.getInputStream());
         return GSON.fromJson(reader, type);
     }
     

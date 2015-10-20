@@ -25,7 +25,7 @@ public class ConnectHook extends ListenerAdapter<AgarBot> {
             throws IOException {
         AgarBot bot = event.getBot();
         String message = event.getMessage();
-        if (!Utils.isTrigger(message, "@con ")
+        if (!Utils.isTrigger(message, "con ")
                 || !bot.getSpam().check(event.getUser())) {
             return;
         }

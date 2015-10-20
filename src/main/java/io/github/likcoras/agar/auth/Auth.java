@@ -57,7 +57,7 @@ public class Auth {
     
     public AuthLevel getLevel(User user) {
         UUID uid = user.getUserId();
-        if (!nicks.containsKey(uid)) {
+        if (!nicks.containsKey(user.getNick())) {
             return AuthLevel.USER;
         }
         try {
