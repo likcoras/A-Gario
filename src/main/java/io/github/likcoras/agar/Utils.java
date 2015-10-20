@@ -49,6 +49,11 @@ public class Utils {
         return GSON.fromJson(reader, type);
     }
     
+    public static String formatDuration(Duration duration) {
+        return String.format("%d:%d:%d", duration.toHours(), duration.getSeconds() % 3600 / 60,
+                duration.getSeconds() % 60);
+    }
+    
     private static class DurationDeserializer implements JsonDeserializer<Duration> {
         @Override
         public Duration deserialize(JsonElement json, Type typeOfT,
