@@ -8,8 +8,9 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 public class Spam {
-    private final Cache<UUID, Boolean> spam = CacheBuilder.newBuilder().expireAfterWrite(10L, TimeUnit.SECONDS).build();
-    
+    private final Cache<UUID, Boolean> spam = CacheBuilder.newBuilder()
+            .expireAfterWrite(10L, TimeUnit.SECONDS).build();
+            
     public boolean check(User user) {
         UUID uid = user.getUserId();
         if (spam.getIfPresent(uid) != null) {

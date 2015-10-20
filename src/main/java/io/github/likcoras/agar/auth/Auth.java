@@ -30,7 +30,7 @@ public class Auth {
     private final Map<String, AuthLevel> nicks = new ConcurrentHashMap<>();
     private final Cache<UUID, AuthLevel> auths = CacheBuilder.newBuilder()
             .expireAfterAccess(15L, TimeUnit.MINUTES).build();
-    
+            
     public Auth() {
         readNicks();
     }

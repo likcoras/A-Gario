@@ -45,13 +45,14 @@ public class Utils {
     }
     
     public static <T> T fromJson(String url, Class<T> type) throws IOException {
-        @Cleanup InputStreamReader reader = new InputStreamReader(new URL(url).openStream());
+        @Cleanup InputStreamReader reader =
+                new InputStreamReader(new URL(url).openStream());
         return GSON.fromJson(reader, type);
     }
     
     public static String formatDuration(Duration duration) {
-        return String.format("%d:%d:%d", duration.toHours(), duration.getSeconds() % 3600 / 60,
-                duration.getSeconds() % 60);
+        return String.format("%d:%d:%d", duration.toHours(),
+                duration.getSeconds() % 3600 / 60, duration.getSeconds() % 60);
     }
     
     private static class DurationDeserializer implements JsonDeserializer<Duration> {

@@ -32,13 +32,12 @@ public class AGario {
         if (Files.notExists(file)) {
             createConfig(file);
         }
-        return Utils.GSON.fromJson(Files.newBufferedReader(file),
-                Config.class);
+        return Utils.GSON.fromJson(Files.newBufferedReader(file), Config.class);
     }
     
     private void createConfig(Path file) throws IOException {
-        @Cleanup
-        InputStream stream = Resources.getResource("config.json").openStream();
+        @Cleanup InputStream stream =
+                Resources.getResource("config.json").openStream();
         Files.copy(stream, file);
     }
 }

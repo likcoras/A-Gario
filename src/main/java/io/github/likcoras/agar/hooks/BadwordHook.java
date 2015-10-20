@@ -64,7 +64,8 @@ public class BadwordHook extends ListenerAdapter<AgarBot> {
     }
     
     @Override
-    public void onGenericMessage(GenericMessageEvent<AgarBot> event) throws IOException {
+    public void onGenericMessage(GenericMessageEvent<AgarBot> event)
+            throws IOException {
         if (Utils.isTrigger(event.getMessage(), "badword ") && event.getBot()
                 .getAuth().checkLevel(event.getUser(), AuthLevel.ADMIN)) {
             handleTrigger(event);
@@ -81,7 +82,8 @@ public class BadwordHook extends ListenerAdapter<AgarBot> {
         handleBadword(event, event);
     }
     
-    private void handleTrigger(GenericMessageEvent<AgarBot> event) throws IOException {
+    private void handleTrigger(GenericMessageEvent<AgarBot> event)
+            throws IOException {
         List<String> args = Splitter.on(" ").limit(4).trimResults()
                 .splitToList(event.getMessage());
         if (args.size() < 2) {
@@ -95,7 +97,8 @@ public class BadwordHook extends ListenerAdapter<AgarBot> {
         }
     }
     
-    private void listWord(GenericMessageEvent<AgarBot> event) throws IOException {
+    private void listWord(GenericMessageEvent<AgarBot> event)
+            throws IOException {
         synchronized (pastebin) {
             if (changedd.getAndSet(false)) {
                 pastebin = newPaste(event);
@@ -105,7 +108,8 @@ public class BadwordHook extends ListenerAdapter<AgarBot> {
     }
     
     @SneakyThrows(UnsupportedEncodingException.class)
-    private String newPaste(GenericMessageEvent<AgarBot> event) throws IOException {
+    private String newPaste(GenericMessageEvent<AgarBot> event)
+            throws IOException {
         StringBuilder builder = new StringBuilder("Words:\n");
         badwords.forEach((pattern, level) -> builder.append(level).append(" ")
                 .append(pattern.pattern()).append("\n"));

@@ -101,7 +101,8 @@ public class LinkHook extends ListenerAdapter<AgarBot> {
             return;
         }
         String link = matcher.group(1).toLowerCase();
-        if (links.containsKey(link) && event.getBot().getSpam().check(event.getUser())) {
+        if (links.containsKey(link)
+                && event.getBot().getSpam().check(event.getUser())) {
             Utils.reply(event, links.getProperty(link));
         }
     }
