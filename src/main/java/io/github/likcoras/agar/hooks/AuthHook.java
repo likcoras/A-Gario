@@ -20,7 +20,8 @@ public class AuthHook extends ListenerAdapter<AgarBot> {
     
     @Override
     public void onGenericMessage(GenericMessageEvent<AgarBot> event) {
-        if (Utils.isTrigger(event.getMessage(), "auth ") && event.getBot().getAuth().checkLevel(event.getUser(), AuthLevel.OWNER)) {
+        if (Utils.isTrigger(event.getMessage(), "auth ") && event.getBot()
+                .getAuth().checkLevel(event.getUser(), AuthLevel.OWNER)) {
             handleTrigger(event);
         }
     }
@@ -51,7 +52,8 @@ public class AuthHook extends ListenerAdapter<AgarBot> {
             return;
         }
         String level = args.get(2);
-        AuthLevel authLevel = level.equals(".") ? null : AuthLevel.valueOf(level);
+        AuthLevel authLevel =
+                level.equals(".") ? null : AuthLevel.valueOf(level);
         String user = args.get(3);
         Auth auth = event.getBot().getAuth();
         if (authLevel == null) {

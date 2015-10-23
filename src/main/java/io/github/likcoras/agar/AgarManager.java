@@ -30,8 +30,8 @@ public class AgarManager extends ThreadedListenerManager<AgarBot> {
         if (!(event instanceof GenericMessageEvent)) {
             return false;
         }
-        @SuppressWarnings("rawtypes")
-        GenericMessageEvent message = (GenericMessageEvent) event;
+        @SuppressWarnings("rawtypes") GenericMessageEvent message =
+                (GenericMessageEvent) event;
         User user = message.getUser();
         if (user.getNick().equalsIgnoreCase("nickserv")) {
             return false;
