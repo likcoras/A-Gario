@@ -19,7 +19,7 @@ public class YoutubeHook extends ListenerAdapter<AgarBot> {
     private static final Pattern LINK_PATTERN = Pattern.compile(
             "(?i)\\byoutu(?:\\.be|be\\.com)\\/(?:.*v(?:/|=)|(?:.*/)?)([\\w-]+)");
     private static final String INFO = Utils.addFormat(
-            "&r[&04Youtube&r] %s by %s [%s] [%s views] &03[%s] &04[%s]");
+            "&r[&04Youtube&r] %s by %s [%s] [%d views] &03[%d] &04[%d]");
             
     @Override
     public void onGenericMessage(GenericMessageEvent<AgarBot> event)
