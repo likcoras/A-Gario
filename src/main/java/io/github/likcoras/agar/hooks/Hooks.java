@@ -12,6 +12,6 @@ public class Hooks {
             ImmutableList.<Listener<AgarBot>> builder().add(new CoreHook())
                     .add(new QuitHook()).add(new RawHook()).add(new LinkHook())
                     .add(new BadwordHook()).add(new YoutubeHook())
-                    .add(new ConnectHook())
-                    .add(new AuthHook()).build();
+                    .add(new ConnectHook()).add(new AuthHook())
+                    .add(new ServerHook()).build();
 }
