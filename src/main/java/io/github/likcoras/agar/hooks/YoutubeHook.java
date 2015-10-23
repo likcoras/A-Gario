@@ -32,7 +32,7 @@ public class YoutubeHook extends ListenerAdapter<AgarBot> {
         YoutubeInfo info =
                 getInfo(match.group(1), bot.getConfig().getGoogleApi());
         if (info != null && !info.getItems().isEmpty()) {
-            event.respond(formatInfo(info));
+            Utils.reply(event, formatInfo(info));
         }
     }
     

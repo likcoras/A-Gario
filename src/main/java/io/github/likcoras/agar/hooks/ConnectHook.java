@@ -32,11 +32,11 @@ public class ConnectHook extends ListenerAdapter<AgarBot> {
         String username = message.substring(5).toLowerCase();
         ConnectInfo info = getInfo(username);
         if (info.username == null) {
-            event.respond(NO_USER + username);
+            Utils.reply(event, NO_USER + username);
         } else if (!info.hasImg) {
-            event.respond(NO_IMG + username);
+            Utils.reply(event, NO_IMG + username);
         } else {
-            event.respond(String.format(INFO, username, username));
+            Utils.reply(event, String.format(INFO, username, username));
         }
     }
     
