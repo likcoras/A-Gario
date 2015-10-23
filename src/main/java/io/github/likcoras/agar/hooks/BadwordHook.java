@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
 @Log4j2
 public class BadwordHook extends ListenerAdapter<AgarBot> {
     private static final Path BADWORD_FILE = Paths.get("badwords.txt");
-    private static final String WARNING = "You're not allowed to say that: &r";
+    private static final String WARNING = "You're not allowed to say that:";
     private static final String ADDED = Utils.addFormat("&03Word added: &r");
     private static final String REMOVED =
             Utils.addFormat("&03Word removed: &r");
