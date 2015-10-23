@@ -5,10 +5,8 @@ import io.github.likcoras.agar.Utils;
 import io.github.likcoras.agar.auth.AuthLevel;
 
 import com.google.common.base.Splitter;
-import com.google.common.base.Strings;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import lombok.Cleanup;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import org.pircbotx.Channel;
@@ -20,15 +18,7 @@ import org.pircbotx.hooks.events.MessageEvent;
 import org.pircbotx.hooks.types.GenericChannelUserEvent;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -38,7 +28,6 @@ import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -47,18 +36,15 @@ import java.util.stream.Collectors;
 @Log4j2
 public class BadwordHook extends ListenerAdapter<AgarBot> {
     private static final Path BADWORD_FILE = Paths.get("badwords.txt");
-    private static final String WARNING = "You're not allowed to say that: ";
-    private static final String ADDED = Utils.addFormat("&03Word added: ");
-    private static final String REMOVED = Utils.addFormat("&03Word removed: ");
-    private static final String API_DATA =
-            "api_option=paste&api_paste_name=Badword_list&api_paste_private=1&api_dev_key=%s&api_paste_code=%s";
+    private static final String WARNING = "You're not allowed to say that: &r";
+    private static final String ADDED = Utils.addFormat("&03Word added: &r");
+    private static final String REMOVED =
+            Utils.addFormat("&03Word removed: &r");
             
     private final Cache<String, Integer> strikes = CacheBuilder.newBuilder()
             .expireAfterWrite(10L, TimeUnit.MINUTES).build();;
     private final Map<Pattern, Integer> badwords = new ConcurrentHashMap<>();
-    private final String list = Utils.addFormat("&03Words: ");
-    private final AtomicBoolean changedd = new AtomicBoolean();
-    private String pastebin = "";
+    private final String list = Utils.addFormat("&03Words: &r");
     
     public BadwordHook() {
         readBadwords();
@@ -100,41 +86,8 @@ public class BadwordHook extends ListenerAdapter<AgarBot> {
     
     private void listWord(GenericMessageEvent<AgarBot> event)
             throws IOException {
-        synchronized (pastebin) {
-            if (changedd.getAndSet(false)) {
-                pastebin = newPaste(event);
-            }
-        }
-        event.getUser().send().message(list + pastebin);
-    }
-    
-    @SneakyThrows(UnsupportedEncodingException.class)
-    private String newPaste(GenericMessageEvent<AgarBot> event)
-            throws IOException {
-        StringBuilder builder = new StringBuilder("Words:\n");
-        badwords.forEach((pattern, level) -> builder.append(level).append(" ")
-                .append(pattern.pattern()).append("\n"));
-        String data = String.format(API_DATA,
-                event.getBot().getConfig().getPasteApi(),
-                URLEncoder.encode(builder.toString(), "UTF-8"));
-        String paste = makePaste(data);
-        if (paste == null) {
-            changedd.set(true);
-        }
-        return paste;
-    }
-    
-    private String makePaste(String data) throws IOException {
-        URLConnection conn = new URL("http://pastebin.com/api/api_post.php")
-                .openConnection();
-        conn.setDoOutput(true);
-        BufferedWriter writer = new BufferedWriter(
-                new OutputStreamWriter(conn.getOutputStream()));
-        writer.write(data);
-        writer.close();
-        @Cleanup BufferedReader read = new BufferedReader(
-                new InputStreamReader(conn.getInputStream()));
-        return Strings.emptyToNull(read.readLine());
+        event.getUser().send()
+                .message(list + event.getBot().getConfig().getListLink());
     }
     
     private void addWord(GenericMessageEvent<AgarBot> event,
@@ -150,9 +103,6 @@ public class BadwordHook extends ListenerAdapter<AgarBot> {
         Pattern pattern = getPattern(regex);
         if (pattern == null) {
             return;
-        }
-        synchronized (pastebin) {
-            changedd.set(true);
         }
         badwords.put(pattern, level);
         event.getUser().send().message(ADDED + regex);
@@ -179,9 +129,6 @@ public class BadwordHook extends ListenerAdapter<AgarBot> {
                 .collect(Collectors.toList());
         if (selected.isEmpty()) {
             return;
-        }
-        synchronized (pastebin) {
-            changedd.set(true);
         }
         selected.forEach(badwords::remove);
         event.getUser().send().message(REMOVED + name);
