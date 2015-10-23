@@ -7,6 +7,9 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import lombok.Cleanup;
+import org.pircbotx.Channel;
+import org.pircbotx.User;
+import org.pircbotx.UserLevel;
 import org.pircbotx.hooks.events.MessageEvent;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 
@@ -16,6 +19,7 @@ import java.lang.reflect.Type;
 import java.net.URL;
 import java.net.URLConnection;
 import java.time.Duration;
+import java.util.Set;
 
 public class Utils {
     public static final Gson GSON = new GsonBuilder()
@@ -33,6 +37,13 @@ public class Utils {
     
     public static boolean isTrigger(String message, String trigger) {
         return message.toLowerCase().startsWith("@" + trigger);
+    }
+    
+    public static boolean checkBot(AgarBot bot, Channel channel) {
+        User user = bot.getUserBot();
+        Set<UserLevel> levels = user.getUserLevels(channel);
+        return !levels.isEmpty() && (levels.contains(UserLevel.HALFOP) || levels.contains(UserLevel.OP)
+                || levels.contains(UserLevel.SUPEROP) || levels.contains(UserLevel.OWNER));
     }
     
     public static void reply(GenericMessageEvent<AgarBot> event,
