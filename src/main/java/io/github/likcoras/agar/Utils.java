@@ -42,8 +42,10 @@ public class Utils {
     public static boolean checkBot(AgarBot bot, Channel channel) {
         User user = bot.getUserBot();
         Set<UserLevel> levels = user.getUserLevels(channel);
-        return !levels.isEmpty() && (levels.contains(UserLevel.HALFOP) || levels.contains(UserLevel.OP)
-                || levels.contains(UserLevel.SUPEROP) || levels.contains(UserLevel.OWNER));
+        return !levels.isEmpty() && (levels.contains(UserLevel.HALFOP)
+                || levels.contains(UserLevel.OP)
+                || levels.contains(UserLevel.SUPEROP)
+                || levels.contains(UserLevel.OWNER));
     }
     
     public static void reply(GenericMessageEvent<AgarBot> event,

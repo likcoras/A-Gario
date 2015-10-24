@@ -139,7 +139,8 @@ public class BadwordHook extends ListenerAdapter<AgarBot> {
             GenericMessageEvent<AgarBot> message) {
         AgarBot bot = event.getBot();
         User user = event.getUser();
-        if (!Utils.checkBot(bot, event.getChannel()) || bot.getAuth().checkLevel(user, AuthLevel.MOD)) {
+        if (!Utils.checkBot(bot, event.getChannel())
+                || bot.getAuth().checkLevel(user, AuthLevel.MOD)) {
             return;
         }
         handleBadword(user, event.getChannel(), message.getMessage());
