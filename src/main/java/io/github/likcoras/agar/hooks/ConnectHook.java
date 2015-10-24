@@ -9,6 +9,7 @@ import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 
 public class ConnectHook extends ListenerAdapter<AgarBot> {
     private static final String API_DATA =
@@ -36,7 +37,7 @@ public class ConnectHook extends ListenerAdapter<AgarBot> {
         } else if (!info.hasImg) {
             Utils.reply(event, NO_IMG + username);
         } else {
-            Utils.reply(event, String.format(INFO, username, username));
+            Utils.reply(event, String.format(INFO, username, URLEncoder.encode(username, "UTF-8")));
         }
     }
     
