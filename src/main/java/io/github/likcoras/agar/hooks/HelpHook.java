@@ -12,6 +12,8 @@ public class HelpHook extends ListenerAdapter<AgarBot> {
             
     @Override
     public void onGenericMessage(GenericMessageEvent<AgarBot> event) {
-        Utils.reply(event, HELP);
+        if (Utils.isTrigger(event.getMessage(), "help")) {
+            Utils.reply(event, HELP);
+        }
     }
 }
