@@ -13,9 +13,9 @@ import java.util.List;
 import java.util.Map;
 
 public class AuthHook extends ListenerAdapter<AgarBot> {
-    private static final String LIST = Utils.addFormat("&03Auths:");
-    private static final String LIST_END = Utils.addFormat("&03Auths end");
-    private static final String SET = Utils.addFormat("&03Auth set: &r");
+    private static final String LIST = "Auths:";
+    private static final String LIST_END = "Auths end";
+    private static final String SET = "Auth set: ";
     
     @Override
     public void onGenericMessage(GenericMessageEvent<AgarBot> event) {

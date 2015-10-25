@@ -36,10 +36,9 @@ import java.util.stream.Collectors;
 public class BadwordHook extends ListenerAdapter<AgarBot> {
     private static final Path BADWORD_FILE = Paths.get("badwords.txt");
     private static final String WARNING = "You're not allowed to say that: ";
-    private static final String ADDED = Utils.addFormat("&03Word added: &r");
-    private static final String REMOVED =
-            Utils.addFormat("&03Word removed: &r");
-    private static final String LIST = Utils.addFormat("&03Words: &r");
+    private static final String ADDED = "Word added: ";
+    private static final String REMOVED = "Word removed: ";
+    private static final String LIST = "Words: ";
     
     private final Cache<String, Integer> strikes = CacheBuilder.newBuilder()
             .expireAfterWrite(10L, TimeUnit.MINUTES).build();;
