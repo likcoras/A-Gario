@@ -4,7 +4,6 @@ import io.github.likcoras.agar.AgarBot;
 import io.github.likcoras.agar.Utils;
 import io.github.likcoras.agar.auth.AuthLevel;
 
-import com.google.common.base.Splitter;
 import lombok.Cleanup;
 import lombok.extern.log4j.Log4j2;
 import org.pircbotx.Colors;
@@ -47,8 +46,7 @@ public class LinkHook extends ListenerAdapter<AgarBot> {
     }
     
     private void handleTrigger(GenericMessageEvent<AgarBot> event) {
-        List<String> args = Splitter.on(" ").limit(4).trimResults()
-                .splitToList(event.getMessage());
+        List<String> args = Utils.getArgs(event.getMessage(), 4);
         if (args.size() < 2) {
             return;
         } else if (args.get(1).equalsIgnoreCase("list")) {

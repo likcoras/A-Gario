@@ -5,7 +5,6 @@ import io.github.likcoras.agar.Utils;
 import io.github.likcoras.agar.auth.Auth;
 import io.github.likcoras.agar.auth.AuthLevel;
 
-import com.google.common.base.Splitter;
 import org.pircbotx.User;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.types.GenericMessageEvent;
@@ -27,8 +26,7 @@ public class AuthHook extends ListenerAdapter<AgarBot> {
     }
     
     private void handleTrigger(GenericMessageEvent<AgarBot> event) {
-        List<String> args = Splitter.on(" ").limit(4).trimResults()
-                .splitToList(event.getMessage());
+        List<String> args = Utils.getArgs(event.getMessage(), 4);
         if (args.size() < 2) {
             return;
         } else if (args.get(1).equalsIgnoreCase("list")) {

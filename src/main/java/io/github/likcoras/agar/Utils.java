@@ -1,5 +1,6 @@
 package io.github.likcoras.agar;
 
+import com.google.common.base.Splitter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;
@@ -19,12 +20,14 @@ import java.lang.reflect.Type;
 import java.net.URL;
 import java.net.URLConnection;
 import java.time.Duration;
+import java.util.List;
 import java.util.Set;
 
 public class Utils {
     public static final Gson GSON = new GsonBuilder()
             .registerTypeAdapter(Duration.class, new DurationDeserializer())
             .create();
+    private static final Splitter ARGS = Splitter.on(" ");
             
     public static String addFormat(String message) {
         return message.replaceAll("&b", "\u0002").replaceAll("&\u0002", "&b")
@@ -46,6 +49,10 @@ public class Utils {
                 || levels.contains(UserLevel.OP)
                 || levels.contains(UserLevel.SUPEROP)
                 || levels.contains(UserLevel.OWNER));
+    }
+    
+    public static List<String> getArgs(String message, int limit) {
+        return ARGS.limit(limit).splitToList(message);
     }
     
     public static void reply(GenericMessageEvent<AgarBot> event,

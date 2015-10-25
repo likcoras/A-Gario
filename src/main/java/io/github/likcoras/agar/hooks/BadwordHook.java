@@ -4,7 +4,6 @@ import io.github.likcoras.agar.AgarBot;
 import io.github.likcoras.agar.Utils;
 import io.github.likcoras.agar.auth.AuthLevel;
 
-import com.google.common.base.Splitter;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import lombok.SneakyThrows;
@@ -71,8 +70,7 @@ public class BadwordHook extends ListenerAdapter<AgarBot> {
     
     private void handleTrigger(GenericMessageEvent<AgarBot> event)
             throws IOException {
-        List<String> args = Splitter.on(" ").limit(4).trimResults()
-                .splitToList(event.getMessage());
+        List<String> args = Utils.getArgs(event.getMessage(), 4);
         if (args.size() < 2) {
             return;
         } else if (args.get(1).equalsIgnoreCase("list")) {
