@@ -40,11 +40,11 @@ public class BadwordHook extends ListenerAdapter<AgarBot> {
     private static final String ADDED = Utils.addFormat("&03Word added: &r");
     private static final String REMOVED =
             Utils.addFormat("&03Word removed: &r");
-            
+    private static final String LIST = Utils.addFormat("&03Words: &r");
+    
     private final Cache<String, Integer> strikes = CacheBuilder.newBuilder()
             .expireAfterWrite(10L, TimeUnit.MINUTES).build();;
     private final Map<Pattern, Integer> badwords = new ConcurrentHashMap<>();
-    private final String list = Utils.addFormat("&03Words: &r");
     
     public BadwordHook() {
         readBadwords();
@@ -87,7 +87,7 @@ public class BadwordHook extends ListenerAdapter<AgarBot> {
     private void listWord(GenericMessageEvent<AgarBot> event)
             throws IOException {
         event.getUser().send()
-                .message(list + event.getBot().getConfig().getListLink());
+                .message(LIST + event.getBot().getConfig().getListLink());
     }
     
     private void addWord(GenericMessageEvent<AgarBot> event,
