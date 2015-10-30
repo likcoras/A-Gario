@@ -9,7 +9,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import lombok.Cleanup;
 import org.pircbotx.Channel;
-import org.pircbotx.User;
 import org.pircbotx.UserLevel;
 import org.pircbotx.hooks.events.MessageEvent;
 import org.pircbotx.hooks.types.GenericMessageEvent;
@@ -21,7 +20,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.time.Duration;
 import java.util.List;
-import java.util.Set;
+import java.util.SortedSet;
 
 public class Utils {
     public static final Gson GSON = new GsonBuilder()
@@ -43,12 +42,8 @@ public class Utils {
     }
     
     public static boolean checkBot(AgarBot bot, Channel channel) {
-        User user = bot.getUserBot();
-        Set<UserLevel> levels = user.getUserLevels(channel);
-        return !levels.isEmpty() && (levels.contains(UserLevel.HALFOP)
-                || levels.contains(UserLevel.OP)
-                || levels.contains(UserLevel.SUPEROP)
-                || levels.contains(UserLevel.OWNER));
+        SortedSet<UserLevel> levels = bot.getUserBot().getUserLevels(channel);
+        return !levels.isEmpty() && levels.last().compareTo(UserLevel.OP) >= 0;
     }
     
     public static List<String> getArgs(String message, int limit) {
