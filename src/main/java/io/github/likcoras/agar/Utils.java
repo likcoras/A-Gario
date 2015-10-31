@@ -9,6 +9,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import lombok.Cleanup;
 import org.pircbotx.Channel;
+import org.pircbotx.Colors;
 import org.pircbotx.UserLevel;
 import org.pircbotx.hooks.events.MessageEvent;
 import org.pircbotx.hooks.types.GenericMessageEvent;
@@ -35,6 +36,18 @@ public class Utils {
                 .replaceAll("&i", "\u001d").replaceAll("&\u001d", "&i")
                 .replaceAll("&u", "\u001f").replaceAll("&\u001f", "&u")
                 .replaceAll("&(\\d\\d)", "\u0003$1").replaceAll("&\u0003", "&");
+    }
+    
+    public static String stripFormat(String message) {
+        String stripped = Colors.removeFormattingAndColors(message);
+        StringBuffer buffer = new StringBuffer();
+        for (int i = 0; i < stripped.length(); i++) {
+            char c = stripped.charAt(i);
+            if (c != '\u001d') {
+                buffer.append(c);
+            }
+        }
+        return buffer.toString();
     }
     
     public static boolean isTrigger(String message, String trigger) {

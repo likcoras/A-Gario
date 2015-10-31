@@ -6,7 +6,6 @@ import io.github.likcoras.agar.auth.AuthLevel;
 
 import lombok.Cleanup;
 import lombok.extern.log4j.Log4j2;
-import org.pircbotx.Colors;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 
@@ -72,8 +71,7 @@ public class LinkHook extends ListenerAdapter<AgarBot> {
         if (args.size() < 4) {
             return;
         }
-        String name =
-                Colors.removeFormattingAndColors(args.get(2)).toLowerCase();
+        String name = Utils.stripFormat(args.get(2)).toLowerCase();
         String target = args.get(3);
         links.setProperty(name, target);
         event.getUser().send().message(ADDED + name);

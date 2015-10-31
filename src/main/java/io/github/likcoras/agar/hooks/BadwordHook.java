@@ -9,7 +9,6 @@ import com.google.common.cache.CacheBuilder;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import org.pircbotx.Channel;
-import org.pircbotx.Colors;
 import org.pircbotx.User;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.ActionEvent;
@@ -144,7 +143,7 @@ public class BadwordHook extends ListenerAdapter<AgarBot> {
     }
     
     private void handleBadword(User user, Channel channel, String message) {
-        Matcher matcher = getMatch(Colors.removeFormattingAndColors(message));
+        Matcher matcher = getMatch(Utils.stripFormat(message));
         if (matcher == null) {
             return;
         }
