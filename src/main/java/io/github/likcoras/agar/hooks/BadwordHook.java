@@ -40,7 +40,7 @@ public class BadwordHook extends ListenerAdapter<AgarBot> {
     private static final String LIST = "Words: ";
     
     private final Cache<String, Integer> strikes = CacheBuilder.newBuilder()
-            .expireAfterWrite(10L, TimeUnit.MINUTES).build();;
+            .expireAfterWrite(10L, TimeUnit.MINUTES).build();
     private final Map<Pattern, Integer> badwords = new ConcurrentHashMap<>();
     
     public BadwordHook() {
