@@ -18,5 +18,6 @@ public class Config {
     List<String> channels;
     
     String listLink;
+    String nickLink;
     String googleApi;
 }
