@@ -140,7 +140,7 @@ public class BadnickHook extends ListenerAdapter<AgarBot> {
         }
         String name = args.get(2);
         List<Pattern> selected = badnicks.keySet().stream()
-                .filter(nick -> nick.pattern().equals("\b" + name + "\b"))
+                .filter(nick -> nick.pattern().equals("\\b" + name + "\\b"))
                 .collect(Collectors.toList());
         if (selected.isEmpty()) {
             return;
