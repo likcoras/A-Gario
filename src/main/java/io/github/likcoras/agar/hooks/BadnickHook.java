@@ -233,7 +233,7 @@ public class BadnickHook extends ListenerAdapter<AgarBot> {
             List<String> lines =
                     badnicks.entrySet().stream()
                     .map(entry -> entry.getValue().severity
-                            + entry.getKey().pattern().substring(1, entry.getKey().pattern().length() -1) + " " + entry.getValue().reason)
+                            + entry.getKey().pattern().substring(2, entry.getKey().pattern().length() -2) + " " + entry.getValue().reason)
                     .collect(Collectors.toList());
             Files.write(BADNICK_FILE, lines);
         } catch (IOException e) {
