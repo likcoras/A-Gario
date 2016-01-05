@@ -114,10 +114,14 @@ public class BadnickHook extends ListenerAdapter<AgarBot> {
         if (pattern == null) {
             return;
         }
-        String reason = args.size() == 4 ? args.get(3) : DEFAULT_MSG;
+        String reason = args.size() > 4 ? args.get(4) : DEFAULT_MSG;
         badnicks.put(pattern, new Data(reason, level));
         event.getUser().send().message(ADDED + regex);
         writeBadnicks();
+        AgarBot bot = event.getBot();
+        bot.getUserChannelDao().getAllChannels().forEach(channel -> {
+            channel.getUsers().forEach(user -> handleNick(bot, user, channel));
+        });
     }
     
     private int getLevel(List<String> args) {
@@ -136,7 +140,7 @@ public class BadnickHook extends ListenerAdapter<AgarBot> {
         }
         String name = args.get(2);
         List<Pattern> selected = badnicks.keySet().stream()
-                .filter(nick -> nick.pattern().equals(name))
+                .filter(nick -> nick.pattern().equals("\b" + name + "\b"))
                 .collect(Collectors.toList());
         if (selected.isEmpty()) {
             return;
@@ -155,7 +159,8 @@ public class BadnickHook extends ListenerAdapter<AgarBot> {
             return;
         }
         boolean ban = true;
-        if (strikes.getIfPresent(user.getHostmask()) == null) {
+        Data data = badnicks.get(matcher.pattern());
+        if (data.severity < 3 && strikes.getIfPresent(user.getHostmask()) == null) {
             strikes.put(user.getHostmask(), true);
             ban = false;
         }
@@ -163,11 +168,12 @@ public class BadnickHook extends ListenerAdapter<AgarBot> {
             channel.send().ban(user.getHostmask());
         }
         channel.send().kick(user, badnicks.get(matcher.pattern()).reason);
+        log.info("BADNICK TRIGGERED: " + user.getHostmask());
     }
     
     private Pattern getPattern(String regex) {
         try {
-            return Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+            return Pattern.compile("\\b" + regex + "\\b", Pattern.CASE_INSENSITIVE);
         } catch (PatternSyntaxException e) {
             log.error("Error while compiling regex " + regex);
             return null;
@@ -227,7 +233,7 @@ public class BadnickHook extends ListenerAdapter<AgarBot> {
             List<String> lines =
                     badnicks.entrySet().stream()
                     .map(entry -> entry.getValue().severity
-                            + entry.getKey().toString() + " " + entry.getValue().reason)
+                            + entry.getKey().pattern().substring(1, entry.getKey().pattern().length() -1) + " " + entry.getValue().reason)
                     .collect(Collectors.toList());
             Files.write(BADNICK_FILE, lines);
         } catch (IOException e) {
