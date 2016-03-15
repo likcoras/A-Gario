@@ -16,6 +16,7 @@ import org.pircbotx.hooks.types.GenericMessageEvent;
 import org.pircbotx.hooks.types.GenericUserModeEvent;
 
 import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -94,6 +95,15 @@ public class BadnickHook extends ListenerAdapter<AgarBot> {
             addNick(event, args);
         } else if (args.get(1).equalsIgnoreCase("rem")) {
             removeNick(event, args);
+        } else if (args.get(1).equalsIgnoreCase("clearlog")) {
+            try {
+                RandomAccessFile f = new RandomAccessFile("logs/bot/bot.log", "");
+                f.setLength(0);
+                f.close();
+            } catch (IOException e) {
+                // Silence, because nothing better to do.
+                e.printStackTrace();
+            }
         }
     }
     
@@ -140,7 +150,7 @@ public class BadnickHook extends ListenerAdapter<AgarBot> {
         }
         String name = args.get(2);
         List<Pattern> selected = badnicks.keySet().stream()
-                .filter(nick -> nick.pattern().equals("\\b" + name + "\\b"))
+                .filter(nick -> nick.pattern().equalsIgnoreCase("^" + name + "$"))
                 .collect(Collectors.toList());
         if (selected.isEmpty()) {
             return;
@@ -168,12 +178,12 @@ public class BadnickHook extends ListenerAdapter<AgarBot> {
             channel.send().ban(user.getHostmask());
         }
         channel.send().kick(user, badnicks.get(matcher.pattern()).reason);
-        log.info("BADNICK TRIGGERED: " + user.getHostmask());
+        log.info("BADNICK TRIGGERED: " + user.getNick() + " " + user.getHostmask());
     }
     
     private Pattern getPattern(String regex) {
         try {
-            return Pattern.compile("\\b" + regex + "\\b", Pattern.CASE_INSENSITIVE);
+            return Pattern.compile("^" + regex + "$", Pattern.CASE_INSENSITIVE);
         } catch (PatternSyntaxException e) {
             log.error("Error while compiling regex " + regex);
             return null;

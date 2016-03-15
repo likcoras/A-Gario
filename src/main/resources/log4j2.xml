@@ -13,12 +13,9 @@
       </Policies>
     </RollingFile>
     
-    <RollingFile name="BotLog" fileName="logs/bot/bot.log" filePattern="logs/bot/bot-%d{MM-dd}.log.gz">
+    <File name="BotLog" fileName="logs/bot/bot.log">
       <PatternLayout pattern="[%d{HH:mm:ss}] [%level] %m%n"/>
-      <Policies>
-        <TimeBasedTriggeringPolicy/>
-      </Policies>
-    </RollingFile>
+    </File>
     
     <RollingFile name="ErrorLog" fileName="logs/error/error.log" filePattern="logs/error/error-%d{MM-dd}.log.gz">
       <PatternLayout pattern="[%d{HH:mm:ss}] [%level] %m%n"/>
